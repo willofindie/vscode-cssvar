@@ -27,15 +27,15 @@ export function activate(context: ExtensionContext): void {
         ) {
           const { config } = setup();
           const cssVars = await parseFiles(config);
-          const firstCharOfLinePosition = new Position(position.line, 0);
-          const cssInput =
-            document
-              .getText(new Range(firstCharOfLinePosition, position))
-              ?.trim() || "";
+          const lastTwoCharIndex = position.character - 2;
+          const lastTwoCharPosition = new Position(
+            position.line,
+            lastTwoCharIndex > 0 ? lastTwoCharIndex : 0
+          );
+          const text =
+            document.getText(new Range(lastTwoCharPosition, position)) || "";
 
-          console.log(cssInput);
-
-          if (!cssInput.match(/--([\w-]*)/)) {
+          if (!/^--[\w-]*/.test(text)) {
             return null;
           }
 

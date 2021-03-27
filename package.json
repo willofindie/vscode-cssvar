@@ -51,6 +51,8 @@
 		"vscode-test": "^1.5.0"
 	},
 	"dependencies": {
-		"css": "^3.0.0"
+		"css": "^3.0.0",
+		"memoize-one": "^5.1.1",
+		"polished": "^4.1.1"
 	}
 }
