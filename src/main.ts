@@ -4,7 +4,7 @@ import { readFile } from "fs";
 import { promisify } from "util";
 import { parse, Rule, Declaration, Stylesheet } from "css";
 import { NoWorkspaceError } from "./errors";
-import { Config, DEFAULT_CONFIG, EXTENSION_NAME } from "./defaults";
+import { Config, CSS3Colors, DEFAULT_CONFIG, EXTENSION_NAME } from "./defaults";
 import memoize from "memoize-one";
 import { lighten } from "polished";
 
@@ -157,7 +157,10 @@ function getColor(
       return getColor(cssVar?.value || "");
     }
   } else {
-    if (/^#|^rgba?|^hsla?/.test(value)) {
+    if (
+      /^#|^rgba?|^hsla?|^transparent$/.test(value) ||
+      CSS3Colors.includes(value.toLowerCase())
+    ) {
       return {
         success: true,
         color: lighten(0, value),
