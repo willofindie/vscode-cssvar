@@ -24,6 +24,10 @@ your User `settings.json` or Workspace `settings.json`.
 
 ## Screeshots:
 
+### How to Install
+![How to install](https://user-images.githubusercontent.com/11786283/112744615-48edc680-8fbf-11eb-870c-91b03a4310bb.gif)
+
+
 ### Working Example
 ![Working Example](https://user-images.githubusercontent.com/11786283/112741076-dcaf9a80-8f9f-11eb-9532-4c9aa7ff3d9a.gif)
 
