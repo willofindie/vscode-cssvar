@@ -65,7 +65,8 @@
 	"scripts": {
 		"postinstall": "husky install",
 		"vscode:prepublish": "yarn run compile",
-		"compile": "tsc -noEmit && rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
+		"pub": "vsce publish --yarn",
+		"compile": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
 		"watch": "rollup -c -w",
 		"pretest": "yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
