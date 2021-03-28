@@ -19,27 +19,22 @@ export function activate(context: ExtensionContext): void {
     const disposable = languages.registerCompletionItemProvider(
       config.extensions || DEFAULT_CONFIG.extensions,
       {
-        async provideCompletionItems(
-          document,
-          position,
-          _token,
-          _completionContext
-        ) {
+        async provideCompletionItems(document, position) {
           const lastTwoCharIndex = position.character - 2;
           const lastTwoCharPosition = new Position(
             position.line,
             lastTwoCharIndex > 0 ? lastTwoCharIndex : 0
           );
-          const firstInLine = new Position(
-            position.line,
-            0
-          );
+          const firstInLine = new Position(position.line, 0);
           const text =
             document.getText(new Range(lastTwoCharPosition, position)) || "";
           const textFromStart =
             document.getText(new Range(firstInLine, position)) || "";
 
-          if (!/^--[\w-]*/.test(text) || /^[\s\t]*-{1,2}\w?/.test(textFromStart)) {
+          if (
+            !/^--[\w-]*/.test(text) ||
+            /^[\s\t]*-{1,2}\w?/.test(textFromStart)
+          ) {
             return null;
           }
 

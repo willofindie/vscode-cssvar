@@ -3,6 +3,12 @@
 	"displayName": "CSSVar Autocomplete",
 	"description": "Intellisense support for CSS Variables",
 	"version": "0.0.1",
+	"publisher": "phoenisx",
+	"repository": {
+		"url": "https://github.com/willofindie/vscode-cssvar",
+		"type": "git"
+	},
+	"icon": "img/icon.png",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
@@ -31,6 +37,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
+		"lint:fix": "eslint src --ext ts --fix",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {

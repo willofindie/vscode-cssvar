@@ -1,5 +1,14 @@
 # CSSVar (A VSCode Extension)
 
+<div align="center">
+  <img
+  src="https://user-images.githubusercontent.com/11786283/112741125-357f3300-8fa0-11eb-8740-41221488509c.png"
+  height="150"
+  alt="CssVar Icon" />
+	<br />
+	<br />
+</div>
+
 Yet another CSSVar Extension. This extension helps to
 autocomplete globally share CSS Variables. Only those
 variables that are present in files, provided in Extension
@@ -12,3 +21,9 @@ your User `settings.json` or Workspace `settings.json`.
 
 - `cssvar.files`: `["index.css"]`
 - `cssvar.extensions`: `["css", "scss", "sass", "less"]`
+
+## Screeshots:
+
+### Working Example
+![Working Example](https://user-images.githubusercontent.com/11786283/112741076-dcaf9a80-8f9f-11eb-9532-4c9aa7ff3d9a.gif)
+
