@@ -3,6 +3,7 @@
 out/test/**
 src/**
 node_modules/**
+.husky/**
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md

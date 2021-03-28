@@ -46,7 +46,7 @@ your User `settings.json` or Workspace `settings.json`.
 
 - [ ] Show variable values in imported CSS Files, in Editor Line Bar.
   - This will help to get details on CSS Variable being used in different files.
-- [ ] Fix: Extension Settings not visible in VSCode.
+- [ ] Add support for `var` to trigger the completion prompt.
 - [ ] Intelligently add semicolon. Add only if the line does not contain any Semicolon.
 - Support SASS?? (Still unsure on this, as SASS/LESS etc. seems overrated now-a-days).
 

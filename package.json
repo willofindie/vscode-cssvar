@@ -39,8 +39,31 @@
 	],
 	"main": "./out/extension.js",
 	"preview": false,
-	"contributes": {},
+	"contributes": {
+		"configuration": {
+			"title": "CSS Var Complete - An Autocompletion Intellisense tool for CSS Variables",
+			"properties": {
+				"cssvar.files": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"description": "CSS variable file relative/absolute paths to include for the Intellisense"
+				},
+				"cssvar.extensions": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"description": "File extensions to include"
+				}
+			}
+		}
+	},
 	"scripts": {
+		"postinstall": "husky install",
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -noEmit && rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
 		"watch": "rollup -c -w",
@@ -82,11 +105,5 @@
 		"*.{ts,tsx}": [
 			"npm run lint:fix"
 		]
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged",
-			"pre-push": "npm run lint"
-		}
 	}
 }
