@@ -1,9 +1,25 @@
 {
 	"name": "cssvar",
-	"displayName": "CSSVar Autocomplete",
+	"displayName": "CSS Var Complete",
+	"keywords": [
+		"css",
+		"css3",
+		"variable",
+		"css variable",
+		"css var",
+		"cssvar",
+		"autocomplete",
+		"complete",
+		"intellisense"
+	],
 	"description": "Intellisense support for CSS Variables",
 	"version": "0.0.1",
 	"publisher": "phoenisx",
+	"license": "MIT",
+	"homepage": "https://github.com/willofindie/vscode-cssvar",
+	"bugs": {
+		"url": "https://github.com/willofindie/vscode-cssvar/issues"
+	},
 	"repository": {
 		"url": "https://github.com/willofindie/vscode-cssvar",
 		"type": "git"
@@ -16,21 +32,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:cssvar.restart",
 		"onLanguage:css",
 		"onLanguage:scss",
 		"onLanguage:sass",
 		"onLanguage:less"
 	],
 	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "cssvar.restart",
-				"title": "Restart CSSVar"
-			}
-		]
-	},
+	"preview": false,
+	"contributes": {},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",
 		"compile": "tsc -p ./",
