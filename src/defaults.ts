@@ -164,3 +164,12 @@ export const CSS3Colors = [
   "whitesmoke",
   "yellowgreen",
 ];
+
+// export const FILTER_REGEX = /[\s:](--|var)\(?[\w-]*/;
+/**
+ * For now I am not supporting `var` keyword,
+ * as it will invalidate createCompletionItems
+ * memoized function, on every call, as I need to
+ * pass the range to properly make this extension work
+ */
+export const FILTER_REGEX = /[\s:]--[\w-]*/;

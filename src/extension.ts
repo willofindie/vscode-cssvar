@@ -6,7 +6,7 @@ import {
   Position,
   Range,
 } from "vscode";
-import { DEFAULT_CONFIG } from "./defaults";
+import { DEFAULT_CONFIG, FILTER_REGEX } from "./defaults";
 import { createCompletionItems, parseFiles, setup } from "./main";
 
 /**
@@ -20,19 +20,12 @@ export function activate(context: ExtensionContext): void {
       config.extensions || DEFAULT_CONFIG.extensions,
       {
         async provideCompletionItems(document, position) {
-          const lastTwoCharIndex = position.character - 2;
-          const lastTwoCharPosition = new Position(
-            position.line,
-            lastTwoCharIndex > 0 ? lastTwoCharIndex : 0
-          );
           const firstInLine = new Position(position.line, 0);
-          const text =
-            document.getText(new Range(lastTwoCharPosition, position)) || "";
           const textFromStart =
             document.getText(new Range(firstInLine, position)) || "";
 
           if (
-            !/^--[\w-]*/.test(text) ||
+            !FILTER_REGEX.test(textFromStart) ||
             /^[\s\t]*-{1,2}\w?/.test(textFromStart)
           ) {
             return null;
@@ -45,7 +38,12 @@ export function activate(context: ExtensionContext): void {
         },
       },
       "-",
-      "-"
+      "-",
+      "v",
+      "a",
+      "r",
+      "(",
+      ")"
     );
     context.subscriptions.push(disposable);
   } catch (err) {

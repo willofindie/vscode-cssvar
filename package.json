@@ -67,7 +67,7 @@
 		"vscode:prepublish": "yarn run compile",
 		"pub": "vsce publish --yarn",
 		"compile": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
-		"watch": "rollup -c -w",
+		"watch": "rollup -c -m -w",
 		"pretest": "yarn run compile && yarn run lint",
 		"lint": "eslint src --ext ts",
 		"lint:fix": "eslint src --ext ts --fix",

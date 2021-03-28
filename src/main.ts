@@ -192,5 +192,14 @@ export const createCompletionItems = memoize(
       }
       return items;
     }, []),
-  (newArgs, lastArgs) => newArgs[0] === lastArgs[0]
+  (newArgs, lastArgs) => {
+    let isEqual = newArgs.length === lastArgs.length;
+    for (let index = 0; index < newArgs.length - 1; index++) {
+      if (newArgs[index] !== lastArgs[index]) {
+        isEqual = false;
+        break;
+      }
+    }
+    return isEqual;
+  }
 );
