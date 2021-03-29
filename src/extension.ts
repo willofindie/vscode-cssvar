@@ -42,8 +42,7 @@ export function activate(context: ExtensionContext): void {
       "v",
       "a",
       "r",
-      "(",
-      ")"
+      "("
     );
     context.subscriptions.push(disposable);
   } catch (err) {

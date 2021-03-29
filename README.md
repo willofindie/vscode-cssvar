@@ -52,4 +52,6 @@ your User `settings.json` or Workspace `settings.json`.
 - SASS/LESS variables, or any specific CSS extension language feature.
   - For eg. setting CSS variable to a SASS Variable will work, but will not
     be considered as a CSS color.
-  - Workaround: Create a separate CSS compatible SASS/LESS (variables) file.
+  - Workaround
+    - Create a separate CSS compatible SASS/LESS (variables) file.
+    - Remove SASS One line Comments. Use proper CSS block comments.

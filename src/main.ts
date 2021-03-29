@@ -2,7 +2,7 @@ import { CompletionItem, CompletionItemKind, workspace } from "vscode";
 import { resolve } from "path";
 import { readFile } from "fs";
 import { promisify } from "util";
-import { parse, Rule, Declaration, Stylesheet } from "css";
+import postcss, { Rule, Node, Declaration } from "postcss";
 import { NoWorkspaceError } from "./errors";
 import { Config, CSS3Colors, DEFAULT_CONFIG, EXTENSION_NAME } from "./defaults";
 import memoize from "memoize-one";
@@ -80,17 +80,18 @@ export function setup(): { config: Config } {
   };
 }
 
-const SUPPORTED_TYPES = ["rule", "declaration"];
+const SUPPORTED_TYPES = ["rule", "decl"];
 const CSS_VAR_REGEX = /^[\s\t]*--/;
 interface CSSVarDeclarations {
   property: string;
   value: string;
 }
 
-const cssParseAsync = (file: string): Promise<Stylesheet> =>
-  new Promise(res => {
-    res(parse(file));
+const cssParseAsync = (file: string) => {
+  return postcss([]).process(file, {
+    from: undefined,
   });
+};
 
 const compareCSSVars = (
   prev: CSSVarDeclarations[],
@@ -102,33 +103,38 @@ const compareCSSVars = (
   );
 };
 
+const isRule = (node: Node): node is Rule => {
+  return !!node.type.match(SUPPORTED_TYPES[0]);
+};
+const isDeclaration = (node: Node): node is Declaration => {
+  return !!node.type.match(SUPPORTED_TYPES[1]);
+};
+
+function getVariableDeclarations(node: Node): CSSVarDeclarations[] {
+  let declarations: CSSVarDeclarations[] = [];
+  if (isDeclaration(node) && CSS_VAR_REGEX.test(node.prop)) {
+    declarations.push({
+      property: node.prop,
+      value: node.value,
+    });
+  } else if (isRule(node)) {
+    for (const _node of node.nodes) {
+      const decls = getVariableDeclarations(_node);
+      declarations = declarations.concat(decls);
+    }
+  }
+  return declarations;
+}
+
 export const parseFiles = async function (config: Config) {
   let cssVars: CSSVarDeclarations[] = [];
   for (const path of config.files) {
     const file = await readFileAsync(path, { encoding: "utf8" });
     const css = await cssParseAsync(file);
     cssVars = cssVars.concat(
-      css.stylesheet?.rules.reduce<CSSVarDeclarations[]>(
-        (declarations, rule: Rule) => {
-          if (
-            !!rule.type &&
-            rule.type === SUPPORTED_TYPES[0] &&
-            !!rule.declarations
-          ) {
-            rule.declarations?.forEach((declaration: Declaration) => {
-              const property = declaration.property || "";
-              if (
-                rule.selectors &&
-                declaration.type === SUPPORTED_TYPES[1] &&
-                CSS_VAR_REGEX.test(property)
-              ) {
-                declarations.push({
-                  property,
-                  value: declaration.value || "",
-                });
-              }
-            });
-          }
+      css.root.nodes.reduce<CSSVarDeclarations[]>(
+        (declarations, node: Node) => {
+          declarations = declarations.concat(getVariableDeclarations(node));
           return declarations;
         },
         []
@@ -192,14 +198,5 @@ export const createCompletionItems = memoize(
       }
       return items;
     }, []),
-  (newArgs, lastArgs) => {
-    let isEqual = newArgs.length === lastArgs.length;
-    for (let index = 0; index < newArgs.length - 1; index++) {
-      if (newArgs[index] !== lastArgs[index]) {
-        isEqual = false;
-        break;
-      }
-    }
-    return isEqual;
-  }
+  (newArgs, lastArgs) => newArgs[0] === lastArgs[0]
 );
