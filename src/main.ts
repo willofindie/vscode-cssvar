@@ -67,16 +67,28 @@ export function setup(): { config: Config } {
   const workspaceFolder = workspace.workspaceFolders || [];
   const resourcePath = workspaceFolder[0]?.uri.fsPath;
   const _config = workspace.getConfiguration(EXTENSION_NAME);
-  const files = _config["files"] || DEFAULT_CONFIG.files;
-  const config: Config = {
-    ...DEFAULT_CONFIG,
-    ..._config,
-    files: files.map((path: string) => resolve(resourcePath, path)),
-    workspaceFolder: resourcePath,
-  };
+  const config: Record<keyof Config, ValueOf<Config>> = {} as Config;
+  for (const key in DEFAULT_CONFIG) {
+    if (isObjectProperty(DEFAULT_CONFIG, key)) {
+      const value = _config.get<ValueOf<Config>>(key) || DEFAULT_CONFIG[key];
+      switch (key) {
+        case "files":
+          config[key] = (<string[]>value).map((path: string) =>
+            resolve(resourcePath, path)
+          );
+          break;
+        case "workspaceFolder":
+          config[key] = resourcePath;
+          break;
+        default:
+          config[key] = value;
+          break;
+      }
+    }
+  }
 
   return {
-    config,
+    config: config as Config,
   };
 }
 
@@ -85,6 +97,7 @@ const CSS_VAR_REGEX = /^[\s\t]*--/;
 interface CSSVarDeclarations {
   property: string;
   value: string;
+  theme: string;
 }
 
 const cssParseAsync = (file: string) => {
@@ -103,23 +116,29 @@ const compareCSSVars = (
   );
 };
 
-const isRule = (node: Node): node is Rule => {
-  return !!node.type.match(SUPPORTED_TYPES[0]);
-};
-const isDeclaration = (node: Node): node is Declaration => {
-  return !!node.type.match(SUPPORTED_TYPES[1]);
+const isNodeType = <T extends Node>(node: Node, type: string): node is T => {
+  return !!node.type.match(type);
 };
 
-function getVariableDeclarations(node: Node): CSSVarDeclarations[] {
+function getVariableDeclarations(
+  config: Config,
+  node: Node,
+  theme?: string | null
+): CSSVarDeclarations[] {
   let declarations: CSSVarDeclarations[] = [];
-  if (isDeclaration(node) && CSS_VAR_REGEX.test(node.prop)) {
+  if (
+    isNodeType<Declaration>(node, SUPPORTED_TYPES[1]) &&
+    CSS_VAR_REGEX.test(node.prop)
+  ) {
     declarations.push({
       property: node.prop,
       value: node.value,
+      theme: theme || "",
     });
-  } else if (isRule(node)) {
+  } else if (isNodeType<Rule>(node, SUPPORTED_TYPES[0])) {
+    const [theme] = config.themes.filter(theme => node.selector.match(theme));
     for (const _node of node.nodes) {
-      const decls = getVariableDeclarations(_node);
+      const decls = getVariableDeclarations(config, _node, theme);
       declarations = declarations.concat(decls);
     }
   }
@@ -134,11 +153,13 @@ export const parseFiles = async function (config: Config) {
     cssVars = cssVars.concat(
       css.root.nodes.reduce<CSSVarDeclarations[]>(
         (declarations, node: Node) => {
-          declarations = declarations.concat(getVariableDeclarations(node));
+          declarations = declarations.concat(
+            getVariableDeclarations(config, node)
+          );
           return declarations;
         },
         []
-      ) || []
+      )
     );
   }
   if (!compareCSSVars(cache.cssVars, cssVars)) {
@@ -190,8 +211,10 @@ export const createCompletionItems = memoize(
         const KIND = color.success
           ? CompletionItemKind.Color
           : CompletionItemKind.Variable;
-        const item = new CompletionItem(cssVar.property, KIND);
-        item.detail = cssVar.value;
+        const extra = cssVar.theme !== "" ? `\n\nTheme: [${cssVar.theme}]` : "";
+        const propertyName = `${cssVar.property}`;
+        const item = new CompletionItem(propertyName, KIND);
+        item.detail = `Value: ${cssVar.value}${extra}`;
         item.documentation = color.color;
         item.insertText = `var(${cssVar.property});`;
         items.push(item);

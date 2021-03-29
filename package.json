@@ -58,6 +58,14 @@
 					],
 					"default": null,
 					"description": "File extensions to include"
+				},
+				"cssvar.themes": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"description": "CSS Theme classname list"
 				}
 			}
 		}

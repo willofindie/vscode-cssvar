@@ -38,7 +38,6 @@ export function activate(context: ExtensionContext): void {
         },
       },
       "-",
-      "-",
       "v",
       "a",
       "r",

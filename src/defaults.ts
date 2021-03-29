@@ -2,12 +2,14 @@ export interface Config {
   workspaceFolder: string;
   files: string[];
   extensions: string[];
+  themes: string[];
 }
 
 export const DEFAULT_CONFIG: Config = {
   workspaceFolder: "",
   files: ["index.css"],
   extensions: ["css", "scss", "sass", "less"],
+  themes: [],
 };
 
 export const EXTENSION_NAME = "cssvar";
