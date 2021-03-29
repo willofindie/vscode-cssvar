@@ -56,6 +56,9 @@ your User `settings.json` or Workspace `settings.json`.
 
 * Show Auto Completion dialogue on trigger chars: `--`
 * Show Color Values and Colors in Autocomplete popup.
+* Minimal support for CSS Modules, using postcss.
+  * This is to make sure, the extension doesn't breaks on
+    CSS Module Files.
 * Themed CSS Variable support.
 
 ## Issues:
