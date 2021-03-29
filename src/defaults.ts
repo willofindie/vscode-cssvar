@@ -3,6 +3,7 @@ export interface Config {
   files: string[];
   extensions: string[];
   themes: string[];
+  excludeThemedVariables: boolean;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -10,6 +11,7 @@ export const DEFAULT_CONFIG: Config = {
   files: ["index.css"],
   extensions: ["css", "scss", "sass", "less"],
   themes: [],
+  excludeThemedVariables: false,
 };
 
 export const EXTENSION_NAME = "cssvar";

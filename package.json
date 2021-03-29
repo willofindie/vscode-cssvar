@@ -66,6 +66,11 @@
 					],
 					"default": null,
 					"description": "CSS Theme classname list"
+				},
+				"cssvar.excludeThemedVariables": {
+					"type": "boolean",
+					"default": false,
+					"description": "Exclude themed variables"
 				}
 			}
 		}

@@ -22,15 +22,21 @@ This Extension supports the following properties as of now:
 
 - `cssvar.files`: Array of Strings: `string[]`
 - `cssvar.extensions`: Array of String: `string[]`
+- `cssvar.themes`: Array of String: `string[]`
+  - Eg: `cssvar.themes: ["dark"]`. This will help the extension
+    distinguish between similarly named variables.
+- `cssvar.excludeThemedVariables`: `boolean`
 
-`cssvar.files` should contain relative/absolute path from
-your workspace root folder.
+*`cssvar.files` should contain relative/absolute path from
+your workspace root folder.*
 
 Following are defaults, which you can override in
 your User `settings.json` or Workspace `settings.json`.
 
 - `cssvar.files`: `["index.css"]`
 - `cssvar.extensions`: `["css", "scss", "sass", "less"]`
+- `cssvar.themes`: `[]`
+- `cssvar.excludeThemedVariables`: `false`
 
 ## Screeshots:
 
@@ -40,12 +46,17 @@ your User `settings.json` or Workspace `settings.json`.
 
 ### Working Example
 ![Working Example](https://user-images.githubusercontent.com/11786283/112746381-07174d00-8fcc-11eb-82eb-d9b27540a956.gif)
-)
 
-## Features to Support in future:
+### Theming Support:
+![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif)
+
+![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
+
+## Supported Features:
 
 * Show Auto Completion dialogue on trigger chars: `--`
 * Show Color Values and Colors in Autocomplete popup.
+* Themed CSS Variable support.
 
 ## Issues:
 

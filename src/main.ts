@@ -137,9 +137,11 @@ function getVariableDeclarations(
     });
   } else if (isNodeType<Rule>(node, SUPPORTED_TYPES[0])) {
     const [theme] = config.themes.filter(theme => node.selector.match(theme));
-    for (const _node of node.nodes) {
-      const decls = getVariableDeclarations(config, _node, theme);
-      declarations = declarations.concat(decls);
+    if (!config.excludeThemedVariables || !theme) {
+      for (const _node of node.nodes) {
+        const decls = getVariableDeclarations(config, _node, theme);
+        declarations = declarations.concat(decls);
+      }
     }
   }
   return declarations;
