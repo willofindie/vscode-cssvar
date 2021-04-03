@@ -2,7 +2,7 @@
 
 <div align="center">
   <img
-  src="img/icon.png"
+  src="https://user-images.githubusercontent.com/11786283/113474026-dd0dd100-948a-11eb-8140-4570d7c983d3.png"
   height="150"
   alt="CssVar Icon" />
   <img
@@ -41,7 +41,7 @@ your User `settings.json` or Workspace `settings.json`.
 ## Screeshots:
 
 ### How to Install
-![How to install](https://user-images.githubusercontent.com/11786283/112744615-48edc680-8fbf-11eb-870c-91b03a4310bb.gif)
+![How to install](https://user-images.githubusercontent.com/11786283/113474149-bdc37380-948b-11eb-847d-4c031912b9f4.gif)
 
 
 ### Working Example
