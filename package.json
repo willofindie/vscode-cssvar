@@ -35,7 +35,11 @@
 		"onLanguage:css",
 		"onLanguage:scss",
 		"onLanguage:sass",
-		"onLanguage:less"
+		"onLanguage:less",
+		"onLanguage:javscript",
+		"onLanguage:javscriptreact",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
 	],
 	"main": "./out/extension.js",
 	"preview": false,

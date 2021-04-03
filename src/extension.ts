@@ -9,6 +9,10 @@ import {
 import { DEFAULT_CONFIG, FILTER_REGEX } from "./defaults";
 import { createCompletionItems, parseFiles, setup } from "./main";
 
+const restrictIntellisense = (text: string) => {
+  return !FILTER_REGEX.test(text) || /^[\s\t]*-{1,2}\w?$/.test(text);
+};
+
 /**
  * Main Function from where the Plugin loads
  * @param context
@@ -23,15 +27,14 @@ export function activate(context: ExtensionContext): void {
           const firstInLine = new Position(position.line, 0);
           const textFromStart =
             document.getText(new Range(firstInLine, position)) || "";
+          // const filename = document.fileName;
+          const { config } = setup();
 
-          if (
-            !FILTER_REGEX.test(textFromStart) ||
-            /^[\s\t]*-{1,2}\w?/.test(textFromStart)
-          ) {
+          // Editing Theme File should be restricted
+          if (restrictIntellisense(textFromStart)) {
             return null;
           }
 
-          const { config } = setup();
           const cssVars = await parseFiles(config);
           const completionItems = createCompletionItems(cssVars);
           return new CompletionList(completionItems);
