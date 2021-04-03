@@ -2,7 +2,7 @@
 
 <div align="center">
   <img
-  src="https://user-images.githubusercontent.com/11786283/112741125-357f3300-8fa0-11eb-8740-41221488509c.png"
+  src="img/icon.png"
   height="150"
   alt="CssVar Icon" />
   <img
