@@ -6,7 +6,7 @@ import {
   Position,
   Range,
 } from "vscode";
-import { DEFAULT_CONFIG, FILTER_REGEX } from "./defaults";
+import { DEFAULT_CONFIG, FILTER_REGEX } from "./constants";
 import { createCompletionItems, parseFiles, setup } from "./main";
 
 const restrictIntellisense = (text: string) => {
