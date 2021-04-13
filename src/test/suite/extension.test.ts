@@ -1,7 +1,7 @@
 import assert from "assert";
 import path from "path";
 import * as vscode from "vscode";
-import { EXTENSION_NAME } from "../../defaults";
+import { EXTENSION_NAME } from "../../constants";
 import { setup } from "../../main";
 
 describe("Extension Test Suite", () => {

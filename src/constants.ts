@@ -177,3 +177,11 @@ export const CSS3Colors = [
  * pass the range to properly make this extension work
  */
 export const FILTER_REGEX = /[\s:]--[\w-]*/;
+
+export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];
+
+/**
+ * This Constant defines the regex for CSS Variable
+ * declaration, in the CSS files or it's AST representation.
+ */
+export const CSS_VAR_REGEX = /^[\s\t]*--/;

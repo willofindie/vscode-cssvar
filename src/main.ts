@@ -2,11 +2,11 @@ import { CompletionItem, CompletionItemKind, workspace } from "vscode";
 import { resolve } from "path";
 import { readFile } from "fs";
 import { promisify } from "util";
-import postcss, { Rule, Node, Declaration } from "postcss";
+import postcss, { Node } from "postcss";
 import { NoWorkspaceError } from "./errors";
-import { Config, CSS3Colors, DEFAULT_CONFIG, EXTENSION_NAME } from "./defaults";
+import { Config, DEFAULT_CONFIG, EXTENSION_NAME } from "./constants";
 import memoize from "memoize-one";
-import { lighten } from "polished";
+import { getColor, getVariableDeclarations } from "./utils";
 
 //#region Utilities
 const readFileAsync = promisify(readFile);
@@ -92,9 +92,7 @@ export function setup(): { config: Config } {
   };
 }
 
-const SUPPORTED_TYPES = ["rule", "decl"];
-const CSS_VAR_REGEX = /^[\s\t]*--/;
-interface CSSVarDeclarations {
+export interface CSSVarDeclarations {
   property: string;
   value: string;
   theme: string;
@@ -116,37 +114,11 @@ const compareCSSVars = (
   );
 };
 
-const isNodeType = <T extends Node>(node: Node, type: string): node is T => {
-  return !!node.type.match(type);
-};
-
-function getVariableDeclarations(
-  config: Config,
-  node: Node,
-  theme?: string | null
-): CSSVarDeclarations[] {
-  let declarations: CSSVarDeclarations[] = [];
-  if (
-    isNodeType<Declaration>(node, SUPPORTED_TYPES[1]) &&
-    CSS_VAR_REGEX.test(node.prop)
-  ) {
-    declarations.push({
-      property: node.prop,
-      value: node.value,
-      theme: theme || "",
-    });
-  } else if (isNodeType<Rule>(node, SUPPORTED_TYPES[0])) {
-    const [theme] = config.themes.filter(theme => node.selector.match(theme));
-    if (!config.excludeThemedVariables || !theme) {
-      for (const _node of node.nodes) {
-        const decls = getVariableDeclarations(config, _node, theme);
-        declarations = declarations.concat(decls);
-      }
-    }
-  }
-  return declarations;
-}
-
+/**
+ * Parses a plain CSS file (even SCSS files, if they are pure CSS)
+ * and retrives all the CSS variables present in all the selected
+ * files
+ */
 export const parseFiles = async function (config: Config) {
   let cssVars: CSSVarDeclarations[] = [];
   for (const path of config.files) {
@@ -169,38 +141,6 @@ export const parseFiles = async function (config: Config) {
   }
   return cache.cssVars;
 };
-
-function getColor(
-  value: string,
-  cssVars?: CSSVarDeclarations[]
-): {
-  success: boolean;
-  color: string;
-} {
-  if (cssVars && /^var/.test(value)) {
-    const propertyName = value.match(/^var\((--[\w-]*)\)/);
-    if (propertyName) {
-      const cssVar = cssVars.find(
-        cssVar => cssVar.property === propertyName[1]
-      );
-      return getColor(cssVar?.value || "");
-    }
-  } else {
-    if (
-      /^#|^rgba?|^hsla?|^transparent$/.test(value) ||
-      CSS3Colors.includes(value.toLowerCase())
-    ) {
-      return {
-        success: true,
-        color: lighten(0, value),
-      };
-    }
-  }
-  return {
-    success: false,
-    color: "",
-  };
-}
 
 export const createCompletionItems = memoize(
   (
