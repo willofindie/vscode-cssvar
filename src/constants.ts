@@ -1,7 +1,21 @@
+export type SupportedExtensionNames =
+  | "css"
+  | "scss"
+  | "sass"
+  | "less"
+  | "ts"
+  | "tsx"
+  | "jsx"
+  | "js"
+  | "typescript"
+  | "typescriptreact"
+  | "javascript"
+  | "javascriptreact";
+
 export interface Config {
   workspaceFolder: string;
   files: string[];
-  extensions: string[];
+  extensions: SupportedExtensionNames[];
   themes: string[];
   excludeThemedVariables: boolean;
 }
@@ -12,6 +26,23 @@ export const DEFAULT_CONFIG: Config = {
   extensions: ["css", "scss", "sass", "less"],
   themes: [],
   excludeThemedVariables: false,
+};
+
+export const mapShortToFullExtension = (
+  ext: SupportedExtensionNames
+): SupportedExtensionNames => {
+  switch (ext) {
+    case "ts":
+      return "typescript";
+    case "tsx":
+      return "typescriptreact";
+    case "js":
+      return "javascript";
+    case "jsx":
+      return "javascriptreact";
+    default:
+      return ext;
+  }
 };
 
 export const EXTENSION_NAME = "cssvar";

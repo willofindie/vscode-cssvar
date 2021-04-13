@@ -5,7 +5,13 @@ import { promisify } from "util";
 import postcss, { Node } from "postcss";
 import fastGlob from "fast-glob";
 import { NoWorkspaceError } from "./errors";
-import { Config, DEFAULT_CONFIG, EXTENSION_NAME } from "./constants";
+import {
+  Config,
+  DEFAULT_CONFIG,
+  EXTENSION_NAME,
+  mapShortToFullExtension,
+  SupportedExtensionNames,
+} from "./constants";
 import memoize from "memoize-one";
 import { getColor, getVariableDeclarations } from "./utils";
 
@@ -84,6 +90,11 @@ export async function setup(): Promise<{ config: Config }> {
         }
         case "workspaceFolder":
           config[key] = resourcePath;
+          break;
+        case "extensions":
+          config[key] = (<SupportedExtensionNames[]>value).map(ext =>
+            mapShortToFullExtension(ext)
+          );
           break;
         default:
           config[key] = value;

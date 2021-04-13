@@ -36,8 +36,8 @@
 		"onLanguage:scss",
 		"onLanguage:sass",
 		"onLanguage:less",
-		"onLanguage:javscript",
-		"onLanguage:javscriptreact",
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact",
 		"onLanguage:typescript",
 		"onLanguage:typescriptreact"
 	],
