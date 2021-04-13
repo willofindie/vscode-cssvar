@@ -176,7 +176,7 @@ export const CSS3Colors = [
  * memoized function, on every call, as I need to
  * pass the range to properly make this extension work
  */
-export const FILTER_REGEX = /[\s:]--[\w-]*/;
+export const FILTER_REGEX = /[\s:"'`]--[\w-]*/;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];
 

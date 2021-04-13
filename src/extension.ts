@@ -17,9 +17,9 @@ const restrictIntellisense = (text: string) => {
  * Main Function from where the Plugin loads
  * @param context
  */
-export function activate(context: ExtensionContext): void {
+export async function activate(context: ExtensionContext): Promise<void> {
   try {
-    const { config } = setup();
+    const { config } = await setup();
     const disposable = languages.registerCompletionItemProvider(
       config.extensions || DEFAULT_CONFIG.extensions,
       {
@@ -28,7 +28,7 @@ export function activate(context: ExtensionContext): void {
           const textFromStart =
             document.getText(new Range(firstInLine, position)) || "";
           // const filename = document.fileName;
-          const { config } = setup();
+          const { config } = await setup();
 
           // Editing Theme File should be restricted
           if (restrictIntellisense(textFromStart)) {

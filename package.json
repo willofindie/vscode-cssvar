@@ -81,12 +81,12 @@
 	},
 	"scripts": {
 		"postinstall": "husky install",
-		"vscode:prepublish": "yarn run compile",
+		"vscode:prepublish": "yarn run build",
 		"pub": "vsce publish --yarn",
-		"precompile": "rimraf out",
-		"compile": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
+		"prebuild": "rimraf out",
+		"build": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
 		"watch": "rollup -c -m -w",
-		"pretest": "yarn run compile && yarn run lint",
+		"pretest": "yarn run build && yarn run lint",
 		"lint": "eslint src --ext ts",
 		"lint:fix": "eslint src --ext ts --fix",
 		"test": "node ./out/test/runTest.js"
@@ -117,6 +117,7 @@
 		"vscode-test": "^1.5.0"
 	},
 	"dependencies": {
+		"fast-glob": "^3.2.5",
 		"memoize-one": "^5.1.1",
 		"polished": "^4.1.1",
 		"postcss": "^8.2.8"
