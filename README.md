@@ -21,6 +21,7 @@ provided in Extension `files` config, will be considered as global.
 This Extension supports the following properties as of now:
 
 - `cssvar.files`: Array of Strings: `string[]`
+  - Support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns
 - `cssvar.extensions`: Array of String: `string[]`
 - `cssvar.themes`: Array of String: `string[]`
   - Eg: `cssvar.themes: ["dark"]`. This will help the extension
