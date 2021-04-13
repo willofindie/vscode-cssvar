@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { readFile } from "fs";
 import { promisify } from "util";
 import postcss, { Node } from "postcss";
+import fastGlob from "fast-glob";
 import { NoWorkspaceError } from "./errors";
 import { Config, DEFAULT_CONFIG, EXTENSION_NAME } from "./constants";
 import memoize from "memoize-one";
@@ -60,7 +61,7 @@ const cache: {
  *
  * @throws {@link NoWorkspaceError}
  */
-export function setup(): { config: Config } {
+export async function setup(): Promise<{ config: Config }> {
   if (!workspace.workspaceFolders) {
     throw new NoWorkspaceError("No Workspace found.");
   }
@@ -72,11 +73,15 @@ export function setup(): { config: Config } {
     if (isObjectProperty(DEFAULT_CONFIG, key)) {
       const value = _config.get<ValueOf<Config>>(key) || DEFAULT_CONFIG[key];
       switch (key) {
-        case "files":
-          config[key] = (<string[]>value).map((path: string) =>
+        case "files": {
+          const entries = await fastGlob(<string[]>value, {
+            cwd: resourcePath,
+          });
+          config[key] = entries.map((path: string) =>
             resolve(resourcePath, path)
           );
           break;
+        }
         case "workspaceFolder":
           config[key] = resourcePath;
           break;

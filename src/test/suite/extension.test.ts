@@ -21,7 +21,7 @@ describe("Extension Test Suite", () => {
       const conf = vscode.workspace.getConfiguration(EXTENSION_NAME);
       await conf.update("files", ["index.css"]).then(res => res);
       const actual = path.resolve(workspacePath, "index.css");
-      const { config } = setup();
+      const { config } = await setup();
       assert.strictEqual(actual, config.files[0]);
     } catch (e) {
       assert.fail(e.message);
