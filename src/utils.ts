@@ -83,3 +83,41 @@ export function getVariableDeclarations(
   }
   return declarations;
 }
+
+export const isObjectProperty = <T>(obj: T, key: any): key is keyof T =>
+  Object.prototype.hasOwnProperty.call(obj, key);
+
+/**
+ * Shallow Compare any JS POJO, to test immutability
+ */
+export const shallowCompare = (obj1: any, obj2: any) => {
+  if (obj1 == null || obj2 == null) {
+    return obj1 !== obj2;
+  }
+  if (typeof obj1 !== typeof obj2) {
+    return false;
+  }
+  if (typeof obj1 === "string" || obj1 instanceof String) {
+    return obj1 === obj2;
+  }
+  if (typeof obj1 === "number" || obj1 instanceof Number) {
+    return obj1 === obj2;
+  }
+  if (typeof obj1 === "boolean" || obj1 instanceof Boolean) {
+    return obj1 === obj2;
+  }
+  if (Array.isArray(obj1) && Array.isArray(obj2)) {
+    const isEqual = obj1.length === obj2.length;
+    if (isEqual) {
+      return obj1.every((item, index) => item === obj2[index]);
+    } else {
+      return isEqual;
+    }
+  }
+  return (
+    Object.keys(obj1).length === Object.keys(obj2).length &&
+    Object.keys(obj1).every(
+      key => isObjectProperty(obj2, key) && obj1[key] === obj2[key]
+    )
+  );
+};

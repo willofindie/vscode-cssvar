@@ -1,6 +1,6 @@
 import { CompletionItem, CompletionItemKind, workspace } from "vscode";
 import { resolve } from "path";
-import { readFile } from "fs";
+import { readFile, stat, existsSync } from "fs";
 import { promisify } from "util";
 import postcss, { Node } from "postcss";
 import fastGlob from "fast-glob";
@@ -13,51 +13,24 @@ import {
   SupportedExtensionNames,
 } from "./constants";
 import memoize from "memoize-one";
-import { getColor, getVariableDeclarations } from "./utils";
+import { getColor, getVariableDeclarations, isObjectProperty } from "./utils";
 
 //#region Utilities
 const readFileAsync = promisify(readFile);
+const statAsync = promisify(stat);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isObjectProperty = <T>(obj: T, key: any): key is keyof T =>
-  Object.prototype.hasOwnProperty.call(obj, key);
-
-export const shallowCompare = (obj1: any, obj2: any) => {
-  if (obj1 == null || obj2 == null) {
-    return obj1 !== obj2;
-  }
-  if (typeof obj1 !== typeof obj2) {
-    return false;
-  }
-  if (typeof obj1 === "string" || obj1 instanceof String) {
-    return obj1 === obj2;
-  }
-  if (typeof obj1 === "number" || obj1 instanceof Number) {
-    return obj1 === obj2;
-  }
-  if (typeof obj1 === "boolean" || obj1 instanceof Boolean) {
-    return obj1 === obj2;
-  }
-  if (Array.isArray(obj1) && Array.isArray(obj2)) {
-    const isEqual = obj1.length === obj2.length;
-    if (isEqual) {
-      return obj1.every((item, index) => item === obj2[index]);
-    } else {
-      return isEqual;
-    }
-  }
-  return (
-    Object.keys(obj1).length === Object.keys(obj2).length &&
-    Object.keys(obj1).every(
-      key => isObjectProperty(obj2, key) && obj1[key] === obj2[key]
-    )
-  );
-};
-
+type CSSVarRecord = { [path: string]: CSSVarDeclarations[] };
 const cache: {
-  cssVars: CSSVarDeclarations[];
+  cssVars: CSSVarRecord;
+  fileMetas: {
+    [path: string]: {
+      path: string;
+      lastModified: number;
+    };
+  };
 } = {
-  cssVars: [],
+  cssVars: {},
+  fileMetas: {},
 };
 
 //#endregion Utilities
@@ -120,52 +93,80 @@ const cssParseAsync = (file: string) => {
   });
 };
 
-const compareCSSVars = (
-  prev: CSSVarDeclarations[],
-  next: CSSVarDeclarations[]
-) => {
-  return (
-    prev.length === next.length &&
-    prev.every((item, index) => shallowCompare(item, next[index]))
-  );
-};
-
 /**
  * Parses a plain CSS file (even SCSS files, if they are pure CSS)
  * and retrives all the CSS variables present in all the selected
- * files
+ * files. Parsing is done only once when plugin activates,
+ * and everytime any file gets modified.
  */
-export const parseFiles = async function (config: Config) {
-  let cssVars: CSSVarDeclarations[] = [];
+export const parseFiles = async function (
+  config: Config
+): Promise<CSSVarRecord> {
+  //#region Remove Delete File Path variables
+  const deletedPath = Object.keys(cache.cssVars).filter(
+    path => !existsSync(path)
+  );
+  if (deletedPath.length > 0) {
+    deletedPath.forEach(path => {
+      delete cache.cssVars[path];
+      delete cache.fileMetas[path];
+    });
+  }
+  //#endregion
+  let cssVars: CSSVarRecord = cache.cssVars;
+  const isModified =
+    Object.keys(cache.fileMetas).length !== config.files.length;
   for (const path of config.files) {
-    const file = await readFileAsync(path, { encoding: "utf8" });
-    const css = await cssParseAsync(file);
-    cssVars = cssVars.concat(
-      css.root.nodes.reduce<CSSVarDeclarations[]>(
-        (declarations, node: Node) => {
-          declarations = declarations.concat(
-            getVariableDeclarations(config, node)
-          );
-          return declarations;
-        },
-        []
-      )
-    );
+    const cachedFileMeta = cache.fileMetas[path];
+    const meta = await statAsync(path);
+    const lastModified = meta.mtimeMs;
+    if (
+      isModified ||
+      !cachedFileMeta ||
+      lastModified !== cachedFileMeta.lastModified
+    ) {
+      // Read and Parse File, only when file has modified
+      const file = await readFileAsync(path, { encoding: "utf8" });
+      const css = await cssParseAsync(file);
+      cssVars = {
+        ...cssVars,
+        [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
+          (declarations, node: Node) => {
+            declarations = declarations.concat(
+              getVariableDeclarations(config, node)
+            );
+            return declarations;
+          },
+          []
+        ),
+      };
+    }
+    if (!cachedFileMeta) {
+      cache.fileMetas[path] = {
+        path,
+        lastModified,
+      };
+    } else {
+      cache.fileMetas[path].lastModified = lastModified;
+    }
   }
-  if (!compareCSSVars(cache.cssVars, cssVars)) {
-    cache.cssVars = cssVars;
-  }
+
+  cache.cssVars = cssVars;
   return cache.cssVars;
 };
 
 export const createCompletionItems = memoize(
   (
-    cssVars: CSSVarDeclarations[],
+    cssVars: CSSVarRecord,
     predicate?: (cssVar: CSSVarDeclarations) => boolean
-  ) =>
-    cssVars.reduce<CompletionItem[]>((items, cssVar) => {
+  ) => {
+    const vars = Object.keys(cssVars).reduce(
+      (acc, key) => acc.concat(cssVars[key]),
+      [] as CSSVarDeclarations[]
+    );
+    return vars.reduce<CompletionItem[]>((items, cssVar) => {
       if (!predicate || predicate(cssVar)) {
-        const color = getColor(cssVar.value, cssVars);
+        const color = getColor(cssVar.value, vars);
         const KIND = color.success
           ? CompletionItemKind.Color
           : CompletionItemKind.Variable;
@@ -178,6 +179,7 @@ export const createCompletionItems = memoize(
         items.push(item);
       }
       return items;
-    }, []),
+    }, []);
+  },
   (newArgs, lastArgs) => newArgs[0] === lastArgs[0]
 );
