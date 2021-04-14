@@ -2,7 +2,12 @@
  * Utility helper functions
  */
 
-import { CSS3Colors, CSSVarRecord } from "./constants";
+import {
+  CSS3Colors,
+  CSSVarRecord,
+  JS_IDS,
+  SupportedLanguageIds,
+} from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { lighten } from "polished";
 
@@ -91,3 +96,6 @@ export const getCSSDeclarationArray = (cssVars: CSSVarRecord) =>
     (acc, key) => acc.concat(cssVars[key]),
     [] as CSSVarDeclarations[]
   );
+
+export const isCSSInJS = (languageId: SupportedLanguageIds) =>
+  JS_IDS.includes(languageId as any);

@@ -1,5 +1,20 @@
 import { CSSVarDeclarations } from "./main";
 
+export const JS_IDS = [
+  "typescript",
+  "typescriptreact",
+  "javascript",
+  "javascriptreact",
+] as const;
+export const SUPPORTED_LANGUAGE_IDS = [
+  "css",
+  "scss",
+  "sass",
+  "less",
+  ...JS_IDS,
+] as const;
+export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
+
 export type SupportedExtensionNames =
   | "css"
   | "scss"
@@ -32,7 +47,7 @@ export const DEFAULT_CONFIG: Config = {
 
 export const mapShortToFullExtension = (
   ext: SupportedExtensionNames
-): SupportedExtensionNames => {
+): SupportedLanguageIds => {
   switch (ext) {
     case "ts":
       return "typescript";
@@ -223,7 +238,8 @@ export const CACHE: {
  * memoized function, on every call, as I need to
  * pass the range to properly make this extension work
  */
-export const FILTER_REGEX = /[\s:"'`]--[\w-]*/;
+export const FILTER_REGEX = /([\t\s:"'(`]--[\w-]*)/;
+export const SUFFIX = /[;'")]{1}/;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];
 

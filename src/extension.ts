@@ -7,8 +7,12 @@ import {
   Range,
 } from "vscode";
 import path from "path";
-import { DEFAULT_CONFIG, FILTER_REGEX } from "./constants";
-import { createCompletionItems, setup } from "./main";
+import {
+  DEFAULT_CONFIG,
+  FILTER_REGEX,
+  SupportedLanguageIds,
+} from "./constants";
+import { createCompletionItems, getRegion, setup } from "./main";
 import { parseFiles } from "./parser";
 
 const restrictIntellisense = (text: string) => {
@@ -27,15 +31,22 @@ export async function activate(context: ExtensionContext): Promise<void> {
       {
         async provideCompletionItems(document, position) {
           const firstInLine = new Position(position.line, 0);
-          const textFromStart =
-            document.getText(new Range(firstInLine, position)) || "";
-          // const filename = document.fileName;
+          const range = new Range(firstInLine, position);
+          const textFromStart = document.getText(range) || "";
+          const language: SupportedLanguageIds = document.languageId as SupportedLanguageIds;
           const { config } = await setup();
 
           // Editing Theme File should be restricted
           if (restrictIntellisense(textFromStart)) {
             return null;
           }
+
+          const range2 = new Range(
+            firstInLine,
+            position.with(position.line, position.character + 5)
+          );
+          const moreText = document.getText(range2);
+          const region = getRegion(moreText, range);
 
           const [cssVars, errorPaths] = await parseFiles(config);
           if (errorPaths.length > 0) {
@@ -47,7 +58,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
               `\n\n${relativePaths.join("\n\n")}`
             );
           }
-          const completionItems = createCompletionItems(cssVars);
+          const completionItems = createCompletionItems(cssVars, {
+            region,
+            languageId: language,
+          });
           return new CompletionList(completionItems);
         },
       },

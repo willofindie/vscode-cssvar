@@ -1,4 +1,4 @@
-import { CompletionItem, CompletionItemKind, workspace } from "vscode";
+import { CompletionItem, CompletionItemKind, Range, workspace } from "vscode";
 import { resolve } from "path";
 import fastGlob from "fast-glob";
 import { NoWorkspaceError } from "./errors";
@@ -7,10 +7,13 @@ import {
   CSSVarRecord,
   DEFAULT_CONFIG,
   EXTENSION_NAME,
+  FILTER_REGEX,
   mapShortToFullExtension,
+  SUFFIX,
   SupportedExtensionNames,
+  SupportedLanguageIds,
 } from "./constants";
-import { getCSSDeclarationArray, isObjectProperty } from "./utils";
+import { getCSSDeclarationArray, isCSSInJS, isObjectProperty } from "./utils";
 
 /**
  * Sets up the Plugin
@@ -65,24 +68,69 @@ export interface CSSVarDeclarations {
   color?: string;
 }
 
+export interface Region {
+  range: Range;
+  insideVar: boolean;
+  suffixChar: string;
+}
+
+export const getRegion = (line: string, currentRange: Range) => {
+  const match = line.match(FILTER_REGEX);
+  if (match) {
+    const filtered = match[1];
+    const cursorPosition = currentRange.end;
+    const range = new Range(
+      cursorPosition.with(
+        cursorPosition.line,
+        cursorPosition.character - filtered.length + 1
+      ),
+      currentRange.end
+    );
+    const suffixChar = line.charAt(line.length - 1);
+    const insideVar = /var\(/.test(line);
+    return {
+      range,
+      suffixChar,
+      insideVar,
+    };
+  }
+  return null;
+};
+
 export const createCompletionItems = (
   cssVars: CSSVarRecord,
-  predicate?: (cssVar: CSSVarDeclarations) => boolean
+  options: {
+    region?: Region | null;
+    languageId: SupportedLanguageIds;
+  } = { languageId: "css" }
 ) => {
   const vars = getCSSDeclarationArray(cssVars);
   return vars.reduce<CompletionItem[]>((items, cssVar) => {
-    if (!predicate || predicate(cssVar)) {
-      const KIND = cssVar.color
-        ? CompletionItemKind.Color
-        : CompletionItemKind.Variable;
-      const extra = cssVar.theme !== "" ? `\n\nTheme: [${cssVar.theme}]` : "";
-      const propertyName = `${cssVar.property}`;
-      const item = new CompletionItem(propertyName, KIND);
-      item.detail = `Value: ${cssVar.value}${extra}`;
-      item.documentation = cssVar.color || cssVar.value;
-      item.insertText = `var(${cssVar.property});`;
-      items.push(item);
+    const KIND = cssVar.color
+      ? CompletionItemKind.Color
+      : CompletionItemKind.Variable;
+    const extra = cssVar.theme !== "" ? `\n\nTheme: [${cssVar.theme}]` : "";
+    const propertyName = `${cssVar.property}`;
+    const item = new CompletionItem(propertyName, KIND);
+    item.detail = `Value: ${cssVar.value}${extra}`;
+    item.documentation = cssVar.color || cssVar.value;
+    if (options.region) {
+      let insertText: string;
+      if (options.region.insideVar) {
+        insertText = cssVar.property;
+      } else {
+        insertText = `var(${cssVar.property})`;
+      }
+      if (
+        !SUFFIX.test(options.region.suffixChar) &&
+        !isCSSInJS(options.languageId)
+      ) {
+        insertText += ";";
+      }
+      item.insertText = insertText;
+      item.range = options.region.range;
     }
+    items.push(item);
     return items;
   }, []);
 };
