@@ -103,12 +103,13 @@ const parseFile = async function (path: string, config: Config) {
  */
 export const parseFiles = async function (
   config: Config
-): Promise<CSSVarRecord> {
+): Promise<[CSSVarRecord, string[]]> {
   updateCacheOnFileDelete();
 
   let cssVars: CSSVarRecord = CACHE.cssVars;
   const isModified =
     Object.keys(CACHE.fileMetas).length !== config.files.length;
+  const errorPaths: string[] = [];
 
   for (const path of config.files) {
     const cachedFileMeta = CACHE.fileMetas[path];
@@ -124,7 +125,7 @@ export const parseFiles = async function (
       try {
         newVars = await parseFile(path, config);
       } catch (e) {
-        // NOOP
+        errorPaths.push(path);
       }
       cssVars = {
         ...cssVars,
@@ -153,5 +154,5 @@ export const parseFiles = async function (
   }
 
   CACHE.cssVars = cssVars;
-  return CACHE.cssVars;
+  return [CACHE.cssVars, errorPaths];
 };

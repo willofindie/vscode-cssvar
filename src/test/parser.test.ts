@@ -103,13 +103,14 @@ describe("Test Parser", () => {
         ...EXTENSION_CONFIG,
         files: [RENAMED_FILE, BROKEN_FILE],
       };
-      await parseFiles(updatedConfig);
+      const [_, errorPaths] = await parseFiles(updatedConfig);
       expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
       expect(CACHE.cssVars[RENAMED_FILE][0]).toMatchObject({
         property: "--red100",
         value: "#f00",
       } as CSSVarDeclarations);
       expect(CACHE.cssVars[BROKEN_FILE].length).toBe(0);
+      expect(errorPaths[0]).toBe(BROKEN_FILE);
     });
   })
 });

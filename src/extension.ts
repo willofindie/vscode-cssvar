@@ -6,6 +6,7 @@ import {
   Position,
   Range,
 } from "vscode";
+import path from "path";
 import { DEFAULT_CONFIG, FILTER_REGEX } from "./constants";
 import { createCompletionItems, setup } from "./main";
 import { parseFiles } from "./parser";
@@ -36,7 +37,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
             return null;
           }
 
-          const cssVars = await parseFiles(config);
+          const [cssVars, errorPaths] = await parseFiles(config);
+          if (errorPaths.length > 0) {
+            const relativePaths = errorPaths
+              .map(_path => _path.split(config.workspaceFolder + path.sep))
+              .map(path => (path.length > 0 ? path[1] : path[0]));
+            window.showWarningMessage(
+              "Failed to parse CSS variables in files:",
+              `\n\n${relativePaths.join("\n\n")}`
+            );
+          }
           const completionItems = createCompletionItems(cssVars);
           return new CompletionList(completionItems);
         },
