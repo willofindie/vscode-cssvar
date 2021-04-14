@@ -26,11 +26,11 @@ const cssParseAsync = (file: string) => {
  * when any file is deleted.
  */
 const updateCacheOnFileDelete = () => {
-  const deletedPath = Object.keys(CACHE.cssVars).filter(
+  const deletedPaths = Object.keys(CACHE.cssVars).filter(
     path => !existsSync(path)
   );
-  if (deletedPath.length > 0) {
-    deletedPath.forEach(path => {
+  if (deletedPaths.length > 0) {
+    deletedPaths.forEach(path => {
       delete CACHE.cssVars[path];
       delete CACHE.fileMetas[path];
     });
