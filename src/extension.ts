@@ -7,7 +7,8 @@ import {
   Range,
 } from "vscode";
 import { DEFAULT_CONFIG, FILTER_REGEX } from "./constants";
-import { createCompletionItems, parseFiles, setup } from "./main";
+import { createCompletionItems, setup } from "./main";
+import { parseFiles } from "./parser";
 
 const restrictIntellisense = (text: string) => {
   return !FILTER_REGEX.test(text) || /^[\s\t]*-{1,2}\w?$/.test(text);

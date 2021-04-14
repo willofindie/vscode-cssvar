@@ -2,15 +2,9 @@
  * Utility helper functions
  */
 
-import {
-  Config,
-  CSS3Colors,
-  CSS_VAR_REGEX,
-  SUPPORTED_CSS_RULE_TYPES,
-} from "./constants";
+import { CSS3Colors, CSSVarRecord } from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { lighten } from "polished";
-import { Declaration, Node, Rule } from "postcss";
 
 /**
  * This method will help convert non-conventional
@@ -50,40 +44,6 @@ export function getColor(
   };
 }
 
-export const isNodeType = <T extends Node>(
-  node: Node,
-  type: string
-): node is T => {
-  return !!node.type.match(type);
-};
-
-export function getVariableDeclarations(
-  config: Config,
-  node: Node,
-  theme?: string | null
-): CSSVarDeclarations[] {
-  let declarations: CSSVarDeclarations[] = [];
-  if (
-    isNodeType<Declaration>(node, SUPPORTED_CSS_RULE_TYPES[1]) &&
-    CSS_VAR_REGEX.test(node.prop)
-  ) {
-    declarations.push({
-      property: node.prop,
-      value: node.value,
-      theme: theme || "",
-    });
-  } else if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
-    const [theme] = config.themes.filter(theme => node.selector.match(theme));
-    if (!config.excludeThemedVariables || !theme) {
-      for (const _node of node.nodes) {
-        const decls = getVariableDeclarations(config, _node, theme);
-        declarations = declarations.concat(decls);
-      }
-    }
-  }
-  return declarations;
-}
-
 export const isObjectProperty = <T>(obj: T, key: any): key is keyof T =>
   Object.prototype.hasOwnProperty.call(obj, key);
 
@@ -121,3 +81,13 @@ export const shallowCompare = (obj1: any, obj2: any) => {
     )
   );
 };
+
+/**
+ * Get an Array reresentation for the
+ * CSSVarDeclaration Record.
+ */
+export const getCSSDeclarationArray = (cssVars: CSSVarRecord) =>
+  Object.keys(cssVars).reduce(
+    (acc, key) => acc.concat(cssVars[key]),
+    [] as CSSVarDeclarations[]
+  );

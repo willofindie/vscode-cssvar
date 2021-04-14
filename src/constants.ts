@@ -1,3 +1,5 @@
+import { CSSVarDeclarations } from "./main";
+
 export type SupportedExtensionNames =
   | "css"
   | "scss"
@@ -199,6 +201,20 @@ export const CSS3Colors = [
   "whitesmoke",
   "yellowgreen",
 ];
+
+export type CSSVarRecord = { [path: string]: CSSVarDeclarations[] };
+export const CACHE: {
+  cssVars: CSSVarRecord;
+  fileMetas: {
+    [path: string]: {
+      path: string;
+      lastModified: number;
+    };
+  };
+} = {
+  cssVars: {},
+  fileMetas: {},
+};
 
 // export const FILTER_REGEX = /[\s:](--|var)\(?[\w-]*/;
 /**
