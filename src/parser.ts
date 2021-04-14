@@ -120,9 +120,15 @@ export const parseFiles = async function (
       lastModified !== cachedFileMeta.lastModified
     ) {
       // Read and Parse File, only when file has modified
+      let newVars = { [path]: [] as CSSVarDeclarations[] };
+      try {
+        newVars = await parseFile(path, config);
+      } catch (e) {
+        // NOOP
+      }
       cssVars = {
         ...cssVars,
-        ...(await parseFile(path, config)),
+        ...newVars,
       };
     }
     if (!cachedFileMeta) {

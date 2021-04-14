@@ -6,8 +6,9 @@ import { CSSVarDeclarations } from "../main";
 import flatMap from "lodash/flatMap";
 
 const MODIFIED_DATE = new Date("2021-04-12T08:58:58.676Z");
-const DUMMY_FILE = path.resolve("src", "jest", "touch.css");
-const RENAMED_FILE = path.resolve("src", "jest", "renamed.css");
+const DUMMY_FILE = path.resolve("src", "test", "touch.css");
+const RENAMED_FILE = path.resolve("src", "test", "renamed.css");
+const BROKEN_FILE = path.resolve("src", "test", "broken.css");
 
 jest.mock("../constants", () => {
   const CONSTANTS = jest.requireActual("../constants");
@@ -95,4 +96,20 @@ describe("Test Parser", () => {
       expect(OLD_FILE_META).not.toEqual(Object.keys(CACHE.fileMetas));
     });
   });
+  describe("parseFiles handle improper CSS Files", () => {
+    it("Should be able to handle few improper CSS files", async () => {
+      // Updated config should contain the latest renamed file name.
+      const updatedConfig: Config = {
+        ...EXTENSION_CONFIG,
+        files: [RENAMED_FILE, BROKEN_FILE],
+      };
+      await parseFiles(updatedConfig);
+      expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
+      expect(CACHE.cssVars[RENAMED_FILE][0]).toMatchObject({
+        property: "--red100",
+        value: "#f00",
+      } as CSSVarDeclarations);
+      expect(CACHE.cssVars[BROKEN_FILE].length).toBe(0);
+    });
+  })
 });
