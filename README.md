@@ -27,6 +27,10 @@ This Extension supports the following properties as of now:
   - Eg: `cssvar.themes: ["dark"]`. This will help the extension
     distinguish between similarly named variables.
 - `cssvar.excludeThemedVariables`: `boolean`
+- `cssvar.unstable`: `string[]`
+  - All unstable features are by default disabled.
+  - Supports specific string constants, pointing to Unstable features:
+    - `"no_sort"` - Disables VSCode's in-built sorting feature for this extension
 
 *`cssvar.files` should contain relative/absolute path from
 your workspace root folder.*
@@ -38,6 +42,7 @@ your User `settings.json` or Workspace `settings.json`.
 - `cssvar.extensions`: `["css", "scss", "sass", "less"]`
 - `cssvar.themes`: `[]`
 - `cssvar.excludeThemedVariables`: `false`
+- `cssvar.unstable`: `[]`
 
 ## Screeshots:
 
