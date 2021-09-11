@@ -20,6 +20,7 @@ function getValue(value: string, cssVars?: CSSVarDeclarations[]): string {
       const cssVar = cssVars.find(
         cssVar => cssVar.property === propertyName[1]
       );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       return getValue(cssVar?.value || "", cssVars);
     }
   } else {
@@ -54,12 +55,9 @@ export function getColor(
       /^#|^rgba?|^hsla?|^transparent$/.test(value) ||
       CSS3Colors.includes(value.toLowerCase())
     ) {
-      const _color = value.replaceAll(/var\(.*?\)/, match =>
-        getValue(match, cssVars)
-      );
       return {
         success: true,
-        color: lighten(0, _color),
+        color: lighten(0, value),
       };
     }
   }

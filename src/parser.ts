@@ -109,8 +109,9 @@ export const parseFiles = async function (
   const isModified =
     Object.keys(CACHE.fileMetas).length !== config.files.length;
   const errorPaths: string[] = [];
+  const filesArray = <string[]>config.files;
 
-  for (const path of config.files) {
+  for (const path of filesArray) {
     const cachedFileMeta = CACHE.fileMetas[path];
     const meta = await statAsync(path);
     const lastModified = meta.mtimeMs;
