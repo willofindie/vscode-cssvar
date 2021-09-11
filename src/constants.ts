@@ -30,7 +30,6 @@ export type SupportedExtensionNames =
   | "javascriptreact";
 
 export interface Config {
-  workspaceFolder: string;
   files: string[];
   extensions: SupportedExtensionNames[];
   themes: string[];
@@ -38,7 +37,6 @@ export interface Config {
 }
 
 export const DEFAULT_CONFIG: Config = {
-  workspaceFolder: "",
   files: ["index.css"],
   extensions: ["css", "scss", "sass", "less"],
   themes: [],

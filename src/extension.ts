@@ -6,7 +6,6 @@ import {
   Position,
   Range,
 } from "vscode";
-import path from "path";
 import {
   DEFAULT_CONFIG,
   FILTER_REGEX,
@@ -50,9 +49,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
           const [cssVars, errorPaths] = await parseFiles(config);
           if (errorPaths.length > 0) {
-            const relativePaths = errorPaths
-              .map(_path => _path.split(config.workspaceFolder + path.sep))
-              .map(path => (path.length > 0 ? path[1] : path[0]));
+            const relativePaths = errorPaths;
             window.showWarningMessage(
               "Failed to parse CSS variables in files:",
               `\n\n${relativePaths.join("\n\n")}`

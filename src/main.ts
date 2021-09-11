@@ -25,8 +25,18 @@ export async function setup(): Promise<{ config: Config }> {
     throw new NoWorkspaceError("No Workspace found.");
   }
   const workspaceFolder = workspace.workspaceFolders || [];
-  const resourcePath = workspaceFolder[0]?.uri.fsPath;
+  const isMultiRoot = workspace.workspaceFolders.length > 1;
+  let resourcePath = workspaceFolder[0]?.uri.fsPath;
   const _config = workspace.getConfiguration(EXTENSION_NAME);
+  const root = _config.get<string>("root");
+  if (isMultiRoot && root) {
+    const wFolder = workspace.workspaceFolders.find(w => {
+      return w.name === root;
+    });
+    if (wFolder) {
+      resourcePath = wFolder.uri.fsPath;
+    }
+  }
   const config: Record<keyof Config, ValueOf<Config>> = {} as Config;
   for (const key in DEFAULT_CONFIG) {
     if (isObjectProperty(DEFAULT_CONFIG, key)) {
@@ -41,13 +51,13 @@ export async function setup(): Promise<{ config: Config }> {
           );
           break;
         }
-        case "workspaceFolder":
-          config[key] = resourcePath;
-          break;
         case "extensions":
-          config[key] = (<SupportedExtensionNames[]>value).map(ext =>
-            mapShortToFullExtension(ext)
-          );
+          config[key] = (<SupportedExtensionNames[]>value).map(ext => {
+            const _ext = ext.startsWith(".")
+              ? (ext.substr(1) as SupportedExtensionNames)
+              : ext;
+            return mapShortToFullExtension(_ext);
+          });
           break;
         default:
           config[key] = value;

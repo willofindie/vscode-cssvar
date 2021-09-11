@@ -85,9 +85,8 @@ const parseFile = async function (path: string, config: Config) {
   return {
     [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
-        declarations = declarations.concat(
-          getVariableDeclarations(config, node)
-        );
+        const dec = getVariableDeclarations(config, node);
+        declarations = declarations.concat(dec);
         return declarations;
       },
       []
@@ -146,9 +145,13 @@ export const parseFiles = async function (
     // Get Color for each, and modify the cssVar Record.
     const vars = getCSSDeclarationArray(cssVars);
     vars.forEach(cssVar => {
-      const color = getColor(cssVar.value, vars);
-      if (color.success) {
-        cssVar.color = color.color;
+      try {
+        const color = getColor(cssVar.value, vars);
+        if (color.success) {
+          cssVar.color = color.color;
+        }
+      } catch (e) {
+        // console.log("Color Parse Error: ", cssVar.value, e.message);
       }
     });
   }

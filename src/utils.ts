@@ -11,6 +11,23 @@ import {
 import { CSSVarDeclarations } from "./main";
 import { lighten } from "polished";
 
+const cssVarRegex = /var\((--[\w-]*)\)/;
+
+function getValue(value: string, cssVars?: CSSVarDeclarations[]): string {
+  if (cssVars && /var\(.*?\)/.test(value)) {
+    const propertyName = value.match(cssVarRegex);
+    if (propertyName) {
+      const cssVar = cssVars.find(
+        cssVar => cssVar.property === propertyName[1]
+      );
+      return getValue(cssVar?.value || "", cssVars);
+    }
+  } else {
+    return value;
+  }
+  return value;
+}
+
 /**
  * This method will help convert non-conventional
  * color calues like color names `red` etc.
@@ -37,9 +54,12 @@ export function getColor(
       /^#|^rgba?|^hsla?|^transparent$/.test(value) ||
       CSS3Colors.includes(value.toLowerCase())
     ) {
+      const _color = value.replaceAll(/var\(.*?\)/, match =>
+        getValue(match, cssVars)
+      );
       return {
         success: true,
-        color: lighten(0, value),
+        color: lighten(0, _color),
       };
     }
   }
