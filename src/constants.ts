@@ -30,7 +30,7 @@ export type SupportedExtensionNames =
   | "javascriptreact";
 
 export interface Config {
-  files: string[];
+  files: string[] | Record<string, string[]>;
   extensions: SupportedExtensionNames[];
   themes: string[];
   excludeThemedVariables: boolean;

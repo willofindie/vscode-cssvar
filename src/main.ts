@@ -26,16 +26,15 @@ export async function setup(): Promise<{ config: Config }> {
   }
   const workspaceFolder = workspace.workspaceFolders || [];
   const isMultiRoot = workspace.workspaceFolders.length > 1;
-  let resourcePath = workspaceFolder[0]?.uri.fsPath;
+  const resourcePath = workspaceFolder[0]?.uri.fsPath;
   const _config = workspace.getConfiguration(EXTENSION_NAME);
-  const root = _config.get<string>("root");
-  if (isMultiRoot && root) {
-    const wFolder = workspace.workspaceFolders.find(w => {
-      return w.name === root;
-    });
-    if (wFolder) {
-      resourcePath = wFolder.uri.fsPath;
-    }
+  if (
+    isMultiRoot &&
+    (!_config.get("files") || Array.isArray(_config.get("files")))
+  ) {
+    throw new NoWorkspaceError(
+      "Provide a map object for cssvar.files property in Multi Root Workspaces"
+    );
   }
   const config: Record<keyof Config, ValueOf<Config>> = {} as Config;
   for (const key in DEFAULT_CONFIG) {
@@ -43,12 +42,32 @@ export async function setup(): Promise<{ config: Config }> {
       const value = _config.get<ValueOf<Config>>(key) || DEFAULT_CONFIG[key];
       switch (key) {
         case "files": {
-          const entries = await fastGlob(<string[]>value, {
-            cwd: resourcePath,
-          });
-          config[key] = entries.map((path: string) =>
-            resolve(resourcePath, path)
-          );
+          if (isMultiRoot) {
+            const _value = <Record<string, string[]>>value;
+            config[key] = [];
+            for (const workspaceName of Object.keys(_value)) {
+              const wFolder = workspace.workspaceFolders.find(w => {
+                return new RegExp(workspaceName).test(w.name);
+              });
+              if (wFolder) {
+                const _resourcePath = wFolder.uri.fsPath;
+                const globs = _value[workspaceName];
+                const entries = await fastGlob(globs, {
+                  cwd: _resourcePath,
+                });
+                config[key] = (<string[]>config[key]).concat(
+                  entries.map((path: string) => resolve(_resourcePath, path))
+                );
+              }
+            }
+          } else {
+            const entries = await fastGlob(<string[]>value, {
+              cwd: resourcePath,
+            });
+            config[key] = entries.map((path: string) =>
+              resolve(resourcePath, path)
+            );
+          }
           break;
         }
         case "extensions":

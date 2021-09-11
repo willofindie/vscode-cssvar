@@ -47,17 +47,10 @@
     "configuration": {
       "title": "CSS Var Complete - An Autocompletion Intellisense tool for CSS Variables",
       "properties": {
-        "cssvar.root": {
-          "type": [
-            "string",
-            "null"
-          ],
-          "default": null,
-          "description": "Provide Root folder name for CSS files in a Multi Root Workspace project"
-        },
         "cssvar.files": {
           "type": [
             "array",
+            "object",
             "null"
           ],
           "default": null,
