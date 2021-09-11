@@ -3,19 +3,21 @@
   "env": {
     "browser": false,
     "node": true,
-    "es6": true
+    "es6": true,
+    "jest/globals": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
+    "plugin:jest/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
       "ecmaVersion": 6,
       "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "jest"],
   "rules": {
     "@typescript-eslint/camelcase": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
@@ -23,6 +25,7 @@
     "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/ban-ts-comment": 1,
     "prettier/prettier": "error",
     "no-console":"error"
   }

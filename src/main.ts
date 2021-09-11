@@ -12,8 +12,10 @@ import {
   SUFFIX,
   SupportedExtensionNames,
   SupportedLanguageIds,
+  UNSTABLE_FEATURES,
 } from "./constants";
 import { getCSSDeclarationArray, isCSSInJS, isObjectProperty } from "./utils";
+import { disableDefaultSort } from "./unstable";
 
 /**
  * Sets up the Plugin
@@ -39,19 +41,19 @@ export async function setup(): Promise<{ config: Config }> {
   const config: Record<keyof Config, ValueOf<Config>> = {} as Config;
   for (const key in DEFAULT_CONFIG) {
     if (isObjectProperty(DEFAULT_CONFIG, key)) {
-      const value = _config.get<ValueOf<Config>>(key) || DEFAULT_CONFIG[key];
       switch (key) {
         case "files": {
+          const value =
+            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
           if (isMultiRoot) {
-            const _value = <Record<string, string[]>>value;
             config[key] = [];
-            for (const workspaceName of Object.keys(_value)) {
+            for (const workspaceName of Object.keys(value)) {
               const wFolder = workspace.workspaceFolders.find(w => {
                 return new RegExp(workspaceName).test(w.name);
               });
               if (wFolder) {
                 const _resourcePath = wFolder.uri.fsPath;
-                const globs = _value[workspaceName];
+                const globs = (<Record<string, string[]>>value)[workspaceName];
                 const entries = await fastGlob(globs, {
                   cwd: _resourcePath,
                 });
@@ -70,17 +72,31 @@ export async function setup(): Promise<{ config: Config }> {
           }
           break;
         }
-        case "extensions":
-          config[key] = (<SupportedExtensionNames[]>value).map(ext => {
+        case "extensions": {
+          const value =
+            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
+          config[key] = value.map(ext => {
             const _ext = ext.startsWith(".")
               ? (ext.substr(1) as SupportedExtensionNames)
               : ext;
             return mapShortToFullExtension(_ext);
           });
           break;
-        default:
+        }
+        case "unstable": {
+          const value =
+            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
+          value.forEach(featureKey => {
+            UNSTABLE_FEATURES[featureKey] = true;
+          });
+          break;
+        }
+        default: {
+          const value =
+            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
           config[key] = value;
           break;
+        }
       }
     }
   }
@@ -103,7 +119,7 @@ export interface Region {
   suffixChar: string;
 }
 
-export const getRegion = (line: string, currentRange: Range) => {
+export const getRegion = (line: string, currentRange: Range): Region | null => {
   const match = line.match(FILTER_REGEX);
   if (match) {
     const filtered = match[1];
@@ -134,7 +150,8 @@ export const createCompletionItems = (
   } = { languageId: "css" }
 ) => {
   const vars = getCSSDeclarationArray(cssVars);
-  return vars.reduce<CompletionItem[]>((items, cssVar) => {
+  const size = vars.length;
+  return vars.reduce<CompletionItem[]>((items, cssVar, index) => {
     const KIND = cssVar.color
       ? CompletionItemKind.Color
       : CompletionItemKind.Variable;
@@ -158,6 +175,7 @@ export const createCompletionItems = (
       }
       item.insertText = insertText;
       item.range = options.region.range;
+      disableDefaultSort(item, { size, index });
     }
     items.push(item);
     return items;
