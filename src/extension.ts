@@ -7,15 +7,22 @@ import {
   Range,
 } from "vscode";
 import {
+  CSS_PROPERTY,
+  CSS_VAR_INTELLISENSE_TRIGGER,
   DEFAULT_CONFIG,
   FILTER_REGEX,
   SupportedLanguageIds,
 } from "./constants";
 import { createCompletionItems, getRegion, setup } from "./main";
 import { parseFiles } from "./parser";
+import { isCSSInJS } from "./utils";
 
-const restrictIntellisense = (text: string) => {
-  return !FILTER_REGEX.test(text) || /^[\s\t]*-{1,2}\w?$/.test(text);
+const restrictIntellisense = (text: string, lang: SupportedLanguageIds) => {
+  if (isCSSInJS(lang)) {
+    return !FILTER_REGEX.test(text) || CSS_PROPERTY.test(text);
+  } else {
+    return !CSS_VAR_INTELLISENSE_TRIGGER.test(text);
+  }
 };
 
 /**
@@ -36,7 +43,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
           const { config } = await setup();
 
           // Editing Theme File should be restricted
-          if (restrictIntellisense(textFromStart)) {
+          if (restrictIntellisense(textFromStart, language)) {
             return null;
           }
 

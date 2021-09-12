@@ -13,6 +13,12 @@ class CompletionItem {
   }
 }
 
+class CompletionList {
+  constructor(items) {
+    this.items = items;
+  }
+}
+
 class Position {
   /**
    * @param {number} line
@@ -54,10 +60,22 @@ const workspace = {
   onDidSaveTextDocument: jest.fn(),
 };
 
+const languages = {
+  registerCompletionItemProvider: jest.fn((_, obj) => obj),
+};
+
+const window = {
+  // eslint-disable-next-line no-console
+  showErrorMessage: jest.fn(msg => console.trace(msg)),
+};
+
 module.exports = {
   CompletionItemKind,
   CompletionItem,
+  CompletionList,
   workspace,
+  languages,
+  window,
   Position,
   Range,
 };

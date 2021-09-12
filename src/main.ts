@@ -125,20 +125,16 @@ export interface Region {
  *
  * @param {string} line current line where cursor is present
  * @param {Range} currentRange Current Selected range pointing to the start and end of css variable trigger
- * @returns {Region | null} region containing the characters in the line to be replaced with css variable
+ * @returns {Region} region containing the characters in the line to be replaced with css variable
  */
-export const getRegion = (line: string, currentRange: Range): Region | null => {
+export const getRegion = (line: string, currentRange: Range): Region => {
   const match = line.match(FILTER_REGEX);
-  if (match) {
-    const filtered = match.groups?.var || "";
-    const startPosition = line.search(filtered);
-    const cursorPosition = currentRange.end;
-    // Get a range starting from cursor's position minus total number
-    // of characters already typed by user to trigger the intellisense
-    // i.e. characters post `--` and including `--`
+  const cursorPosition = currentRange.end;
+
+  const findRegion = (start: number, offset: number): Region => {
     const range = new Range(
-      cursorPosition.with(cursorPosition.line, startPosition),
-      cursorPosition.with(cursorPosition.line, startPosition + filtered.length)
+      cursorPosition.with(cursorPosition.line, start),
+      cursorPosition.with(cursorPosition.line, start + offset)
     );
     const suffixChar = line.charAt(line.length - 1);
     const insideVar = /var\(/.test(line);
@@ -147,8 +143,38 @@ export const getRegion = (line: string, currentRange: Range): Region | null => {
       suffixChar,
       insideVar,
     };
+  };
+
+  if (match) {
+    const filtered = match.groups?.var || "";
+    const startPosition = line.search(filtered);
+    // Get a range starting from cursor's position minus total number
+    // of characters already typed by user to trigger the intellisense
+    // i.e. characters post `--` and including `--`
+    return findRegion(startPosition, filtered.length);
+  } else {
+    // Due to some variations in how VSCode triggers this plugin's `activate` method
+    // this else condition is required, and we need to return a region, when
+    // this plugin is activated and we have a match that resembles our trigger regex, i.e. FILTER_REGEX.
+
+    /**
+     * If this https://github.com/microsoft/vscode/issues/38982 issue is read carefully, range returned
+     * from this function is run with the text, when `provideCompletionItems` is triggered. So,
+     * if this method returns a range between `0-3` where 0 is `-` and 3 is `;` for text `--);`,
+     * then `);` will also be replaced with selection, which is not desired.
+     * For e.g. take following examples of text, when `provideCompletionItems` gets triggered:
+     *  - `: -);` - if range returned is [2, 5], then everything beyond `: ` will be replaced by insertText
+     *
+     * To keep this in check we should remove the last two chars from `endString`, if they contain
+     * `);` at the end. Even simpler solution would be to keep the offset sized 1 always.
+     */
+    const colonIndex = line.search(":");
+    const endString = line.slice(colonIndex);
+    const index = endString.search(/-{1,2}\w*?/);
+    const offset = endString.length - (index === -1 ? endString.length : index);
+    const startPosition = line.length - offset;
+    return findRegion(startPosition, 1);
   }
-  return null;
 };
 
 export const createCompletionItems = (

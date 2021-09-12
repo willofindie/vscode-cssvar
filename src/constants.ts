@@ -250,8 +250,12 @@ export const SUFFIX = /[;'")]{1}/;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];
 
+export const CSS_VAR_INTELLISENSE_TRIGGER = /:.*?-{1,2}(\w|\)|;)*?/;
 /**
  * This Constant defines the regex for CSS Variable
  * declaration, in the CSS files or it's AST representation.
+ * DO NOT CHANGE as it is used only in one place to parse CSS AST
+ * declaration
  */
 export const CSS_VAR_REGEX = /^[\s\t]*--/;
+export const CSS_PROPERTY = /^[\s\t]*-{1,2}\w?$/;
