@@ -236,14 +236,16 @@ export const CACHE: {
   fileMetas: {},
 };
 
-// export const FILTER_REGEX = /[\s:](--|var)\(?[\w-]*/;
 /**
- * For now I am not supporting `var` keyword,
- * as it will invalidate createCompletionItems
- * memoized function, on every call, as I need to
- * pass the range to properly make this extension work
+ * Following regex supports:
+ *  - CSS variables as values: `: --red` or `:--red`
+ *  - CSS variables with `var(--`
+ *  - CSS variables in CSS-in-JS, as strings/string literals
+ *
+ * Adds support for the following but changes are pending to support is properly.
+ *  - Multiple use of CSS variables separated with commas: `linear-gradient(4deg, --var1, --var2)
  */
-export const FILTER_REGEX = /([\t\s:"'(`]--[\w-]*)/;
+export const FILTER_REGEX = /((:(\t|\s)*)|(("|'|`)(\t|\s)*)|(\((\t|\s)*)|(,(\t|\s)*))(?<var>--[\w-]*)/;
 export const SUFFIX = /[;'")]{1}/;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];

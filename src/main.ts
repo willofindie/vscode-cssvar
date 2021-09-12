@@ -119,17 +119,26 @@ export interface Region {
   suffixChar: string;
 }
 
+/**
+ * Get the region containing the --variable to be replaced later with specific selected
+ * CSS Variable name. The range returned as part of Region, will start from `--`.
+ *
+ * @param {string} line current line where cursor is present
+ * @param {Range} currentRange Current Selected range pointing to the start and end of css variable trigger
+ * @returns {Region | null} region containing the characters in the line to be replaced with css variable
+ */
 export const getRegion = (line: string, currentRange: Range): Region | null => {
   const match = line.match(FILTER_REGEX);
   if (match) {
-    const filtered = match[1];
+    const filtered = match.groups?.var || "";
+    const startPosition = line.search(filtered);
     const cursorPosition = currentRange.end;
+    // Get a range starting from cursor's position minus total number
+    // of characters already typed by user to trigger the intellisense
+    // i.e. characters post `--` and including `--`
     const range = new Range(
-      cursorPosition.with(
-        cursorPosition.line,
-        cursorPosition.character - filtered.length + 1
-      ),
-      currentRange.end
+      cursorPosition.with(cursorPosition.line, startPosition),
+      cursorPosition.with(cursorPosition.line, startPosition + filtered.length)
     );
     const suffixChar = line.charAt(line.length - 1);
     const insideVar = /var\(/.test(line);

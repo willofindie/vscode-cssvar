@@ -23,8 +23,17 @@ class Position {
     this.character = char;
   }
 
-  with = jest.fn().mockImplementation((start, end) => {
-    return new Range(start, end);
+  /**
+   * @param {number} line
+   * @param {number} char
+   */
+  with = jest.fn().mockImplementation((line, char) => {
+    // Reference of https://github.com/microsoft/vscode/blob/main/src/vs/editor/common/core/position.ts
+    if (line === this.line && char === this.char) {
+      return this;
+    } else {
+      return new Position(line, char);
+    }
   });
 }
 

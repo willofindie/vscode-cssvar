@@ -40,11 +40,21 @@ export async function activate(context: ExtensionContext): Promise<void> {
             return null;
           }
 
-          const range2 = new Range(
+          /**
+           * VSCode auto-fills extra characters post our current cursor position sometimes
+           * like typing `var(;` adds `var();` in css files. we can have 2 or more characters
+           * post our current cursor position.
+           *
+           * Taking 5 extra characters make sure we do not miss any extra characters post our cursor
+           * position, but vscode will take the minimum characters present post cursor position, i.e.
+           * if there are only 2 more charaters post the cursors position, range will be between (0, n+2)
+           * not n + 5.
+           */
+          const rangeWithTerminator = new Range(
             firstInLine,
             position.with(position.line, position.character + 5)
           );
-          const moreText = document.getText(range2);
+          const moreText = document.getText(rangeWithTerminator);
           const region = getRegion(moreText, range);
 
           const [cssVars, errorPaths] = await parseFiles(config);

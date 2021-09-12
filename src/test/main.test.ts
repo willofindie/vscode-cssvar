@@ -19,6 +19,53 @@ describe("Test Extension Main", () => {
     );
   });
 
+  describe(`Test getRegion method`, () => {
+    it("testing range for plain -- init", () => {
+      const line = "  color: --c";
+      let received = getRegion(
+        line,
+        new Range(new Position(0, 0), new Position(0, line.length))
+      );
+      expect(received).not.toBeNull();
+      expect(received).toMatchObject({
+        insideVar: false,
+        suffixChar: "c",
+        range: {
+          start: expect.objectContaining({
+            character: 9,
+          }),
+          end: expect.objectContaining({
+            character: 12
+          }),
+        }
+      });
+      received = getRegion(
+        line,
+        new Range(new Position(0, 0), new Position(0, line.length))
+      );
+    });
+    it("testing range for cssvar init with `var`", () => {
+      const lineWithVar = "  color: var(--c);";
+      let received = getRegion(
+        lineWithVar,
+        new Range(new Position(0, 0), new Position(0, lineWithVar.length))
+      );
+      expect(received).not.toBeNull();
+      expect(received).toMatchObject({
+        insideVar: true,
+        suffixChar: ";",
+        range: {
+          start: expect.objectContaining({
+            character: 13,
+          }),
+          end: expect.objectContaining({
+            character: 16
+          }),
+        }
+      });
+    });
+  });
+
   describe(`Test createCompletion method`, () => {
     it("Should return CompletionItems with Sorting On", async () => {
       UNSTABLE_FEATURES.no_sort = false;
