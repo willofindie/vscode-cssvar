@@ -13,7 +13,7 @@
     "intellisense"
   ],
   "description": "Intellisense support for CSS Variables",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "phoenisx",
   "license": "MIT",
   "homepage": "https://github.com/willofindie/vscode-cssvar",
@@ -77,14 +77,10 @@
           "default": false,
           "description": "Exclude themed variables"
         },
-        "cssvar.unstable": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "pattern": "no_sort",
-          "description": "Enable various unstable feature for the extension"
+        "cssvar.disableSort": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables default sorting applied by VSCode"
         }
       }
     }

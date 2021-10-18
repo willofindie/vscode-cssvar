@@ -3,16 +3,17 @@
  */
 
 import { CompletionItem } from "vscode";
-import { UNSTABLE_FEATURES } from "./constants";
+import { Config } from "./constants";
 
 export const disableDefaultSort = (
+  config: Config,
   item: CompletionItem,
   options: {
     size: number;
     index: number;
   }
 ) => {
-  if (UNSTABLE_FEATURES.no_sort) {
+  if (config.disableSort) {
     const padSize = Math.floor(Math.log(options.size - 1) / Math.log(10) + 1);
     item.sortText = `${options.index}`.padStart(padSize, "0");
   }

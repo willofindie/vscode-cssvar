@@ -1,5 +1,5 @@
 import { Position, Range } from "vscode";
-import { CSSVarRecord, UNSTABLE_FEATURES } from "../constants";
+import { Config, CSSVarRecord, DEFAULT_CONFIG } from "../constants";
 import { createCompletionItems, getRegion, Region } from "../main";
 
 jest.mock("../constants", () => ({
@@ -110,7 +110,10 @@ describe("Test Extension Main", () => {
 
   describe(`Test createCompletion method`, () => {
     it("Should return CompletionItems with Sorting On", async () => {
-      UNSTABLE_FEATURES.no_sort = false;
+      const config: Config = {
+        ...DEFAULT_CONFIG,
+        disableSort: false,
+      }
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
@@ -127,7 +130,7 @@ describe("Test Extension Main", () => {
           },
         ],
       };
-      const items = createCompletionItems(cssVars, {
+      const items = createCompletionItems(config, cssVars, {
         region,
         languageId: "css",
       });
@@ -139,7 +142,10 @@ describe("Test Extension Main", () => {
       );
     });
     it("Should return CompletionItems with Sorting Disabled", async () => {
-      UNSTABLE_FEATURES.no_sort = true;
+      const config: Config = {
+        ...DEFAULT_CONFIG,
+        disableSort: true,
+      }
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
@@ -157,7 +163,7 @@ describe("Test Extension Main", () => {
         ],
       };
 
-      const items = createCompletionItems(cssVars, {
+      const items = createCompletionItems(config, cssVars, {
         region,
         languageId: "css",
       });
@@ -171,7 +177,10 @@ describe("Test Extension Main", () => {
       });
     });
     it("Should return CompletionItems with 3 and 2digit sortText", async () => {
-      UNSTABLE_FEATURES.no_sort = true;
+      const config: Config = {
+        ...DEFAULT_CONFIG,
+        disableSort: true,
+      }
       const cssVars1: CSSVarRecord = Array(11)
         .fill([
           {
@@ -197,11 +206,11 @@ describe("Test Extension Main", () => {
           return acc;
         }, {});
 
-      const items1 = createCompletionItems(cssVars1, {
+      const items1 = createCompletionItems(config, cssVars1, {
         region,
         languageId: "css",
       });
-      const items2 = createCompletionItems(cssVars2, {
+      const items2 = createCompletionItems(config, cssVars2, {
         region,
         languageId: "css",
       });

@@ -12,7 +12,6 @@ import {
   SUFFIX,
   SupportedExtensionNames,
   SupportedLanguageIds,
-  UNSTABLE_FEATURES,
 } from "./constants";
 import { getCSSDeclarationArray, isCSSInJS, isObjectProperty } from "./utils";
 import { disableDefaultSort } from "./unstable";
@@ -80,14 +79,6 @@ export async function setup(): Promise<{ config: Config }> {
               ? (ext.substr(1) as SupportedExtensionNames)
               : ext;
             return mapShortToFullExtension(_ext);
-          });
-          break;
-        }
-        case "unstable": {
-          const value =
-            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
-          value.forEach(featureKey => {
-            UNSTABLE_FEATURES[featureKey] = true;
           });
           break;
         }
@@ -178,6 +169,7 @@ export const getRegion = (line: string, currentRange: Range): Region => {
 };
 
 export const createCompletionItems = (
+  config: Config,
   cssVars: CSSVarRecord,
   options: {
     region?: Region | null;
@@ -210,7 +202,7 @@ export const createCompletionItems = (
       }
       item.insertText = insertText;
       item.range = options.region.range;
-      disableDefaultSort(item, { size, index });
+      disableDefaultSort(config, item, { size, index });
     }
     items.push(item);
     return items;

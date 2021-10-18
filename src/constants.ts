@@ -29,17 +29,12 @@ export type SupportedExtensionNames =
   | "javascript"
   | "javascriptreact";
 
-export const UNSTABLE_FEATURES = {
-  no_sort: false,
-};
-export type UnstableFeatures = (keyof typeof UNSTABLE_FEATURES)[];
-
 export interface Config {
   files: string[] | Record<string, string[]>;
   extensions: SupportedExtensionNames[];
   themes: string[];
   excludeThemedVariables: boolean;
-  unstable: UnstableFeatures;
+  disableSort: boolean;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -47,7 +42,7 @@ export const DEFAULT_CONFIG: Config = {
   extensions: ["css", "scss", "sass", "less"],
   themes: [],
   excludeThemedVariables: false,
-  unstable: [],
+  disableSort: false,
 };
 
 export const mapShortToFullExtension = (

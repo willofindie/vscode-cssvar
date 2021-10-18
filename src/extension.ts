@@ -72,7 +72,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
               `\n\n${relativePaths.join("\n\n")}`
             );
           }
-          const completionItems = createCompletionItems(cssVars, {
+          const completionItems = createCompletionItems(config, cssVars, {
             region,
             languageId: language,
           });
