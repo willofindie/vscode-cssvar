@@ -1,0 +1,1 @@
+- Implement Github Workflows to auto release with notes: check https://github.com/MylesBorins/node-osc
