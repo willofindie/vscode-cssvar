@@ -5,11 +5,15 @@
 import {
   CSS3Colors,
   CSSVarRecord,
+  CSS_REGEX_INITIATOR,
+  JSS_REGEX_INITIATOR,
   JS_IDS,
   SupportedLanguageIds,
+  VAR_KEYWORD_REVERSE,
 } from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { lighten } from "polished";
+import { Range } from "vscode";
 
 const cssVarRegex = /var\((--[\w-]*)\)/;
 
@@ -117,3 +121,77 @@ export const getCSSDeclarationArray = (cssVars: CSSVarRecord) =>
 
 export const isCSSInJS = (languageId: SupportedLanguageIds) =>
   JS_IDS.includes(languageId as any);
+
+export const reverseFindVarKeyword = (
+  input: string,
+  startPos: number
+): boolean => {
+  for (let index = 0; index < 4; index++) {
+    if (input.charAt(startPos - index - 1) !== VAR_KEYWORD_REVERSE[index]) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export interface Region {
+  range: Range;
+  insideVar: boolean;
+  suffixChar: string;
+}
+
+/**
+ * Restrict Intellisense if we do not get a proper CSS Variable activator.
+ * This function will return an array of regions, where CSS Variable is found.
+ * If no CSS Variable value is found, an empty array will be returned, for which
+ * we can ignore intellisense calls.
+ *
+ * @param text Should be the text from start of the line
+ * @param lang supported lang, like JS/TS/CSS etc.
+ * @param currentRange Current Line and Character Range where the text cursor is present.
+ */
+export const restrictIntellisense = (
+  text: string,
+  lang: SupportedLanguageIds,
+  currentRange: Range
+): Region[] => {
+  // irrespective of JS or CSS files, `:` is the common entity
+  // that is present while defining CSS Values, thus splitting it
+  // into two halves will give us the value in second.
+  const [property, value] = text.split(":");
+  if (!value) {
+    return [];
+  }
+
+  const cursorPosition = currentRange.end;
+  const findRegion = (start: number, size: number): Region => {
+    const range = new Range(
+      cursorPosition.with(cursorPosition.line, property.length + 1 + start),
+      cursorPosition.with(cursorPosition.line, property.length + start + size)
+    );
+    const suffixChar = value.charAt(start + size);
+    const insideVar = reverseFindVarKeyword(value, start);
+    return {
+      range,
+      suffixChar,
+      insideVar,
+    };
+  };
+  if (isCSSInJS(lang)) {
+    const results = [...value.matchAll(JSS_REGEX_INITIATOR)];
+    const regions = results.map(result => {
+      const size = result[1].length; // Returns the matched strings length.
+      const start = result.index || 0;
+      return findRegion(start, size);
+    });
+    return regions;
+  } else {
+    const results = [...value.matchAll(CSS_REGEX_INITIATOR)];
+    const regions = results.map(result => {
+      const size = result[1].length; // Returns the matched strings length.
+      const start = (result.index || 0) + 1;
+      return findRegion(start, size);
+    });
+    return regions;
+  }
+};

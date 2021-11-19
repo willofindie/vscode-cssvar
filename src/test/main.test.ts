@@ -1,6 +1,7 @@
 import { Position, Range } from "vscode";
 import { Config, CSSVarRecord, DEFAULT_CONFIG } from "../constants";
-import { createCompletionItems, getRegion, Region } from "../main";
+import { createCompletionItems } from "../main";
+import { Region } from "../utils";
 
 jest.mock("../constants", () => ({
   ...jest.requireActual("../constants"),
@@ -13,99 +14,11 @@ let region: Region | null = null;
 
 describe("Test Extension Main", () => {
   beforeEach(() => {
-    region = getRegion(
-      "color: --s",
-      new Range(new Position(0, 5), new Position(0, 10))
-    );
-  });
-
-  describe(`Test getRegion method`, () => {
-    it("testing range for plain -- init", () => {
-      const lines = [
-        "  color: -",
-        "  color: --",
-        "  color: --c"
-      ];
-      let [r1, r2, r3] = lines.map(line => getRegion(
-        line,
-        new Range(new Position(0, 0), new Position(0, line.length))
-      ));
-      expect(r1).toMatchObject({
-        range: {
-          start: expect.objectContaining({
-            character: 9,
-          }),
-          end: expect.objectContaining({
-            character: 10
-          }),
-        }
-      });
-      expect(r2).toMatchObject({
-        range: {
-          start: expect.objectContaining({
-            character: 9,
-          }),
-          end: expect.objectContaining({
-            character: 11
-          }),
-        }
-      });
-      expect(r3).toMatchObject({
-        insideVar: false,
-        suffixChar: "c",
-        range: {
-          start: expect.objectContaining({
-            character: 9,
-          }),
-          end: expect.objectContaining({
-            character: 12
-          }),
-        }
-      });
-    });
-    it("testing range for cssvar init with `var`", () => {
-      const linesWithVar = [
-        "  color: var(-);",
-        "  color: var(--);",
-        "  color: var(--c);",
-      ];
-      let [r1, r2, r3] = linesWithVar.map(line => getRegion(
-        line,
-        new Range(new Position(0, 0), new Position(0, line.length))
-      ));
-      expect(r1).toMatchObject({
-        range: {
-          start: expect.objectContaining({
-            character: 13,
-          }),
-          end: expect.objectContaining({
-            character: 14
-          }),
-        }
-      });
-      expect(r2).toMatchObject({
-        range: {
-          start: expect.objectContaining({
-            character: 13,
-          }),
-          end: expect.objectContaining({
-            character: 15
-          }),
-        }
-      });
-      expect(r3).toMatchObject({
-        insideVar: true,
-        suffixChar: ";",
-        range: {
-          start: expect.objectContaining({
-            character: 13,
-          }),
-          end: expect.objectContaining({
-            character: 16
-          }),
-        }
-      });
-    });
+    region = {
+      range: new Range(new Position(0, 5), new Position(0, 10)),
+      insideVar: false,
+      suffixChar: "",
+    } as Region;
   });
 
   describe(`Test createCompletion method`, () => {
