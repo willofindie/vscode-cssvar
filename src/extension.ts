@@ -6,24 +6,10 @@ import {
   Position,
   Range,
 } from "vscode";
-import {
-  CSS_PROPERTY,
-  CSS_VAR_INTELLISENSE_TRIGGER,
-  DEFAULT_CONFIG,
-  FILTER_REGEX,
-  SupportedLanguageIds,
-} from "./constants";
-import { createCompletionItems, getRegion, setup } from "./main";
+import { DEFAULT_CONFIG, SupportedLanguageIds } from "./constants";
+import { createCompletionItems, setup } from "./main";
 import { parseFiles } from "./parser";
-import { isCSSInJS } from "./utils";
-
-const restrictIntellisense = (text: string, lang: SupportedLanguageIds) => {
-  if (isCSSInJS(lang)) {
-    return !FILTER_REGEX.test(text) || CSS_PROPERTY.test(text);
-  } else {
-    return !CSS_VAR_INTELLISENSE_TRIGGER.test(text);
-  }
-};
+import { restrictIntellisense } from "./utils";
 
 /**
  * Main Function from where the Plugin loads
@@ -37,15 +23,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
       {
         async provideCompletionItems(document, position) {
           const firstInLine = new Position(position.line, 0);
-          const range = new Range(firstInLine, position);
-          const textFromStart = document.getText(range) || "";
           const language: SupportedLanguageIds = document.languageId as SupportedLanguageIds;
           const { config } = await setup();
-
-          // Editing Theme File should be restricted
-          if (restrictIntellisense(textFromStart, language)) {
-            return null;
-          }
 
           /**
            * VSCode auto-fills extra characters post our current cursor position sometimes
@@ -61,8 +40,19 @@ export async function activate(context: ExtensionContext): Promise<void> {
             firstInLine,
             position.with(position.line, position.character + 5)
           );
-          const moreText = document.getText(rangeWithTerminator);
-          const region = getRegion(moreText, range);
+          const textFromStart = document.getText(rangeWithTerminator) || "";
+
+          // Editing Theme File should be restricted
+          const regions = restrictIntellisense(
+            textFromStart,
+            language,
+            rangeWithTerminator
+          );
+          if (regions.length === 0) {
+            return null;
+          }
+
+          const region = regions[regions.length - 1];
 
           const [cssVars, errorPaths] = await parseFiles(config);
           if (errorPaths.length > 0) {
