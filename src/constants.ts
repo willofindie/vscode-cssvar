@@ -6,13 +6,8 @@ export const JS_IDS = [
   "javascript",
   "javascriptreact",
 ] as const;
-export const SUPPORTED_LANGUAGE_IDS = [
-  "css",
-  "scss",
-  "sass",
-  "less",
-  ...JS_IDS,
-] as const;
+export const CSS_IDS = ["css", "scss", "sass", "less", "postcss"] as const;
+export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
 
 export type SupportedExtensionNames =
@@ -20,6 +15,7 @@ export type SupportedExtensionNames =
   | "scss"
   | "sass"
   | "less"
+  | "postcss"
   | "ts"
   | "tsx"
   | "jsx"
@@ -39,7 +35,7 @@ export interface Config {
 
 export const DEFAULT_CONFIG: Config = {
   files: ["index.css"],
-  extensions: ["css", "scss", "sass", "less"],
+  extensions: [...CSS_IDS],
   themes: [],
   excludeThemedVariables: false,
   disableSort: false,
