@@ -36,6 +36,7 @@
     "onLanguage:scss",
     "onLanguage:sass",
     "onLanguage:less",
+    "onLanguage:postcss",
     "onLanguage:javascript",
     "onLanguage:javascriptreact",
     "onLanguage:typescript",
