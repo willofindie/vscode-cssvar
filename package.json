@@ -37,6 +37,8 @@
     "onLanguage:sass",
     "onLanguage:less",
     "onLanguage:postcss",
+    "onLanguage:svelte",
+    "onLanguage:vue",
     "onLanguage:javascript",
     "onLanguage:javascriptreact",
     "onLanguage:typescript",

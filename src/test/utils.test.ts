@@ -58,6 +58,8 @@ describe("Utility Function Tests", () => {
       const input1 = "for(let i=4; i>0; --i) {}";
       const input2 = "let x = --i";
       const input3 = "--i";
+      // Need to fix intellisense getting triggered for input4 for JS like files.
+      const input4 = '{x: "(--i) reduces i by 1"';
       const result1 = restrictIntellisense(
         input1,
         "javascript",
