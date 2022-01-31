@@ -6,7 +6,15 @@ export const JS_IDS = [
   "javascript",
   "javascriptreact",
 ] as const;
-export const CSS_IDS = ["css", "scss", "sass", "less", "postcss"] as const;
+export const CSS_IDS = [
+  "css",
+  "scss",
+  "sass",
+  "less",
+  "postcss",
+  "vue",
+  "svelte",
+] as const;
 export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
 
@@ -16,6 +24,8 @@ export type SupportedExtensionNames =
   | "sass"
   | "less"
   | "postcss"
+  | "vue"
+  | "svelte"
   | "ts"
   | "tsx"
   | "jsx"
