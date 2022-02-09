@@ -1,3 +1,4 @@
+import { window } from "vscode";
 import { readFile, existsSync, stat } from "fs";
 import postcss, { Declaration, Node, Rule } from "postcss";
 import { promisify } from "util";
@@ -143,18 +144,25 @@ export const parseFiles = async function (
   }
 
   if (CACHE.cssVars !== cssVars) {
+    const cssVarsMap: Record<string, CSSVarDeclarations> = {};
     // Get Color for each, and modify the cssVar Record.
     const vars = getCSSDeclarationArray(cssVars);
+    // [TODO(shub)] Improve the following code, if possible
+    // Mutating self inside the loop is not performant
     vars.forEach(cssVar => {
       try {
         const color = getColor(cssVar.value, vars);
         if (color.success) {
           cssVar.color = color.color;
         }
-      } catch (e) {
-        // console.log("Color Parse Error: ", cssVar.value, e.message);
+        cssVarsMap[cssVar.property] = cssVar;
+      } catch (e: any) {
+        window.showErrorMessage(
+          `Color Parse Error: ${cssVar.value}, ${e?.message}`
+        );
       }
     });
+    CACHE.cssVarsMap = cssVarsMap;
   }
 
   CACHE.cssVars = cssVars;
