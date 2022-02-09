@@ -74,6 +74,9 @@ export function getColor(
 export const isObjectProperty = <T>(obj: T, key: any): key is keyof T =>
   Object.prototype.hasOwnProperty.call(obj, key);
 
+export const isObjectEmpty = (obj: Record<string, any>): boolean =>
+  Object.keys(obj).filter(key => isObjectProperty(obj, key)).length === 0;
+
 /**
  * Shallow Compare any JS POJO, to test immutability
  */

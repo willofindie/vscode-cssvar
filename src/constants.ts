@@ -227,6 +227,7 @@ export const CSS3Colors = [
 export type CSSVarRecord = { [path: string]: CSSVarDeclarations[] };
 export const CACHE: {
   cssVars: CSSVarRecord;
+  cssVarsMap: { [varName: string]: CSSVarDeclarations };
   fileMetas: {
     [path: string]: {
       path: string;
@@ -235,6 +236,7 @@ export const CACHE: {
   };
 } = {
   cssVars: {},
+  cssVarsMap: {},
   fileMetas: {},
 };
 

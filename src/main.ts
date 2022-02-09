@@ -23,6 +23,9 @@ import { disableDefaultSort } from "./unstable";
 /**
  * Sets up the Plugin
  *
+ * TODO(shub): Cache config, to use it in places, where initial
+ *  configuration is required.
+ *
  * @throws {@link NoWorkspaceError}
  */
 export async function setup(): Promise<{ config: Config }> {

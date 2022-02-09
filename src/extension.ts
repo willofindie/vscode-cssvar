@@ -6,6 +6,7 @@ import {
   Position,
   Range,
 } from "vscode";
+import { CssColorProvider } from "./color-provider";
 import { DEFAULT_CONFIG, SupportedLanguageIds } from "./constants";
 import { createCompletionItems, setup } from "./main";
 import { parseFiles } from "./parser";
@@ -18,7 +19,7 @@ import { restrictIntellisense } from "./utils";
 export async function activate(context: ExtensionContext): Promise<void> {
   try {
     const { config } = await setup();
-    const disposable = languages.registerCompletionItemProvider(
+    const completionDisposable = languages.registerCompletionItemProvider(
       config.extensions || DEFAULT_CONFIG.extensions,
       {
         async provideCompletionItems(document, position) {
@@ -75,7 +76,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
       "r",
       "("
     );
-    context.subscriptions.push(disposable);
+    const colorDisposable = languages.registerColorProvider(
+      config.extensions || DEFAULT_CONFIG.extensions,
+      new CssColorProvider()
+    );
+    context.subscriptions.push(completionDisposable);
+    context.subscriptions.push(colorDisposable);
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
