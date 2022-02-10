@@ -41,6 +41,7 @@ export interface Config {
   themes: string[];
   excludeThemedVariables: boolean;
   disableSort: boolean;
+  enableColors: boolean;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -49,6 +50,7 @@ export const DEFAULT_CONFIG: Config = {
   themes: [],
   excludeThemedVariables: false,
   disableSort: false,
+  enableColors: false,
 };
 
 export const mapShortToFullExtension = (
