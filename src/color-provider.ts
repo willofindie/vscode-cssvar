@@ -17,6 +17,7 @@ import { parseFiles } from "./parser";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
   new Range(new Position(startLineNumber, 0), new Position(endLineNumber, 0));
+
 export class CssColorProvider implements DocumentColorProvider {
   async provideDocumentColors(
     document: TextDocument
@@ -29,13 +30,6 @@ export class CssColorProvider implements DocumentColorProvider {
 
     const eol = document.eol === EndOfLine.CRLF ? "\r\n" : "\n";
     const colorInfo: ColorInformation[] = [];
-    /**
-     * FIXME: document.getText() contains unsaved text as well.
-     * This is crucial, as the range keeps on changing for the Color Info
-     * Not sure why but VScode doesn't provide any Buffer instead of text for
-     * huge file content.
-     * That means I will have to work upon the entire text all at once.
-     */
 
     // Assuming the worst case that each line has 120 characters (for JS like files)
     // 500 lines will contain at-max 500 * 120 = 60000 chars, which is very close to
