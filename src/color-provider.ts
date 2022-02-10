@@ -8,12 +8,12 @@ import {
   EndOfLine,
   Position,
 } from "vscode";
+import { parseToRgb } from "polished";
+import type { RgbaColor } from "polished/lib/types/color";
 import { CACHE } from "./constants";
 import { isObjectEmpty } from "./utils";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
-import { parseToRgb } from "polished";
-import type { RgbaColor } from "polished/lib/types/color";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
   new Range(new Position(startLineNumber, 0), new Position(endLineNumber, 0));
