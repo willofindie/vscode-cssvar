@@ -54,6 +54,15 @@ class Range {
   }
 }
 
+class Color {
+  constructor(red, green, blue, alpha) {
+    this.red = red;
+    this.green = green;
+    this.blue = blue;
+    this.alpha = alpha;
+  }
+}
+
 const workspace = {
   getConfiguration: jest.fn(),
   workspaceFolders: [],
@@ -79,4 +88,9 @@ module.exports = {
   window,
   Position,
   Range,
+  Color,
+  EndOfLine: {
+    LF: 1,
+    CRLF: 2,
+  },
 };
