@@ -84,6 +84,11 @@
           "type": "boolean",
           "default": false,
           "description": "Disables default sorting applied by VSCode"
+        },
+        "cssvar.enableColors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enables VScode's Color Representation feature when true"
         }
       }
     }

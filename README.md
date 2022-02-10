@@ -23,12 +23,22 @@ This Extension supports the following properties as of now:
 - `cssvar.files`: Array of Strings: `string[]`
   - Support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns
 - `cssvar.extensions`: Array of String: `string[]`
+
+Supported Extensions:
+```
+"css" | "scss" | "sass" | "less" | "postcss" | "vue" | "svelte" | "ts" | "tsx" | "jsx" | "js"
+```
+
+> NOTE: Raise an issue to add more extension support: [New Issue](https://github.com/willofindie/vscode-cssvar/issues/new)
+
 - `cssvar.themes`: Array of String: `string[]`
   - Eg: `cssvar.themes: ["dark"]`. This will help the extension
     distinguish between similarly named variables.
 - `cssvar.excludeThemedVariables`: `boolean`
 - `cssvar.disableSort`: `boolean`
   - Disables VSCode's default sorting functionality for this extension.
+- `cssvar.enableColors`: `boolean`
+  - Enable CSS Variable color display everywhere.
 
 *`cssvar.files` should contain relative/absolute path from
 your workspace root folder.*
@@ -41,6 +51,7 @@ your User `settings.json` or Workspace `settings.json`.
 - `cssvar.themes`: `[]`
 - `cssvar.excludeThemedVariables`: `false`
 - `cssvar.disableSort`: `false`
+- `cssvar.enableColors`: `true`
 
 ## Screeshots:
 
@@ -50,6 +61,12 @@ your User `settings.json` or Workspace `settings.json`.
 
 ### Working Example
 ![Working Example](https://user-images.githubusercontent.com/11786283/112746381-07174d00-8fcc-11eb-82eb-d9b27540a956.gif)
+
+### Show Variable Colors
+
+
+![Var Colors](https://user-images.githubusercontent.com/11786283/153472208-91fc1c43-fa88-41c6-b1f2-4465369634d9.gif)
+
 
 ### Theming Support:
 ![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif)
@@ -73,3 +90,6 @@ your User `settings.json` or Workspace `settings.json`.
   - Workaround
     - Create a separate CSS compatible SASS/LESS (variables) file.
     - Remove SASS One line Comments. Use proper CSS block comments.
+
+
+> NOTE: Please raise an issue for any feature request or a bug fix [here](https://github.com/willofindie/vscode-cssvar/issues/new)

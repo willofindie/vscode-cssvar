@@ -76,12 +76,15 @@ export async function activate(context: ExtensionContext): Promise<void> {
       "r",
       "("
     );
-    const colorDisposable = languages.registerColorProvider(
-      config.extensions || DEFAULT_CONFIG.extensions,
-      new CssColorProvider()
-    );
     context.subscriptions.push(completionDisposable);
-    context.subscriptions.push(colorDisposable);
+
+    if (config.enableColors) {
+      const colorDisposable = languages.registerColorProvider(
+        config.extensions || DEFAULT_CONFIG.extensions,
+        new CssColorProvider()
+      );
+      context.subscriptions.push(colorDisposable);
+    }
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
