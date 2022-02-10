@@ -3,6 +3,7 @@ import { resolve } from "path";
 import fastGlob from "fast-glob";
 import { NoWorkspaceError } from "./errors";
 import {
+  CACHE,
   Config,
   CSSVarRecord,
   DEFAULT_CONFIG,
@@ -99,8 +100,10 @@ export async function setup(): Promise<{ config: Config }> {
     }
   }
 
+  CACHE.config = config as Config;
+
   return {
-    config: config as Config,
+    config: CACHE.config,
   };
 }
 

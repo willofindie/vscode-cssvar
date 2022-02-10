@@ -234,10 +234,12 @@ export const CACHE: {
       lastModified: number;
     };
   };
+  config: Config;
 } = {
   cssVars: {},
   cssVarsMap: {},
   fileMetas: {},
+  config: {} as Config,
 };
 
 /**

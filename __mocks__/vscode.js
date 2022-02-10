@@ -62,6 +62,7 @@ const workspace = {
 
 const languages = {
   registerCompletionItemProvider: jest.fn((_, obj) => obj),
+  registerColorProvider: jest.fn((_, obj) => obj),
 };
 
 const window = {
