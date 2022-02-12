@@ -88,12 +88,12 @@
         "cssvar.enableColors": {
           "type": "boolean",
           "default": true,
-          "description": "Enables VScode's Color Representation feature when true"
+          "description": "Enable VScode's Color Representation feature when true"
         },
         "cssvar.enableGotoDef": {
           "type": "boolean",
           "default": true,
-          "description": "Enables VScode's Goto Definition feature for CSS Variables"
+          "description": "Enable VScode's Goto Definition feature for CSS Variables"
         }
       }
     }

@@ -40,6 +40,9 @@ Supported Extensions:
 - `cssvar.enableColors`: `boolean`
   - Enable CSS Variable color display everywhere.
   - If this config is changed, reload VSCode window.
+- `cssvar.enableGotoDef`: `boolean`
+  - Enable VScode's Goto Definition feature for CSS Variables
+  - If this config is changed, reload VSCode window.
 
 *`cssvar.files` should contain relative/absolute path from
 your workspace root folder.*
