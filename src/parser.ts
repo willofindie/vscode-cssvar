@@ -8,6 +8,7 @@ import {
   Config,
   CSSVarRecord,
   SUPPORTED_CSS_RULE_TYPES,
+  CacheType,
 } from "./constants";
 
 import { CSSVarDeclarations } from "./main";
@@ -190,6 +191,19 @@ export const parseFiles = async function (
         );
       }
     });
+    CACHE.cssVarDefinitionsMap = vars.reduce((defs, cssVar) => {
+      if (!cssVar.location) {
+        return defs;
+      }
+
+      const key = cssVar.property;
+      if (key in defs) {
+        defs[key].push(cssVar.location);
+      } else {
+        defs[key] = [cssVar.location];
+      }
+      return defs;
+    }, {} as CacheType["cssVarDefinitionsMap"]);
     CACHE.cssVarsMap = cssVarsMap;
   }
 

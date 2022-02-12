@@ -1,3 +1,4 @@
+import { Location } from "vscode";
 import { CSSVarDeclarations } from "./main";
 
 export const JS_IDS = [
@@ -232,6 +233,7 @@ export type CSSVarRecord = { [path: string]: CSSVarDeclarations[] };
 export type CacheType = {
   cssVars: CSSVarRecord;
   cssVarsMap: { [varName: string]: CSSVarDeclarations };
+  cssVarDefinitionsMap: { [varName: string]: Location[] };
   fileMetas: {
     [path: string]: {
       path: string;
@@ -243,6 +245,7 @@ export type CacheType = {
 export const CACHE: CacheType = {
   cssVars: {},
   cssVarsMap: {},
+  cssVarDefinitionsMap: {},
   fileMetas: {},
   config: {} as Config,
 };

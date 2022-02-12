@@ -42,8 +42,8 @@ export class CssDefinitionProvider implements DefinitionProvider {
       }
     }
 
-    const location = CACHE.cssVarsMap[exactMatch]?.location;
+    const locations = CACHE.cssVarDefinitionsMap[exactMatch];
 
-    return location || [];
+    return locations;
   }
 }
