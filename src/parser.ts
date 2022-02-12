@@ -1,6 +1,7 @@
-import { Location, Position, Range, Uri, window } from "vscode";
+/* eslint-disable no-console */
+import { Location, Position, Range, Uri, window, workspace } from "vscode";
 import { readFile, existsSync, stat } from "fs";
-import postcss, { Declaration, Node, Rule } from "postcss";
+import postcss, { Declaration, Node, ProcessOptions, Rule } from "postcss";
 import { promisify } from "util";
 import {
   CACHE,
@@ -9,7 +10,10 @@ import {
   CSSVarRecord,
   SUPPORTED_CSS_RULE_TYPES,
   CacheType,
+  POSTCSS_SYNTAX_MODULES,
+  CssExtensions,
 } from "./constants";
+import { extname } from "path";
 
 import { CSSVarDeclarations } from "./main";
 import { getColor, getCSSDeclarationArray } from "./utils";
@@ -17,10 +21,46 @@ import { getColor, getCSSDeclarationArray } from "./utils";
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
 
-const cssParseAsync = (file: string) => {
-  return postcss([]).process(file, {
-    from: undefined,
+const cssParseAsync = (file: string, ext: CssExtensions) => {
+  const rootPaths =
+    workspace.workspaceFolders?.map(folder => folder.uri.path) || [];
+
+  const plugins = CACHE.config.postcssPlugins
+    .map(plugin => {
+      try {
+        return require(require.resolve(plugin, { paths: rootPaths }));
+      } catch (e: any) {
+        window.showErrorMessage(
+          `Cannot resolve postcss plugin ${plugin}: ${e.toString()}`
+        );
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  const syntaxModuleName = CACHE.config.postcssSyntax.find(moduleName => {
+    return moduleName === POSTCSS_SYNTAX_MODULES[ext];
   });
+
+  const options: ProcessOptions = {
+    from: undefined,
+    syntax: undefined,
+  };
+  if (syntaxModuleName) {
+    try {
+      options.syntax = require(require.resolve(syntaxModuleName, {
+        paths: rootPaths,
+      }));
+    } catch (e: any) {
+      window.showErrorMessage(
+        `Cannot resolve postcss syntax module ${syntaxModuleName}: ${e.toString()}`
+      );
+    }
+  }
+
+  console.log("Modules: ", plugins, options.syntax);
+
+  return postcss(plugins).process(file, options);
 };
 
 /**
@@ -109,7 +149,12 @@ export function getVariableDeclarations(
  */
 const parseFile = async function (path: string, config: Config) {
   const file = await readFileAsync(path, { encoding: "utf8" });
-  const css = await cssParseAsync(file);
+  console.log("Parsing start: ");
+  const css = await cssParseAsync(
+    file,
+    extname(path).replace(".", "") as CssExtensions
+  );
+  console.log("Parsing return: ", css);
   return {
     [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
@@ -142,6 +187,7 @@ export const parseFiles = async function (
   const filesArray = <string[]>config.files;
 
   for (const path of filesArray) {
+    // console.log("Goig to Parse: ", path);
     const cachedFileMeta = CACHE.fileMetas[path];
     const meta = await statAsync(path);
     const lastModified = meta.mtimeMs;
@@ -154,6 +200,7 @@ export const parseFiles = async function (
       let newVars = { [path]: [] as CSSVarDeclarations[] };
       try {
         newVars = await parseFile(path, config);
+        // console.log("Parsing CSS pre done: ");
       } catch (e) {
         errorPaths.push(path);
       }
@@ -171,6 +218,8 @@ export const parseFiles = async function (
       CACHE.fileMetas[path].lastModified = lastModified;
     }
   }
+
+  // console.log("Parsing CSS Done: ", CACHE.cssVars !== cssVars);
 
   if (CACHE.cssVars !== cssVars) {
     const cssVarsMap: Record<string, CSSVarDeclarations> = {};

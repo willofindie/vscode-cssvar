@@ -7,21 +7,12 @@ import {
   TextDocument,
 } from "vscode";
 import { CACHE } from "./constants";
-import { setup } from "./main";
-import { parseFiles } from "./parser";
-import { isObjectEmpty } from "./utils";
 
 export class CssDefinitionProvider implements DefinitionProvider {
   async provideDefinition(
     document: TextDocument,
     position: Position
   ): Promise<Definition | LocationLink[]> {
-    if (isObjectEmpty(CACHE.config)) {
-      // Config won't change a lot of time.
-      await setup();
-    }
-    await parseFiles(CACHE.config);
-
     const text = document.getText(
       new Range(
         position.translate({ characterDelta: -position.character }),

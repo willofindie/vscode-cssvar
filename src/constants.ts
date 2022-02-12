@@ -18,6 +18,10 @@ export const CSS_IDS = [
 ] as const;
 export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
+export type CssExtensions = Exclude<
+  typeof CSS_IDS[number],
+  "vue" | "svelte" | "postcss" | "css"
+>;
 
 export type SupportedExtensionNames =
   | "css"
@@ -40,6 +44,8 @@ export interface Config {
   files: string[] | Record<string, string[]>;
   extensions: SupportedExtensionNames[];
   themes: string[];
+  postcssPlugins: string[];
+  postcssSyntax: string[];
   excludeThemedVariables: boolean;
   disableSort: boolean;
   enableColors: boolean;
@@ -50,6 +56,8 @@ export const DEFAULT_CONFIG: Config = {
   files: ["index.css"],
   extensions: [...CSS_IDS],
   themes: [],
+  postcssPlugins: [],
+  postcssSyntax: [],
   excludeThemedVariables: false,
   disableSort: false,
   enableColors: false,
@@ -248,6 +256,12 @@ export const CACHE: CacheType = {
   cssVarDefinitionsMap: {},
   fileMetas: {},
   config: {} as Config,
+};
+
+export const POSTCSS_SYNTAX_MODULES: Record<CssExtensions, string> = {
+  scss: "postcss-scss",
+  sass: "postcss-sass",
+  less: "postcss-less",
 };
 
 /**

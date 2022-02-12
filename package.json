@@ -94,6 +94,22 @@
           "type": "boolean",
           "default": true,
           "description": "Enable VScode's Goto Definition feature for CSS Variables"
+        },
+        "cssvar.postcssPlugins": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "default": null,
+          "description": "Provide PostCSS Plugins to support custom CSS features"
+        },
+        "cssvar.postcssSyntax": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "default": null,
+          "description": "Add support for custom CSS compilers like SCSS, SASS, LESS and more"
         }
       }
     }
