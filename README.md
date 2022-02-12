@@ -56,6 +56,7 @@ your User `settings.json` or Workspace `settings.json`.
 - `cssvar.excludeThemedVariables`: `false`
 - `cssvar.disableSort`: `false`
 - `cssvar.enableColors`: `true`
+- `cssvar.enableGotoDef`: `true`
 
 ## Screeshots:
 
@@ -67,9 +68,10 @@ your User `settings.json` or Workspace `settings.json`.
 ![Working Example](https://user-images.githubusercontent.com/11786283/112746381-07174d00-8fcc-11eb-82eb-d9b27540a956.gif)
 
 ### Show Variable Colors
-
-
 ![Var Colors](https://user-images.githubusercontent.com/11786283/153472208-91fc1c43-fa88-41c6-b1f2-4465369634d9.gif)
+
+### Supports Goto Definitions
+![Var Goto Definition](https://user-images.githubusercontent.com/11786283/153715008-24f9a0c2-e26d-48c9-9a8c-35152c7279bb.gif)
 
 
 ### Theming Support:
