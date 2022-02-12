@@ -11,9 +11,6 @@ import {
 import { parseToRgb } from "polished";
 import type { RgbaColor } from "polished/lib/types/color";
 import { CACHE } from "./constants";
-import { isObjectEmpty } from "./utils";
-import { setup } from "./main";
-import { parseFiles } from "./parser";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
   new Range(new Position(startLineNumber, 0), new Position(endLineNumber, 0));
@@ -22,12 +19,6 @@ export class CssColorProvider implements DocumentColorProvider {
   async provideDocumentColors(
     document: TextDocument
   ): Promise<ColorInformation[]> {
-    if (isObjectEmpty(CACHE.config)) {
-      // Config won't change a lot of time.
-      await setup();
-    }
-    await parseFiles(CACHE.config);
-
     const eol = document.eol === EndOfLine.CRLF ? "\r\n" : "\n";
     const colorInfo: ColorInformation[] = [];
 
