@@ -89,6 +89,9 @@ describe("Test Parser", () => {
         value: "#f24455",
         color: "#f24455",
         theme: "",
+        location: expect.objectContaining({
+          uri: RENAMED_FILE,
+        })
       } as CSSVarDeclarations);
       expect(flatMap(CACHE.cssVars)).not.toContainEqual(oldVariable);
       expect(OLD_VARS).not.toBe(CACHE.cssVars);

@@ -54,6 +54,17 @@ class Range {
   }
 }
 
+class Location {
+  /**
+   * @param {Uri} uri
+   * @param {Rage | Position} range
+   */
+  constructor(uri, range) {
+    this.uri = uri;
+    this.range = range;
+  }
+}
+
 class Color {
   constructor(red, green, blue, alpha) {
     this.red = red;
@@ -79,6 +90,11 @@ const window = {
   showErrorMessage: jest.fn(msg => console.trace(msg)),
 };
 
+const Uri = {
+  parse: path => path,
+  file: path => path,
+};
+
 module.exports = {
   CompletionItemKind,
   CompletionItem,
@@ -89,8 +105,10 @@ module.exports = {
   Position,
   Range,
   Color,
+  Location,
   EndOfLine: {
     LF: 1,
     CRLF: 2,
   },
+  Uri,
 };
