@@ -39,6 +39,7 @@ Supported Extensions:
   - Disables VSCode's default sorting functionality for this extension.
 - `cssvar.enableColors`: `boolean`
   - Enable CSS Variable color display everywhere.
+  - If this config is changed, reload VSCode window.
 
 *`cssvar.files` should contain relative/absolute path from
 your workspace root folder.*

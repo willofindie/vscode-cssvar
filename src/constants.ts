@@ -42,6 +42,7 @@ export interface Config {
   excludeThemedVariables: boolean;
   disableSort: boolean;
   enableColors: boolean;
+  enableGotoDef: boolean;
 }
 
 export const DEFAULT_CONFIG: Config = {
@@ -51,6 +52,7 @@ export const DEFAULT_CONFIG: Config = {
   excludeThemedVariables: false,
   disableSort: false,
   enableColors: false,
+  enableGotoDef: false,
 };
 
 export const mapShortToFullExtension = (
