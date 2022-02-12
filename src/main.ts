@@ -1,4 +1,9 @@
-import { CompletionItem, CompletionItemKind, workspace } from "vscode";
+import {
+  CompletionItem,
+  CompletionItemKind,
+  Location,
+  workspace,
+} from "vscode";
 import { resolve } from "path";
 import fastGlob from "fast-glob";
 import { NoWorkspaceError } from "./errors";
@@ -110,6 +115,7 @@ export async function setup(): Promise<{ config: Config }> {
 export interface CSSVarDeclarations {
   property: string;
   value: string;
+  location?: Location;
   theme: string;
   color?: string;
 }

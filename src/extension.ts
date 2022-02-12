@@ -8,6 +8,7 @@ import {
 } from "vscode";
 import { CssColorProvider } from "./color-provider";
 import { DEFAULT_CONFIG, SupportedLanguageIds } from "./constants";
+import { CssDefinitionProvider } from "./definition-provider";
 import { createCompletionItems, setup } from "./main";
 import { parseFiles } from "./parser";
 import { restrictIntellisense } from "./utils";
@@ -84,6 +85,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
         new CssColorProvider()
       );
       context.subscriptions.push(colorDisposable);
+    }
+
+    if (config.enableGotoDef) {
+      const definitionDisposable = languages.registerDefinitionProvider(
+        config.extensions || DEFAULT_CONFIG.extensions,
+        new CssDefinitionProvider()
+      );
+      context.subscriptions.push(definitionDisposable);
     }
   } catch (err) {
     if (err instanceof Error) {

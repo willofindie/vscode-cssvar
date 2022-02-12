@@ -1,4 +1,4 @@
-import { window } from "vscode";
+import { Location, Position, Range, Uri, window } from "vscode";
 import { readFile, existsSync, stat } from "fs";
 import postcss, { Declaration, Node, Rule } from "postcss";
 import { promisify } from "util";
@@ -52,23 +52,49 @@ export const isNodeType = <T extends Node>(
 export function getVariableDeclarations(
   config: Config,
   node: Node,
-  theme?: string | null
+  options: {
+    path: string;
+    theme?: string | null;
+  } = { path: "" }
 ): CSSVarDeclarations[] {
   let declarations: CSSVarDeclarations[] = [];
   if (
     isNodeType<Declaration>(node, SUPPORTED_CSS_RULE_TYPES[1]) &&
     CSS_VAR_REGEX.test(node.prop)
   ) {
+    let location: Location | undefined = undefined;
+    try {
+      const uri = Uri.file(options.path);
+      let position: Position | Range = new Position(0, 0);
+      if (node.source?.start && node.source?.end) {
+        position = new Range(
+          new Position(
+            node.source.start.line - 1,
+            node.source.start.column - 1
+          ),
+          new Position(node.source.end.line - 1, node.source.end.column - 1)
+        );
+      }
+      location = new Location(uri, position);
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to find the Location: ", e);
+    }
+
     declarations.push({
       property: node.prop,
       value: node.value,
-      theme: theme || "",
+      location,
+      theme: options.theme || "",
     });
   } else if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
     const [theme] = config.themes.filter(theme => node.selector.match(theme));
     if (!config.excludeThemedVariables || !theme) {
       for (const _node of node.nodes) {
-        const decls = getVariableDeclarations(config, _node, theme);
+        const decls = getVariableDeclarations(config, _node, {
+          ...options,
+          theme,
+        });
         declarations = declarations.concat(decls);
       }
     }
@@ -86,7 +112,9 @@ const parseFile = async function (path: string, config: Config) {
   return {
     [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
-        const dec = getVariableDeclarations(config, node);
+        const dec = getVariableDeclarations(config, node, {
+          path,
+        });
         declarations = declarations.concat(dec);
         return declarations;
       },
