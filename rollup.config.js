@@ -2,6 +2,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import esbuild from "rollup-plugin-esbuild";
 import pkg from "./package.json";
+import tsConfig from "./tsconfig.json";
 
 export default [
   {
@@ -22,7 +23,7 @@ export default [
       esbuild({
         minify: process.env.NODE_ENV === "production",
         sourceMap: process.env.NODE_ENV !== "production",
-        target: "es6",
+        target: tsConfig.compilerOptions.target,
         define: {
           __VERSION__: JSON.stringify(pkg.version),
         },

@@ -286,12 +286,5 @@ export const CSS_REGEX_INITIATOR = /[\t\s(:]{1}(-{1,2}[\w-]*)/g;
  * end of the var, if already not present.
  */
 export const SUFFIX = /[;'")]{1}/;
-/**
- * This Constant defines the regex for CSS Variable
- * declaration, in the CSS files or it's AST representation.
- * DO NOT CHANGE as it is used only in one place to parse CSS AST
- * declaration
- */
-export const CSS_VAR_REGEX = /^[\s\t]*--/;
 
-export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl"];
+export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl", "atrule"] as const;

@@ -113,6 +113,7 @@ export async function setup(): Promise<{ config: Config }> {
 }
 
 export interface CSSVarDeclarations {
+  type: "css" | "sass" | "less";
   property: string;
   value: string;
   location?: Location;
