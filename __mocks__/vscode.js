@@ -78,6 +78,10 @@ const workspace = {
   getConfiguration: jest.fn(),
   workspaceFolders: [],
   onDidSaveTextDocument: jest.fn(),
+  createFileSystemWatcher: jest.fn().mockReturnValue({
+    onDidChange: jest.fn(),
+    onDidDelete: jest.fn(),
+  }),
 };
 
 const languages = {
@@ -95,6 +99,13 @@ const Uri = {
   file: path => path,
 };
 
+export class RelativePattern {
+  constructor(base, pattern) {
+    this.base = base;
+    this.pattern = pattern;
+  }
+}
+
 module.exports = {
   CompletionItemKind,
   CompletionItem,
@@ -111,4 +122,5 @@ module.exports = {
     CRLF: 2,
   },
   Uri,
+  RelativePattern,
 };
