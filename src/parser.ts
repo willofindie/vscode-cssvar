@@ -159,13 +159,15 @@ export function getVariableDeclarations(
  * Parse a CSS file, and cache generated AST
  * into CSSVarDeclarations[].
  *
- * This Function locally mutates Parsing Options, since Extrnsions like
- * sass contains custom variables, which is not parsed by Syntax Plugins
+ * Recursively parse a file, when it contains `imports`
+ *
+ * Cache such file paths to a set to watch them change.
  */
 const parseFile = async function (
   path: string,
   config: Config
 ): Promise<Record<string, CSSVarDeclarations[]>> {
+  CACHE.filesToWatch.add(path);
   /* Parse Current File */
   const file = await readFileAsync(path, { encoding: "utf8" });
   const css = await cssParseAsync(
@@ -229,7 +231,8 @@ export const parseFiles = async function (
   const isModified =
     Object.keys(CACHE.fileMetas).length !== config.files.length;
   const errorPaths: string[] = [];
-  const filesArray = <string[]>config.files;
+  const filesArray =
+    CACHE.filesToWatch.size > 0 ? CACHE.filesToWatch : <string[]>config.files;
 
   for (const path of filesArray) {
     const cachedFileMeta = CACHE.fileMetas[path];
