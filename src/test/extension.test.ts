@@ -12,9 +12,9 @@ jest.mock("../constants", () => {
     __esModule: true,
     ...CONSTANTS,
     CACHE: {
-      cssVars: {},
-      fileMetas: {},
-    },
+      ...CONSTANTS.CACHE,
+      config: CONSTANTS.DEFAULT_CONFIG,
+    }
   };
 });
 jest.mock("../main", () => {

@@ -16,9 +16,9 @@ jest.mock("../constants", () => {
     __esModule: true,
     ...CONSTANTS,
     CACHE: {
-      cssVars: {},
-      fileMetas: {},
-    },
+      ...CONSTANTS.CACHE,
+      config: CONSTANTS.DEFAULT_CONFIG,
+    }
   };
 });
 
@@ -29,15 +29,17 @@ const EXTENSION_CONFIG: Config = {
 
 describe("Test Parser", () => {
   const INIT_STATS = fs.statSync(DUMMY_FILE);
+  beforeEach(() => {
+    fs.utimesSync(DUMMY_FILE, INIT_STATS.atime, MODIFIED_DATE);
+    CACHE.cssVars = {};
+    CACHE.filesToWatch = new Set();
+    CACHE.fileMetas = {};
+    CACHE.fileMetas[DUMMY_FILE] = {
+      path: DUMMY_FILE,
+      lastModified: +MODIFIED_DATE,
+    };
+  });
   describe(`parseFiles`, () => {
-    beforeEach(async () => {
-      fs.utimesSync(DUMMY_FILE, INIT_STATS.atime, MODIFIED_DATE);
-      CACHE.cssVars = {};
-      CACHE.fileMetas[DUMMY_FILE] = {
-        path: DUMMY_FILE,
-        lastModified: +MODIFIED_DATE,
-      };
-    });
 
     it("Should update cache, if file was modified", async () => {
       fs.utimesSync(
@@ -66,7 +68,8 @@ describe("Test Parser", () => {
           lastModified: +MODIFIED_DATE,
         },
       };
-      const oldVariable = {
+      const oldVariable: CSSVarDeclarations = {
+        type: "css",
         property: "--red",
         value: "#f00",
         theme: "",
@@ -85,6 +88,7 @@ describe("Test Parser", () => {
       await parseFiles(updatedConfig);
       expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
       expect(CACHE.cssVars[RENAMED_FILE]).toContainEqual({
+        type: "css",
         property: "--red500",
         value: "#f24455",
         color: "#f24455",
@@ -99,6 +103,7 @@ describe("Test Parser", () => {
       expect(OLD_FILE_META).not.toEqual(Object.keys(CACHE.fileMetas));
     });
   });
+
   describe("parseFiles handle improper CSS Files", () => {
     it("Should be able to handle few improper CSS files", async () => {
       // Updated config should contain the latest renamed file name.
@@ -106,9 +111,11 @@ describe("Test Parser", () => {
         ...EXTENSION_CONFIG,
         files: [RENAMED_FILE, BROKEN_FILE],
       };
+      CACHE.config = updatedConfig;
       const [_, errorPaths] = await parseFiles(updatedConfig);
       expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
       expect(CACHE.cssVars[RENAMED_FILE][0]).toMatchObject({
+        type: "css",
         property: "--red100",
         value: "#f00",
       } as CSSVarDeclarations);

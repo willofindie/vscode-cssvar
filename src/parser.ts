@@ -238,6 +238,7 @@ export const parseFiles = async function (
     const cachedFileMeta = CACHE.fileMetas[path];
     const meta = await statAsync(path);
     const lastModified = meta.mtimeMs;
+
     if (
       isModified ||
       !cachedFileMeta ||
