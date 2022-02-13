@@ -11,25 +11,38 @@
   alt="CssVar Icon" />
 </div>
 
-This extension helps to autocomplete globally shared CSS
-Variables.
-> Only those variables that are present in files,
-provided in Extension `files` config, will be considered as global.
+![CSS Extension Support](https://user-images.githubusercontent.com/11786283/153740157-96e5033c-2fed-4475-9844-1eb4e866ecfd.png)
+
+Details here: [Customize Extension](./customize-extension.md)
+
+## Features:
+
+This extension helps to autocomplete globally shared CSS Variables and a lot more.
+
+* [Provides Auto Completion](#working-example) for CSS Variables across VSCode workspaces.
+* Supports CSS, SASS, JS, TS etc. Find complete list in [Supported Extensions](#supported-extensions).
+* [Color swatch](#show-variable-colors) attached to each usage of `var(--color-variable)`.
+* [Goto Definition for CSS Variables](#supports-goto-definitions).
+* [Customization](./customize-extension.md)
+* [Theme Support](./theming.md)
 
 ## Supported Configs:
 
 This Extension supports the following properties as of now:
 
 - `cssvar.files`: Array of Strings: `string[]`
-  - Support [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns
+  - Should contain relative/absolute path from your workspace root folder.
+  - Supports [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns.
+  - Only keep the `files` that have CSS Variables; this will boost the performance.
+
 - `cssvar.extensions`: Array of String: `string[]`
 
-Supported Extensions:
-```
+### Supported Extensions:
+```ts
 "css" | "scss" | "sass" | "less" | "postcss" | "vue" | "svelte" | "ts" | "tsx" | "jsx" | "js"
 ```
 
-> NOTE: Raise an issue to add more extension support: [New Issue](https://github.com/willofindie/vscode-cssvar/issues/new)
+> NOTE: [Open issue](https://github.com/willofindie/vscode-cssvar/issues/new) to add more extension support.
 
 - `cssvar.themes`: Array of String: `string[]`
   - Eg: `cssvar.themes: ["dark"]`. This will help the extension
@@ -43,9 +56,6 @@ Supported Extensions:
 - `cssvar.enableGotoDef`: `boolean`
   - Enable VScode's Goto Definition feature for CSS Variables
   - If this config is changed, reload VSCode window.
-
-*`cssvar.files` should contain relative/absolute path from
-your workspace root folder.*
 
 Following are defaults, which you can override in
 your User `settings.json` or Workspace `settings.json`.
@@ -79,23 +89,5 @@ your User `settings.json` or Workspace `settings.json`.
 
 ![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
 
-## Supported Features:
 
-* Show Auto Completion dialogue on trigger chars: `--`
-* Show Color Values and Colors in Autocomplete popup.
-* Minimal support for CSS Modules, using postcss.
-  * This is to make sure, the extension doesn't breaks on
-    CSS Module Files.
-* Themed CSS Variable support.
-
-## Issues:
-
-- SASS/LESS variables, or any specific CSS extension language feature.
-  - For eg. setting CSS variable to a SASS Variable will work, but will not
-    be considered as a CSS color.
-  - Workaround
-    - Create a separate CSS compatible SASS/LESS (variables) file.
-    - Remove SASS One line Comments. Use proper CSS block comments.
-
-
-> NOTE: Please raise an issue for any feature request or a bug fix [here](https://github.com/willofindie/vscode-cssvar/issues/new)
+> NOTE: Please [raise an issue](https://github.com/willofindie/vscode-cssvar/issues/new) for any feature request or a bug fix.
