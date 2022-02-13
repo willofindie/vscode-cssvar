@@ -54,6 +54,20 @@ Support for this style of theming is present in current version of this extensio
 Enabling theme support in Extension helps removing duplicate CSS variables from the
 Autocomplete list, making sure the list doesn't grow unnecessarily.
 
+### Extension Config
+
+Following feature is still improving, and will change in future. Use the below config, if you have
+too many duplicates in your autocomplete list, due to theming.
+
+```jsonc
+{
+  /* Let Extension know there exists a `.dark` theme  */
+  "cssvar.themes": ["dark", "dim"],
+  /* If the below config is true, css variables from `.dark` and `.dim` theme will be hidden from list */
+  "cssvar.excludeThemedVariables": true
+}
+```
+
 
 ## Theming using CSS `color-scheme` property
 
