@@ -242,6 +242,7 @@ export type CacheType = {
   cssVars: CSSVarRecord;
   cssVarsMap: { [varName: string]: CSSVarDeclarations };
   cssVarDefinitionsMap: { [varName: string]: Location[] };
+  filesToWatch: Set<string>;
   fileMetas: {
     [path: string]: {
       path: string;
@@ -254,6 +255,7 @@ export const CACHE: CacheType = {
   cssVars: {},
   cssVarsMap: {},
   cssVarDefinitionsMap: {},
+  filesToWatch: new Set(),
   fileMetas: {},
   config: {} as Config,
 };

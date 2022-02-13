@@ -4,15 +4,16 @@ import {
   ExtensionContext,
   workspace,
   FileSystemWatcher,
+  RelativePattern,
 } from "vscode";
 import { CssColorProvider } from "./color-provider";
 import { CssCompletionProvider } from "./completion-provider";
-import { DEFAULT_CONFIG } from "./constants";
+import { CACHE, DEFAULT_CONFIG } from "./constants";
 import { CssDefinitionProvider } from "./definition-provider";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
 
-let watcher: FileSystemWatcher;
+const watchers: FileSystemWatcher[] = [];
 
 /**
  * Main Function from where the Plugin loads
@@ -57,27 +58,28 @@ export async function activate(context: ExtensionContext): Promise<void> {
       context.subscriptions.push(definitionDisposable);
     }
 
-    let matchString = "";
-    if (Array.isArray(config.files)) {
-      matchString = config.files.join("|");
-    } else {
-      const files = config.files;
-      matchString = Object.keys(files)
-        .map((key: string) => files[key]?.join("|"))
-        .join("|");
-    }
+    const watchers: FileSystemWatcher[] = [];
+    for (const path of CACHE.filesToWatch) {
+      const relativePattern = new RelativePattern(path, "*");
+      const watcher = workspace.createFileSystemWatcher(relativePattern);
+      watcher.onDidChange(async () => {
+        const [, errorPaths] = await parseFiles(CACHE.config); // Cache Parsed CSS Vars
+        if (errorPaths.length > 0) {
+          const relativePaths = errorPaths;
+          window.showWarningMessage(
+            "Failed to parse CSS variables in files:",
+            `\n\n${relativePaths.join("\n\n")}`
+          );
+        }
+      });
 
-    watcher = workspace.createFileSystemWatcher(matchString);
-    watcher.onDidChange(async () => {
-      const [, errorPaths] = await parseFiles(config); // Cache Parsed CSS Vars
-      if (errorPaths.length > 0) {
-        const relativePaths = errorPaths;
-        window.showWarningMessage(
-          "Failed to parse CSS variables in files:",
-          `\n\n${relativePaths.join("\n\n")}`
-        );
-      }
-    });
+      watcher.onDidDelete(uri => {
+        // THough I don't think this is of any benefit.
+        CACHE.filesToWatch.delete(uri.path);
+      });
+
+      watchers.push(watcher);
+    }
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
@@ -87,5 +89,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 // this method is called when your extension is deactivated
 export function deactivate(): void {
-  watcher?.dispose();
+  watchers.forEach(watcher => {
+    watcher.dispose();
+  });
 }
