@@ -1,11 +1,15 @@
-/* eslint-disable no-console */
 import { Location, Position, Range, Uri, window, workspace } from "vscode";
 import { readFile, existsSync, stat } from "fs";
-import postcss, { Declaration, Node, ProcessOptions, Rule } from "postcss";
+import postcss, {
+  AtRule,
+  Declaration,
+  Node,
+  ProcessOptions,
+  Rule,
+} from "postcss";
 import { promisify } from "util";
 import {
   CACHE,
-  CSS_VAR_REGEX,
   Config,
   CSSVarRecord,
   SUPPORTED_CSS_RULE_TYPES,
@@ -13,10 +17,10 @@ import {
   POSTCSS_SYNTAX_MODULES,
   CssExtensions,
 } from "./constants";
-import { extname } from "path";
+import { extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
-import { getColor, getCSSDeclarationArray } from "./utils";
+import { getVariableType, populateValue } from "./utils";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -38,6 +42,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
     })
     .filter(Boolean);
 
+  /* Postcss Syntax needs to be applied only for files of that type */
   const syntaxModuleName = CACHE.config.postcssSyntax.find(moduleName => {
     return moduleName === POSTCSS_SYNTAX_MODULES[ext];
   });
@@ -58,8 +63,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
     }
   }
 
-  console.log("Modules: ", plugins, options.syntax);
-
+  /* Parse a single file, with a syntax if provided */
   return postcss(plugins).process(file, options);
 };
 
@@ -83,7 +87,12 @@ export const isNodeType = <T extends Node>(
   node: Node,
   type: string
 ): node is T => {
-  return !!node.type.match(type);
+  return node.type === type;
+};
+
+type ParsingOptions = {
+  path?: string;
+  theme?: string | null;
 };
 
 /**
@@ -93,42 +102,44 @@ export const isNodeType = <T extends Node>(
 export function getVariableDeclarations(
   config: Config,
   node: Node,
-  options: {
-    path: string;
-    theme?: string | null;
-  } = { path: "" }
+  options: ParsingOptions = {}
 ): CSSVarDeclarations[] {
   let declarations: CSSVarDeclarations[] = [];
-  if (
-    isNodeType<Declaration>(node, SUPPORTED_CSS_RULE_TYPES[1]) &&
-    CSS_VAR_REGEX.test(node.prop)
-  ) {
-    let location: Location | undefined = undefined;
-    try {
-      const uri = Uri.file(options.path);
-      let position: Position | Range = new Position(0, 0);
-      if (node.source?.start && node.source?.end) {
-        position = new Range(
-          new Position(
-            node.source.start.line - 1,
-            node.source.start.column - 1
-          ),
-          new Position(node.source.end.line - 1, node.source.end.column - 1)
-        );
-      }
-      location = new Location(uri, position);
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error("Failed to find the Location: ", e);
-    }
+  const { path = "" } = options;
 
-    declarations.push({
-      property: node.prop,
-      value: node.value,
-      location,
-      theme: options.theme || "",
-    });
-  } else if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
+  if (isNodeType<Declaration>(node, SUPPORTED_CSS_RULE_TYPES[1])) {
+    const type = getVariableType(node.prop);
+    if (type) {
+      let location: Location | undefined = undefined;
+      try {
+        const uri = Uri.file(path);
+        let position: Position | Range = new Position(0, 0);
+        if (node.source?.start && node.source?.end) {
+          position = new Range(
+            new Position(
+              node.source.start.line - 1,
+              node.source.start.column - 1
+            ),
+            new Position(node.source.end.line - 1, node.source.end.column - 1)
+          );
+        }
+        location = new Location(uri, position);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to find the Location: ", e);
+      }
+
+      declarations.push({
+        type,
+        property: node.prop,
+        value: node.value,
+        location,
+        theme: options.theme || "",
+      });
+    }
+  }
+
+  if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
     const [theme] = config.themes.filter(theme => node.selector.match(theme));
     if (!config.excludeThemedVariables || !theme) {
       for (const _node of node.nodes) {
@@ -140,32 +151,66 @@ export function getVariableDeclarations(
       }
     }
   }
+
   return declarations;
 }
 
 /**
  * Parse a CSS file, and cache generated AST
  * into CSSVarDeclarations[].
+ *
+ * This Function locally mutates Parsing Options, since Extrnsions like
+ * sass contains custom variables, which is not parsed by Syntax Plugins
  */
-const parseFile = async function (path: string, config: Config) {
+const parseFile = async function (
+  path: string,
+  config: Config
+): Promise<Record<string, CSSVarDeclarations[]>> {
+  /* Parse Current File */
   const file = await readFileAsync(path, { encoding: "utf8" });
-  console.log("Parsing start: ");
   const css = await cssParseAsync(
     file,
     extname(path).replace(".", "") as CssExtensions
   );
-  console.log("Parsing return: ", css);
+
+  /* Find imported paths from CSS file */
+  const resolvedImportPaths = css.root.nodes.reduce((resolvedPaths, node) => {
+    if (
+      isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
+      node.name === "import"
+    ) {
+      const match = node.params.match(/url\(['"](.*?)['"]\)/);
+      if (match) {
+        const toPath = match[1];
+        const resolvedPath = resolve(path, "..", toPath);
+        if (!(<string[]>config.files).includes(resolvedPath)) {
+          resolvedPaths.push(resolvedPath);
+        }
+      }
+    }
+    return resolvedPaths;
+  }, [] as string[]);
+
+  /* Parse Imported files which are not part of the config list */
+  let importDeclarations: Record<string, CSSVarDeclarations[]> = {};
+  for await (const resolvedPath of resolvedImportPaths) {
+    const declarations = await parseFile(resolvedPath, config);
+    importDeclarations = {
+      ...importDeclarations,
+      ...declarations,
+    };
+  }
+
   return {
     [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
-        const dec = getVariableDeclarations(config, node, {
-          path,
-        });
+        const dec = getVariableDeclarations(config, node, { path });
         declarations = declarations.concat(dec);
         return declarations;
       },
       []
     ),
+    ...importDeclarations,
   };
 };
 
@@ -187,7 +232,6 @@ export const parseFiles = async function (
   const filesArray = <string[]>config.files;
 
   for (const path of filesArray) {
-    // console.log("Goig to Parse: ", path);
     const cachedFileMeta = CACHE.fileMetas[path];
     const meta = await statAsync(path);
     const lastModified = meta.mtimeMs;
@@ -200,7 +244,6 @@ export const parseFiles = async function (
       let newVars = { [path]: [] as CSSVarDeclarations[] };
       try {
         newVars = await parseFile(path, config);
-        // console.log("Parsing CSS pre done: ");
       } catch (e) {
         errorPaths.push(path);
       }
@@ -219,41 +262,26 @@ export const parseFiles = async function (
     }
   }
 
-  // console.log("Parsing CSS Done: ", CACHE.cssVars !== cssVars);
-
   if (CACHE.cssVars !== cssVars) {
-    const cssVarsMap: Record<string, CSSVarDeclarations> = {};
-    // Get Color for each, and modify the cssVar Record.
-    const vars = getCSSDeclarationArray(cssVars);
-    // [TODO(shub)] Improve the following code, if possible
-    // Mutating self inside the loop is not performant
-    vars.forEach(cssVar => {
-      try {
-        const color = getColor(cssVar.value, vars);
-        if (color.success) {
-          cssVar.color = color.color;
+    try {
+      const [vars, cssVarsMap] = populateValue(cssVars);
+      CACHE.cssVarDefinitionsMap = vars.reduce((defs, cssVar) => {
+        if (!cssVar.location) {
+          return defs;
         }
-        cssVarsMap[cssVar.property] = cssVar;
-      } catch (e: any) {
-        window.showErrorMessage(
-          `Color Parse Error: ${cssVar.value}, ${e?.message}`
-        );
-      }
-    });
-    CACHE.cssVarDefinitionsMap = vars.reduce((defs, cssVar) => {
-      if (!cssVar.location) {
-        return defs;
-      }
 
-      const key = cssVar.property;
-      if (key in defs) {
-        defs[key].push(cssVar.location);
-      } else {
-        defs[key] = [cssVar.location];
-      }
-      return defs;
-    }, {} as CacheType["cssVarDefinitionsMap"]);
-    CACHE.cssVarsMap = cssVarsMap;
+        const key = cssVar.property;
+        if (key in defs) {
+          defs[key].push(cssVar.location);
+        } else {
+          defs[key] = [cssVar.location];
+        }
+        return defs;
+      }, {} as CacheType["cssVarDefinitionsMap"]);
+      CACHE.cssVarsMap = cssVarsMap;
+    } catch (e) {
+      window.showErrorMessage(`Populating Variable Values: ${e}`);
+    }
   }
 
   CACHE.cssVars = cssVars;

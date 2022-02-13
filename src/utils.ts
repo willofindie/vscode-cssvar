@@ -15,24 +15,6 @@ import { CSSVarDeclarations } from "./main";
 import { lighten } from "polished";
 import { Range } from "vscode";
 
-const cssVarRegex = /var\((--[\w-]*)\)/;
-
-function getValue(value: string, cssVars?: CSSVarDeclarations[]): string {
-  if (cssVars && /var\(.*?\)/.test(value)) {
-    const propertyName = value.match(cssVarRegex);
-    if (propertyName) {
-      const cssVar = cssVars.find(
-        cssVar => cssVar.property === propertyName[1]
-      );
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      return getValue(cssVar?.value || "", cssVars);
-    }
-  } else {
-    return value;
-  }
-  return value;
-}
-
 /**
  * This method will help convert non-conventional
  * color calues like color names `red` etc.
@@ -69,6 +51,57 @@ export function getColor(
     success: false,
     color: "",
   };
+}
+
+/**
+ * Once the Variables are parsed, there are still nested variable values
+ * like --x: var(--y), whose value is unknown. This method will populate such
+ * values and also, populate the color properties for each declarations.
+ */
+export const populateValue = (
+  cssVars: CSSVarRecord
+): [CSSVarDeclarations[], Record<string, CSSVarDeclarations>] => {
+  // Get Color for each, and modify the cssVar Record.
+  const vars = getCSSDeclarationArray(cssVars);
+
+  const cssVarsMapToSelf = vars.reduce((defs, cssVar) => {
+    defs[cssVar.property] = cssVar;
+    return defs;
+  }, {} as Record<string, CSSVarDeclarations>);
+
+  // [TODO(shub)] Improve the following code, if possible
+  // Mutating self inside the loop is not performant
+  vars.forEach(cssVar => {
+    const isVariable = getVariableType(cssVar.value);
+    if (typeof isVariable === "string") {
+      const value = getValue(getVariableName(cssVar.value), cssVarsMapToSelf);
+      cssVar.value = value || cssVar.value;
+    }
+
+    const color = getColor(cssVar.value, vars);
+    if (color.success) {
+      cssVar.color = color.color;
+    }
+  });
+
+  return [vars, cssVarsMapToSelf];
+};
+
+function getValue(
+  name: string,
+  cssVarsMapToSelf: Record<string, CSSVarDeclarations | null>
+): string | null {
+  const currentCssVar = cssVarsMapToSelf[name];
+  if (currentCssVar) {
+    const variableType = getVariableType(currentCssVar.value);
+    if (variableType === null) {
+      return currentCssVar.value;
+    } else {
+      return getValue(getVariableName(currentCssVar.value), cssVarsMapToSelf);
+    }
+  }
+
+  return null;
 }
 
 export const isObjectProperty = <T>(obj: T, key: any): key is keyof T =>
@@ -197,4 +230,32 @@ export const restrictIntellisense = (
     });
     return regions;
   }
+};
+
+const getVariableName = (value: string): string => {
+  if (value.match(/^var\s*\(/)) {
+    return value.replace(/var\s*\((.*?)\)/, "$1").trim();
+  }
+
+  return value;
+};
+
+export const getVariableType = (
+  value: string
+): "css" | "sass" | "less" | null => {
+  if (value.startsWith("$")) {
+    return "sass";
+  }
+  if (value.startsWith("@")) {
+    return "less";
+  }
+  if (value.startsWith("--")) {
+    return "css";
+  }
+
+  if (value.match(/^var\s*\(/)) {
+    return getVariableType(value.replace(/var\s*\((.*?)\)/, "$1").trim());
+  }
+
+  return null;
 };
