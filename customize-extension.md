@@ -1,6 +1,6 @@
 # Customize the Extension
 
-> Before reading the doc, do keep in mind with more features comes more responsibility :stuck_out_tongue_winking_eye:. CSS and Browsers have come a long way, and even the basic CSS has a lot of features now a days. The plugin can perfectly work with plain CSS and there is no need for customizations.
+> Before reading the doc, do keep in mind with more features comes more responsibility :stuck_out_tongue_winking_eye:. CSS and Browsers have come a long way, and even the basic CSS has a lot of features now a days. This extension can perfectly work with plain CSS and there is no need for customizations.
 >
 > *Customizations is required for legacy projects which are already heavily dependent on custom CSS Extensions and features provided by various tools like SASS preprocessor and more.*
 
@@ -15,17 +15,21 @@ can be customised as per user's own needs.
 
 You can find list of `postcss` plugins and syntax,
 [here][plugin-list] and
-[here][syntax-link] respectively.
-
-> NOTE: There's a limit to supported CSS Extensions for now. Supported list of CSS Extensions are:
-> - `Sass`: using [postcss-sass][sass-syntax]
-> - `Scss`: using [postcss-sass][scss-syntax]
-> - `Less`: using [postcss-less][less-syntax]
+[here][syntax-list] respectively.
 
 ## Adding support for any new Sytax
 
 First install any syntax from list provided [here][syntax-list].
 For e.g. read the following to add support for `Sass` CSS Extension.
+
+> NOTE: There's a limit to supported CSS Extensions for now. Supported list of CSS Extensions are:
+> - `Sass`: using [postcss-sass][sass-syntax]
+> - `Scss`: using [postcss-scss][scss-syntax]
+> - `Less`: using [postcss-less][less-syntax]
+
+**[IMPORTANT] Few Gotchas with Syntax modules:**
+- [postcss-scss][scss-syntax] `v4.x` is a broken module. Please install `v3.x` instead. Track the [issue here](https://github.com/postcss/postcss-scss/issues/136)
+
 
 Install [postcss-sass][sass-syntax] npm module on your system:
 
