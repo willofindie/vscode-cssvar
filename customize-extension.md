@@ -2,12 +2,15 @@
 
 > Before reading the doc, do keep in mind with more features comes more responsibility :stuck_out_tongue_winking_eye:. CSS and Browsers have come a long way, and even the basic CSS has a lot of features now a days. This extension can perfectly work with plain CSS and there is no need for customizations.
 >
-> *Customizations is required for legacy projects which are already heavily dependent on custom CSS Extensions and features provided by various tools like SASS preprocessor and more.*
+> *Customizations might be required for legacy projects which are already heavily dependent on custom CSS Extensions and features provided by various tools like SASS preprocessor and more.*
 
 `phoenisx.cssvar` internally uses [postcss](https://github.com/postcss/postcss) to parse and
 find css variables.
-Post `cssvar v1.1`, this extension supports `postcss` own plugins and syntax providers
+Post `cssvar v1.1+`, this extension supports `postcss` own plugins and syntax providers
 to enhance the ability of this extension.
+
+***For customizations to work, you need to have
+[postcss](https://github.com/postcss/postcss) `v8+` in your local project's `node_modules`.***
 
 Previously this extension worked only with pure CSS3 spec files, and support for other
 CSS Extensions like `Sass`/`Scss`/`Less` was not in the roadmap, but now this extension
@@ -34,7 +37,7 @@ For e.g. read the following to add support for `Sass` CSS Extension.
 Install [postcss-sass][sass-syntax] npm module on your system:
 
 ```sh
-yarn add -D postcss-sass
+yarn add -D postcss postcss-sass
 
 # Or install it globally
 yarn global add postcss-sass
@@ -58,7 +61,7 @@ For e.g. read the following to add support for `nesting` in CSS files listed in 
 Install [postcss-nested][nested-plugin] npm module on your system:
 
 ```sh
-yarn add -D postcss-nested
+yarn add -D postcss postcss-nested
 
 # Or install it globally
 yarn global add postcss-nested

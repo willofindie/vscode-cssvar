@@ -16,8 +16,9 @@ import {
   CacheType,
   POSTCSS_SYNTAX_MODULES,
   CssExtensions,
+  SUPPORTED_IMPORT_NAMES,
 } from "./constants";
-import { extname, resolve } from "path";
+import { dirname, extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
 import { getVariableType, populateValue } from "./utils";
@@ -35,7 +36,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
         return require(require.resolve(plugin, { paths: rootPaths }));
       } catch (e: any) {
         window.showErrorMessage(
-          `Cannot resolve postcss plugin ${plugin}: ${e.toString()}`
+          `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`
         );
       }
       return null;
@@ -58,7 +59,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
       }));
     } catch (e: any) {
       window.showErrorMessage(
-        `Cannot resolve postcss syntax module ${syntaxModuleName}: ${e.toString()}`
+        `Cannot resolve postcss syntax module ${syntaxModuleName}. Please add postcss@8 as project's dependency.`
       );
     }
   }
@@ -170,23 +171,40 @@ const parseFile = async function (
   CACHE.filesToWatch.add(path);
   /* Parse Current File */
   const file = await readFileAsync(path, { encoding: "utf8" });
+  const extension = extname(path);
   const css = await cssParseAsync(
     file,
-    extname(path).replace(".", "") as CssExtensions
+    extension.replace(".", "") as CssExtensions
   );
 
   /* Find imported paths from CSS file */
   const resolvedImportPaths = css.root.nodes.reduce((resolvedPaths, node) => {
     if (
       isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
-      node.name === "import"
+      SUPPORTED_IMPORT_NAMES.includes(node.name)
     ) {
-      const match = node.params.match(/url\(['"](.*?)['"]\)/);
+      const match = node.params.match(/['"](.*?)['"]/);
       if (match) {
-        const toPath = match[1];
-        const resolvedPath = resolve(path, "..", toPath);
-        if (!(<string[]>config.files).includes(resolvedPath)) {
-          resolvedPaths.push(resolvedPath);
+        let toPath = match[1];
+        const importFileExtension = extname(toPath);
+        if (!importFileExtension) {
+          toPath += extension; // Add Parent's extension
+        }
+        const parentDir = dirname(toPath);
+        const filename = toPath.replace(parentDir, "").substring(1);
+
+        // In Some CSS extensions like Sass, we can have imports without a `_` prefix
+        // like `@use 'filename'` for `_filename.scss`
+        const acceptedFiles = [filename, `_${filename}`];
+        const acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
+          const resolvedPath = resolve(path, "..", file);
+          if (existsSync(resolvedPath)) {
+            acceptedFile = resolvedPath;
+          }
+          return acceptedFile;
+        }, "");
+        if (acceptedFile && !(<string[]>config.files).includes(acceptedFile)) {
+          resolvedPaths.push(acceptedFile);
         }
       }
     }

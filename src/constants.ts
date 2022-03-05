@@ -290,3 +290,4 @@ export const CSS_REGEX_INITIATOR = /[\t\s(:]{1}(-{1,2}[\w-]*)/g;
 export const SUFFIX = /[;'")]{1}/;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl", "atrule"] as const;
+export const SUPPORTED_IMPORT_NAMES = ["import", "use"];
