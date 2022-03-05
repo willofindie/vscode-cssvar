@@ -58,6 +58,10 @@ This Extension supports the following properties as of now:
 - `cssvar.enableGotoDef`: `boolean`
   - Enable VScode's Goto Definition feature for CSS Variables
   - If this config is changed, reload VSCode window.
+- `cssvar.postcssPlugins`: `string[]`
+  - Details for this can be read here: [Customize Extension](./customize-extension.md)
+- `cssvar.postcssSyntax`: `string[]`
+  - Details for this can be read here: [Customize Extension](./customize-extension.md)
 
 Following are defaults, which you can override in
 your User `settings.json` or Workspace `settings.json`.
@@ -69,6 +73,8 @@ your User `settings.json` or Workspace `settings.json`.
 - `cssvar.disableSort`: `false`
 - `cssvar.enableColors`: `true`
 - `cssvar.enableGotoDef`: `true`
+- `cssvar.postcssPlugins`: `[]`
+- `cssvar.postcssSyntax`: `[]`
 
 ## Screeshots:
 
