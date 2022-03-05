@@ -191,11 +191,15 @@ const parseFile = async function (
           toPath += extension; // Add Parent's extension
         }
         const parentDir = dirname(toPath);
+        if (parentDir === "." && !toPath.startsWith(".")) {
+          // Relative current dir URLs might or might not have `./`;
+          toPath = "./" + toPath;
+        }
         const filename = toPath.replace(parentDir, "").substring(1);
 
         // In Some CSS extensions like Sass, we can have imports without a `_` prefix
         // like `@use 'filename'` for `_filename.scss`
-        const acceptedFiles = [filename, `_${filename}`];
+        const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
         const acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
           const resolvedPath = resolve(path, "..", file);
           if (existsSync(resolvedPath)) {

@@ -1,0 +1,10 @@
+// With @use, relative without current dir
+@use "f1.scss";
+
+// With @import, relative with current dir and extension
+@import "./f2.css";
+
+/* Import nested file without `_` prefix and without extension */
+@use "nested/f5";
+
+@import "nested/f6.scss";

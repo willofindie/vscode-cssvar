@@ -24,6 +24,8 @@ This extension helps to autocomplete globally shared CSS Variables and a lot mor
 * [Color swatch](#show-variable-colors) attached to each usage of `var(--color-variable)`.
 * [Goto Definition for CSS Variables](#supports-goto-definitions).
 * [Customization](./customize-extension.md)
+  * If your project uses **SASS/LESS**, and you are facing issues to setup this extension, please
+    read [Customization](./customize-extension.md) Doc.
 * [Theme Support](./theming.md)
 
 ## Supported Configs:
