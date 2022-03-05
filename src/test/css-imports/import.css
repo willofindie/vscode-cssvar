@@ -1,0 +1,8 @@
+/* Relative without current dir */
+@import url("f1.css");
+
+/* Relative with current dir */
+@import "./f2.css";
+
+/* Url of Parent CSS */
+@import "../renamed.css";

@@ -10,11 +10,11 @@ Post `cssvar v1.1+`, this extension supports `postcss` own plugins and syntax pr
 to enhance the ability of this extension.
 
 ***For customizations to work, you need to have
-[postcss](https://github.com/postcss/postcss) `v8+` in your local project's `node_modules`.***
+[postcss](https://github.com/postcss/postcss) `v8+` installed in your local project's `node_modules`.***
 
-Previously this extension worked only with pure CSS3 spec files, and support for other
-CSS Extensions like `Sass`/`Scss`/`Less` was not in the roadmap, but now this extension
-can be customised as per user's own needs.
+Previously this extension was able to parse only pure CSS3 spec files, and support
+for parsing other CSS Extensions like `Sass`/`Scss`/`Less` was not in the roadmap, but now this
+extension can be customised as per user's own needs.
 
 You can find list of `postcss` plugins and syntax,
 [here][plugin-list] and
@@ -30,9 +30,6 @@ For e.g. read the following to add support for `Sass` CSS Extension.
 > - `Scss`: using [postcss-scss][scss-syntax]
 > - `Less`: using [postcss-less][less-syntax]
 
-**[IMPORTANT] Few Gotchas with Syntax modules:**
-- [postcss-scss][scss-syntax] `v4.x` is a broken module. Please install `v3.x` instead. Track the [issue here](https://github.com/postcss/postcss-scss/issues/136)
-
 
 Install [postcss-sass][sass-syntax] npm module on your system:
 
@@ -47,8 +44,8 @@ Once the above is done, edit your `cssvar` config to use this syntax:
 
 ```json
 {
-  "cssvar.files": ["src/styles/variables/index.sass"],
-  "cssvar.extensions": ["css", "sass"],
+  "cssvar.files": ["src/styles/variables/index.sass", ...],
+  "cssvar.extensions": ["css", "sass", ...],
   "cssvar.postcssSyntax": ["postcss-sass"]
 }
 ```
@@ -71,8 +68,8 @@ Once the above is done, edit your `cssvar` config to use this syntax:
 
 ```json
 {
-  "cssvar.files": ["src/styles/variables/index.scss"],
-  "cssvar.extensions": ["css", "scss"],
+  "cssvar.files": ["src/styles/variables/index.scss", ...],
+  "cssvar.extensions": ["css", "scss", ...],
   "cssvar.postcssPlugins": ["postcss-nested"]
 }
 ```

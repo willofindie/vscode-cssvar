@@ -1,5 +1,6 @@
 import { parseFiles } from "../parser";
 import path from "path";
+import { workspace } from "vscode";
 import fs from "fs";
 import { Config, DEFAULT_CONFIG, CACHE } from "../constants";
 import { CSSVarDeclarations } from "../main";
@@ -9,6 +10,9 @@ const MODIFIED_DATE = new Date("2021-04-12T08:58:58.676Z");
 const DUMMY_FILE = path.resolve("src", "test", "touch.css");
 const RENAMED_FILE = path.resolve("src", "test", "renamed.css");
 const BROKEN_FILE = path.resolve("src", "test", "broken.css");
+const IMPORT_BASE = path.resolve("src", "test", "css-imports");
+const IMPORT_CSS_FILE = path.resolve(IMPORT_BASE, "import.css");
+const IMPORT_SCSS_FILE = path.resolve(IMPORT_BASE, "import.scss");
 
 jest.mock("../constants", () => {
   const CONSTANTS = jest.requireActual("../constants");
@@ -18,7 +22,7 @@ jest.mock("../constants", () => {
     CACHE: {
       ...CONSTANTS.CACHE,
       config: CONSTANTS.DEFAULT_CONFIG,
-    }
+    },
   };
 });
 
@@ -40,7 +44,6 @@ describe("Test Parser", () => {
     };
   });
   describe(`parseFiles`, () => {
-
     it("Should update cache, if file was modified", async () => {
       fs.utimesSync(
         DUMMY_FILE,
@@ -95,7 +98,7 @@ describe("Test Parser", () => {
         theme: "",
         location: expect.objectContaining({
           uri: RENAMED_FILE,
-        })
+        }),
       } as CSSVarDeclarations);
       expect(flatMap(CACHE.cssVars)).not.toContainEqual(oldVariable);
       expect(OLD_VARS).not.toBe(CACHE.cssVars);
@@ -122,5 +125,48 @@ describe("Test Parser", () => {
       expect(CACHE.cssVars[BROKEN_FILE].length).toBe(0);
       expect(errorPaths[0]).toBe(BROKEN_FILE);
     });
-  })
+  });
+
+  it(`parse css imports`, async () => {
+    const cssConfig: Config = {
+      ...EXTENSION_CONFIG,
+      files: [IMPORT_CSS_FILE],
+    };
+    CACHE.config = cssConfig;
+    const [_, errorPaths] = await parseFiles(cssConfig);
+    expect(CACHE.filesToWatch.size).toBe(6);
+    expect(Array.from(CACHE.filesToWatch)).toEqual(
+      expect.arrayContaining([
+        path.resolve(IMPORT_BASE, "f1.css"),
+        path.resolve(IMPORT_BASE, "f3.css"),
+        RENAMED_FILE,
+      ])
+    );
+    expect(errorPaths.length).toBe(0);
+  });
+  it(`parse scss imports`, async () => {
+    // @ts-ignore
+    workspace.workspaceFolders = [
+      { uri: { path: path.resolve(__dirname, "..", "..") } },
+    ];
+    const scssConfig: Config = {
+      ...EXTENSION_CONFIG,
+      postcssSyntax: ["postcss-scss"],
+      files: [IMPORT_SCSS_FILE],
+    };
+    CACHE.config = scssConfig;
+    const [_, errorPaths] = await parseFiles(scssConfig);
+    expect(CACHE.filesToWatch.size).toBe(7);
+    expect(Array.from(CACHE.filesToWatch)).toEqual(
+      expect.arrayContaining([
+        path.resolve(IMPORT_BASE, "f1.scss"),
+        path.resolve(IMPORT_BASE, "_f3.scss"),
+        path.resolve(IMPORT_BASE, "nested", "_f5.scss"),
+        path.resolve(IMPORT_BASE, "nested", "f6.scss"),
+      ])
+    );
+    expect(errorPaths.length).toBe(0);
+    // @ts-ignore
+    workspace.workspaceFolders = [];
+  });
 });
