@@ -4,7 +4,7 @@
  *
  * Jest Test cases should be isolated and if used for
  * VSCode extension specific tests, then it should
- * mock `vscode` module, for jest to ework
+ * mock `vscode` module, for jest to work
  */
 
 module.exports = {
