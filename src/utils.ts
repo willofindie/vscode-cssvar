@@ -3,7 +3,6 @@
  */
 
 import {
-  CSS3Colors,
   CSSVarRecord,
   CSS_REGEX_INITIATOR,
   JSS_REGEX_INITIATOR,
@@ -12,7 +11,7 @@ import {
   VAR_KEYWORD_REVERSE,
 } from "./constants";
 import { CSSVarDeclarations } from "./main";
-import { lighten } from "polished";
+import { serializeColor } from "./color-parser";
 import { Range } from "vscode";
 
 /**
@@ -37,15 +36,11 @@ export function getColor(
       return getColor(cssVar?.value || "");
     }
   } else {
-    if (
-      /^#|^rgba?|^hsla?|^transparent$/.test(value) ||
-      CSS3Colors.includes(value.toLowerCase())
-    ) {
-      return {
-        success: true,
-        color: lighten(0, value),
-      };
-    }
+    const color = serializeColor(value);
+    return {
+      success: !!color,
+      color: color,
+    };
   }
   return {
     success: false,

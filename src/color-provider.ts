@@ -8,8 +8,7 @@ import {
   EndOfLine,
   Position,
 } from "vscode";
-import { parseToRgb } from "polished";
-import type { RgbaColor } from "polished/lib/types/color";
+import { parseToRgb } from "./color-parser";
 import { CACHE } from "./constants";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
@@ -41,20 +40,20 @@ export class CssColorProvider implements DocumentColorProvider {
           const key = cssVarMatch[1].trim();
           const hexColor = CACHE.cssVarsMap[key]?.color;
           if (hexColor && cssVarMatch.index) {
-            const color = parseToRgb(hexColor) as RgbaColor;
-            const info = {
-              color: new Color(
-                color.red / 255,
-                color.green / 255,
-                color.blue / 255,
-                color.alpha ?? 1
-              ),
-              range: new Range(
-                new Position(exactLineNumber, cssVarMatch.index),
-                new Position(exactLineNumber, cssVarMatch.index + match.length)
-              ),
-            };
-            colorInfo.push(info);
+            const color = parseToRgb(hexColor);
+            if (color) {
+              const info = {
+                color: new Color(color.r, color.g, color.b, color.alpha ?? 1),
+                range: new Range(
+                  new Position(exactLineNumber, cssVarMatch.index),
+                  new Position(
+                    exactLineNumber,
+                    cssVarMatch.index + match.length
+                  )
+                ),
+              };
+              colorInfo.push(info);
+            }
           }
         }
       });
