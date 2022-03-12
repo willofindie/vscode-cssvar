@@ -1,6 +1,5 @@
 import { EndOfLine, TextDocument } from "vscode";
-import { parseToRgb } from "polished";
-import { RgbaColor } from "polished/lib/types/color";
+import { parseToRgb } from "../../color-parser";
 
 import { CssColorProvider } from "../../color-provider";
 import { CSSVarDeclarations } from "../../main";
@@ -74,8 +73,8 @@ const getDocumentFromText = (text: string) => {
 
 describe("Test Color Provider", () => {
   let provider: CssColorProvider;
-  const red300 = parseToRgb("#fc8181") as RgbaColor;
-  const red500 = parseToRgb("#e53e3e") as RgbaColor;
+  const red300 = parseToRgb("#fc8181");
+  const red500 = parseToRgb("#e53e3e");
 
   beforeAll(() => {
     provider = new CssColorProvider();
@@ -87,10 +86,10 @@ describe("Test Color Provider", () => {
     );
     expect(colorInfos.length).toBe(1);
     expect(colorInfos[0].color).toMatchObject({
-      red: red300.red / 255,
-      green: red300.green / 255,
-      blue: red300.blue / 255,
-      alpha: red300.alpha ?? 1,
+      red: red300!.r,
+      green: red300!.g,
+      blue: red300!.b,
+      alpha: red300!.alpha ?? 1,
     });
     expect(colorInfos[0].range.start.character).toBe(7);
     expect(colorInfos[0].range.end.character).toBe(27);
@@ -101,10 +100,10 @@ describe("Test Color Provider", () => {
     );
     expect(colorInfos.length).toBe(3);
     expect(colorInfos[1].color).toMatchObject({
-      red: red500.red / 255,
-      green: red500.green / 255,
-      blue: red500.blue / 255,
-      alpha: red500.alpha ?? 1,
+      red: red500!.r,
+      green: red500!.g,
+      blue: red500!.b,
+      alpha: red500!.alpha ?? 1,
     });
     expect(colorInfos[1].range).toEqual(
       expect.objectContaining({

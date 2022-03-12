@@ -74,7 +74,7 @@ describe("Test Parser", () => {
       const oldVariable: CSSVarDeclarations = {
         type: "css",
         property: "--red",
-        value: "#f00",
+        value: "rgb(255, 0, 0)",
         theme: "",
       };
       CACHE.cssVars = {
@@ -94,7 +94,7 @@ describe("Test Parser", () => {
         type: "css",
         property: "--red500",
         value: "#f24455",
-        color: "#f24455",
+        color: "rgb(242, 68, 85)",
         theme: "",
         location: expect.objectContaining({
           uri: RENAMED_FILE,

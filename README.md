@@ -27,6 +27,9 @@ This extension helps to autocomplete globally shared CSS Variables and a lot mor
   * If your project uses **SASS/LESS**, and you are facing issues to setup this extension, please
     read [Customization](./customize-extension.md) Doc.
 * [Theme Support](./theming.md)
+* *CSS Level 4 color spec support is limited*, to keep the bundle size small
+  * Except `color()` api, every other CSS color is supported. Please find
+    details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
 
 ## Supported Configs:
 
