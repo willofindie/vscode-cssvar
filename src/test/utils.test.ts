@@ -8,6 +8,7 @@ describe("Utility Function Tests", () => {
     it("should return proper Hex string for unknown Color Names", () => {
       const cssVars: CSSVarDeclarations[] = [
         {
+          type: "css",
           property: "--red500",
           value: "red",
           theme: "",
@@ -15,16 +16,18 @@ describe("Utility Function Tests", () => {
       ];
       const result = getColor(cssVars[0].value, cssVars);
       expect(result.success).toBeTruthy();
-      expect(result.color).toEqual("#f00");
+      expect(result.color).toEqual("rgb(255, 0, 0)");
     });
     it("should return proper Hex string recursively", () => {
       const cssVars: CSSVarDeclarations[] = [
         {
+          type: "css",
           property: "--red500",
           value: "red",
           theme: "",
         },
         {
+          type: "css",
           property: "--bg01",
           value: "var(--red500)",
           theme: "",
@@ -32,16 +35,18 @@ describe("Utility Function Tests", () => {
       ];
       const result = getColor(cssVars[1].value, cssVars);
       expect(result.success).toBeTruthy();
-      expect(result.color).toEqual("#f00");
+      expect(result.color).toEqual("rgb(255, 0, 0)");
     });
     it("should not return color if value is not a color", () => {
       const cssVars: CSSVarDeclarations[] = [
         {
+          type: "css",
           property: "--pad-1",
           value: "16px",
           theme: "",
         },
         {
+          type: "css",
           property: "--spacing-x",
           value: "var(--pad-1)",
           theme: "",
