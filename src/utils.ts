@@ -4,7 +4,10 @@
 
 import {
   CSSVarRecord,
+  CSS_COLOR_ARG_PARSER,
+  CSS_COLOR_FUNCTION_NOTATION,
   CSS_REGEX_INITIATOR,
+  CSS_VAR_FUNCTION_NOTATION,
   JSS_REGEX_INITIATOR,
   JS_IDS,
   SupportedLanguageIds,
@@ -15,36 +18,59 @@ import { serializeColor } from "./color-parser";
 import { Range } from "vscode";
 
 /**
+ * [TODO] Change this method to a more generic recursion call to
+ * normalize `var()` calls to their original values.
+ *
  * This method will help convert non-conventional
- * color calues like color names `red` etc.
+ * color values like color names `red` etc.
  * to their proper HEX values, so that VSCode
  * can show their colors in Helper Dialog.
  */
-export function getColor(
+export async function normalizeVars(
   value: string,
   cssVars?: CSSVarDeclarations[]
-): {
-  success: boolean;
-  color: string;
-} {
-  if (cssVars && /^var/.test(value)) {
-    const propertyName = value.match(/^var\((--[\w-]*)\)/);
+): Promise<{
+  isColor: boolean;
+  value: string;
+}> {
+  if (cssVars && CSS_VAR_FUNCTION_NOTATION.test(value)) {
+    // If value contains a CSS variable, we need to resolve each one of them.
+    const propertyName = value.match(CSS_VAR_FUNCTION_NOTATION)?.groups?.args;
     if (propertyName) {
-      const cssVar = cssVars.find(
-        cssVar => cssVar.property === propertyName[1]
-      );
-      return getColor(cssVar?.value || "");
+      const cssVar = cssVars.find(cssVar => cssVar.property === propertyName);
+      return await normalizeVars(cssVar?.value || "");
     }
   } else {
-    const color = serializeColor(value);
+    let _value = value;
+    const colorFnMatch = value.match(CSS_COLOR_FUNCTION_NOTATION);
+    if (colorFnMatch) {
+      // Value is a supported CSS Color Function.
+      const fnName = colorFnMatch[1];
+      const hasDivider = value.includes("/");
+      const args = value.match(CSS_COLOR_ARG_PARSER);
+      if (args) {
+        const parsedValues = await Promise.all(
+          args.map(value => normalizeVars(value, cssVars))
+        );
+        if (hasDivider) {
+          const alpha = parsedValues.pop();
+          _value = `${fnName}(${parsedValues
+            .map(val => val.value)
+            .join(" ")} / ${alpha?.value})`;
+        } else {
+          _value = `${fnName}(${parsedValues.map(val => val.value).join(" ")})`;
+        }
+      }
+    }
+    const result = serializeColor(_value);
     return {
-      success: !!color,
-      color: color,
+      isColor: result.isColor,
+      value: result.color,
     };
   }
   return {
-    success: false,
-    color: "",
+    isColor: false,
+    value,
   };
 }
 
@@ -53,9 +79,9 @@ export function getColor(
  * like --x: var(--y), whose value is unknown. This method will populate such
  * values and also, populate the color properties for each declarations.
  */
-export const populateValue = (
+export const populateValue = async (
   cssVars: CSSVarRecord
-): [CSSVarDeclarations[], Record<string, CSSVarDeclarations>] => {
+): Promise<[CSSVarDeclarations[], Record<string, CSSVarDeclarations>]> => {
   // Get Color for each, and modify the cssVar Record.
   const vars = getCSSDeclarationArray(cssVars);
 
@@ -66,18 +92,18 @@ export const populateValue = (
 
   // [TODO(shub)] Improve the following code, if possible
   // Mutating self inside the loop is not performant
-  vars.forEach(cssVar => {
+  for await (const cssVar of vars) {
     const isVariable = getVariableType(cssVar.value);
     if (typeof isVariable === "string") {
       const value = getValue(getVariableName(cssVar.value), cssVarsMapToSelf);
       cssVar.value = value || cssVar.value;
     }
 
-    const color = getColor(cssVar.value, vars);
-    if (color.success) {
-      cssVar.color = color.color;
+    const color = await normalizeVars(cssVar.value, vars);
+    if (color.isColor) {
+      cssVar.color = color.value;
     }
-  });
+  }
 
   return [vars, cssVarsMapToSelf];
 };

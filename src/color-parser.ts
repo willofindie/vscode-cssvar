@@ -57,12 +57,23 @@ export const parseToRgb = (color: string) => {
   return null;
 };
 
-export const serializeColor = (color: string) => {
+export const serializeColor = (
+  color: string
+): {
+  isColor: boolean;
+  color: string;
+} => {
   const parsedColor = parseColor(color);
 
   if (parsedColor) {
-    return serializeRgb(CONVERTERS[parsedColor.mode](parsedColor as any));
+    return {
+      isColor: true,
+      color: serializeRgb(CONVERTERS[parsedColor.mode](parsedColor as any)),
+    };
   }
 
-  return "";
+  return {
+    isColor: false,
+    color,
+  };
 };

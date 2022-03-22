@@ -1,11 +1,11 @@
 import { Position, Range } from "vscode";
 import { SupportedLanguageIds } from "../constants";
 import { CSSVarDeclarations } from "../main";
-import { getColor, restrictIntellisense } from "../utils";
+import { normalizeVars, restrictIntellisense } from "../utils";
 
 describe("Utility Function Tests", () => {
-  describe(`getColor`, () => {
-    it("should return proper Hex string for unknown Color Names", () => {
+  describe(`normalizeVars`, () => {
+    it("should return proper Hex string for unknown Color Names", async () => {
       const cssVars: CSSVarDeclarations[] = [
         {
           type: "css",
@@ -14,11 +14,11 @@ describe("Utility Function Tests", () => {
           theme: "",
         },
       ];
-      const result = getColor(cssVars[0].value, cssVars);
-      expect(result.success).toBeTruthy();
-      expect(result.color).toEqual("rgb(255, 0, 0)");
+      const result = await normalizeVars(cssVars[0].value, cssVars);
+      expect(result.isColor).toBeTruthy();
+      expect(result.value).toEqual("rgb(255, 0, 0)");
     });
-    it("should return proper Hex string recursively", () => {
+    it("should return proper Hex string recursively", async () => {
       const cssVars: CSSVarDeclarations[] = [
         {
           type: "css",
@@ -33,11 +33,11 @@ describe("Utility Function Tests", () => {
           theme: "",
         },
       ];
-      const result = getColor(cssVars[1].value, cssVars);
-      expect(result.success).toBeTruthy();
-      expect(result.color).toEqual("rgb(255, 0, 0)");
+      const result = await normalizeVars(cssVars[1].value, cssVars);
+      expect(result.isColor).toBeTruthy();
+      expect(result.value).toEqual("rgb(255, 0, 0)");
     });
-    it("should not return color if value is not a color", () => {
+    it("should not return color if value is not a color", async () => {
       const cssVars: CSSVarDeclarations[] = [
         {
           type: "css",
@@ -52,10 +52,79 @@ describe("Utility Function Tests", () => {
           theme: "",
         },
       ];
-      const result = getColor(cssVars[1].value, cssVars);
-      expect(result.success).toBeFalsy();
-      expect(result.color).toEqual("");
+      const result = await normalizeVars(cssVars[1].value, cssVars);
+      expect(result.isColor).toBeFalsy();
+      expect(result.value).toEqual("16px");
     });
+  });
+
+  it("should parse variables passed inside CSS functions", async () => {
+    const cssVars: CSSVarDeclarations[] = [
+      {
+        type: "css",
+        property: "--color",
+        value: "210 14% 89%",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--g-rot",
+        value: "45deg",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--g-red",
+        value: "red",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--test",
+        value: "14% 89% / 30%",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-solid",
+        value: "hsl(var(--color))",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-translucent",
+        value: "hsla(var(--color) / 30%)",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-deg",
+        value: "hsla(var(--g-rot) var(--test))",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-gradient",
+        value: "linear-gradient(var(--g-rot), var(--g-red), var(--color-translucent))",
+        theme: "",
+      },
+    ];
+    const result1 = await normalizeVars(cssVars[4].value, cssVars);
+    const result2 = await normalizeVars(cssVars[5].value, cssVars);
+    const result3 = await normalizeVars(cssVars[6].value, cssVars);
+    const result4 = await normalizeVars(cssVars[7].value, cssVars);
+    // Following tests color var parsing for only single argument
+    expect(result1.isColor).toBeTruthy();
+    expect(result1.value).toEqual("rgb(223, 227, 231)");
+    // Following tests color var parsing with divider
+    expect(result2.isColor).toBeTruthy();
+    expect(result2.value).toEqual("rgba(223, 227, 231, 0.3)");
+    // Following tests color var parsing without divider
+    expect(result3.isColor).toBeTruthy();
+    expect(result3.value).toEqual("rgba(231, 229, 223, 0.3)");
+    // As of now recursively finding var(--color) details only for Color Functions.
+    expect(result4.isColor).toBeFalsy();
+    expect(result4.value).toEqual(cssVars[7].value);
   });
 
   describe(`restrictIntellisense`, () => {

@@ -290,7 +290,7 @@ export const parseFiles = async function (
 
   if (CACHE.cssVars !== cssVars) {
     try {
-      const [vars, cssVarsMap] = populateValue(cssVars);
+      const [vars, cssVarsMap] = await populateValue(cssVars);
       CACHE.cssVarDefinitionsMap = vars.reduce((defs, cssVar) => {
         if (!cssVar.location) {
           return defs;
