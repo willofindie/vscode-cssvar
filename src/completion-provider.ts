@@ -16,7 +16,8 @@ export class CssCompletionProvider implements CompletionItemProvider {
     position: Position
   ): Promise<CompletionList | null> {
     const firstInLine = new Position(position.line, 0);
-    const language: SupportedLanguageIds = document.languageId as SupportedLanguageIds;
+    const language: SupportedLanguageIds =
+      document.languageId as SupportedLanguageIds;
 
     /**
      * VSCode auto-fills extra characters post our current cursor position sometimes
