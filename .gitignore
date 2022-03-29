@@ -4,3 +4,7 @@ node_modules
 .vscode-test/
 *.vsix
 yarn-error.log
+.DS_Store
+
+# Temporary disabled folders
+examples

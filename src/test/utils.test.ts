@@ -5,7 +5,7 @@ import { normalizeVars, restrictIntellisense } from "../utils";
 
 describe("Utility Function Tests", () => {
   describe(`normalizeVars`, () => {
-    it("should return proper Hex string for unknown Color Names", async () => {
+    it("should return proper rgb string for known Color Names", async () => {
       const cssVars: CSSVarDeclarations[] = [
         {
           type: "css",
@@ -18,7 +18,7 @@ describe("Utility Function Tests", () => {
       expect(result.isColor).toBeTruthy();
       expect(result.value).toEqual("rgb(255, 0, 0)");
     });
-    it("should return proper Hex string recursively", async () => {
+    it("should return proper rgb string recursively", async () => {
       const cssVars: CSSVarDeclarations[] = [
         {
           type: "css",
@@ -125,6 +125,83 @@ describe("Utility Function Tests", () => {
     // As of now recursively finding var(--color) details only for Color Functions.
     expect(result4.isColor).toBeFalsy();
     expect(result4.value).toEqual(cssVars[7].value);
+  });
+
+  it("should parse CSS functions without variables", async () => {
+    const cssVars: CSSVarDeclarations[] = [
+      {
+        type: "css",
+        property: "--color-hex",
+        value: "#6A1B9A",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-rgb",
+        value: "rgb(106, 27, .154e+3)",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-hsl",
+        value: "hsl(27732e-2, 70.17%, 35.49%)",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-hwba",
+        value: "hwb(277.3228 10.588% 39.6078%)",
+        theme: "",
+      },
+
+      // With Alpha
+      {
+        type: "css",
+        property: "--color-hex8",
+        value: "#6A1B9Aaa",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-rgba",
+        value: "rgba(106, 27, 154, 0.67)",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-hsla",
+        value: "hsla(277.32, 70.17%, 35.49%, .67)",
+        theme: "",
+      },
+      {
+        type: "css",
+        property: "--color-hwba",
+        value: "hwb(277.3228 10.588% 39.6078% / .67)",
+        theme: "",
+      },
+    ];
+    const colorWithNegativeRad = [{
+      type: "css",
+      property: "--color",
+      value: "hwb(-100 0% 10%)",
+      theme: "",
+    }] as CSSVarDeclarations[];
+
+    const results = await Promise.all(cssVars.map(cssVar => normalizeVars(cssVar.value, cssVars)));
+    const maxIndexWithoutAlpha = Math.ceil((results.length / 2) - 1);
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
+      expect(result.isColor).toBeTruthy();
+      if (i <= maxIndexWithoutAlpha) {
+        expect(result.value).toEqual("rgb(106, 27, 154)");
+      } else {
+        expect(result.value).toEqual("rgba(106, 27, 154, 0.67)");
+      }
+    }
+
+    const result = await normalizeVars(colorWithNegativeRad[0].value, colorWithNegativeRad);
+    expect(result.isColor).toBeTruthy();
+    expect(result.value).toEqual("rgb(76, 0, 230)");
   });
 
   describe(`restrictIntellisense`, () => {
