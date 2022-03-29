@@ -117,7 +117,7 @@
   "scripts": {
     "postinstall": "husky install",
     "vscode:prepublish": "yarn test && yarn build",
-    "pub": "vsce publish --yarn",
+    "pub": "vsce publish",
     "prebuild": "rimraf out",
     "build": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
     "watch": "rollup -c -m -w",
@@ -136,7 +136,7 @@
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.180",
     "@types/node": "^12.20.47",
-    "@types/vscode": "^1.65.0",
+    "@types/vscode": "1.46.0",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
     "babel-jest": "^26.6.3",
