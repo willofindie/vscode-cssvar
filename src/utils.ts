@@ -47,12 +47,14 @@ export async function normalizeVars(
       // Value is a supported CSS Color Function.
       const fnName = colorFnMatch[1];
       const hasDivider = value.includes("/");
-      const args = value.match(CSS_COLOR_ARG_PARSER);
+      const args = value.match(CSS_COLOR_ARG_PARSER)?.filter(m => !!m);
       if (args) {
         const parsedValues = await Promise.all(
           args.map(value => normalizeVars(value, cssVars))
         );
-        if (hasDivider) {
+        // hasDivider is required for values like `hsl(var(--color) / 30%)`, where
+        // we have less than 4 parsedValued
+        if (hasDivider || parsedValues.length > 3) {
           const alpha = parsedValues.pop();
           _value = `${fnName}(${parsedValues
             .map(val => val.value)

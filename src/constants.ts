@@ -165,7 +165,7 @@ export const SUFFIX = /[;'")]{1}/;
  *  - separator is `,` (comma), divider will always be `,` (comma)
  * applies vice-versa
  */
-const cnn = /(\d+(\.\d+)?(e\d+)?(%|deg|rad|grad|turn)?)/i.source; // color number notation
+const cnn = /([+-]?\d*(\.\d+)?(e[+-]?\d+)?(%|deg|rad|grad|turn)?)/i.source; // color number notation
 const vn = /(var\s*\(.*?\))/i.source; // var notation
 const cORv = new RegExp(`(${vn}|${cnn})`, "i").source;
 const cfn = /(rgba?|hsla?|hwb|lab|lch)/i.source; // color function notation
