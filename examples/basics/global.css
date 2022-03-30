@@ -1,0 +1,21 @@
+:root {
+  --size-sm: 12px;
+  --size-md: 18px;
+  --size-lg: 2rem;
+
+  --color-red-50: #ffebee;
+  --color-red-100: rgb(255, 205, 210);
+  --color-purple-300: hsl(291.25, 46.6%, 59.61%);
+  --color-purple-500-alpha: hsla(277.32, 70.17%, 35.49%, 0.67);
+}
+
+:body {
+  --size-sm: 12px;
+  --size-md: 18px;
+  --size-lg: 2rem;
+
+  --color-red-50: #ffebee;
+  --color-red-100: rgb(255, 205, 210);
+  --color-purple-300: hsl(291.25, 46.6%, 59.61%);
+  --color-purple-500-alpha: hsla(277.32, 70.17%, 35.49%, 0.67);
+}
