@@ -83,6 +83,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
+      // eslint-disable-next-line no-console
+      console.warn(err);
     }
   }
 }

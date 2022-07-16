@@ -2,6 +2,7 @@ import { Location, Position, Range, Uri, window, workspace } from "vscode";
 import { readFile, existsSync, stat } from "fs";
 import postcss, {
   AtRule,
+  ChildNode,
   Declaration,
   Node,
   ProcessOptions,
@@ -21,7 +22,7 @@ import {
 import { dirname, extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
-import { getVariableType, populateValue } from "./utils";
+import { getCSSErrorMsg, getVariableType, populateValue } from "./utils";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -178,42 +179,48 @@ const parseFile = async function (
   );
 
   /* Find imported paths from CSS file */
-  const resolvedImportPaths = css.root.nodes.reduce((resolvedPaths, node) => {
-    if (
-      isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
-      SUPPORTED_IMPORT_NAMES.includes(node.name)
-    ) {
-      const match = node.params.match(/['"](.*?)['"]/);
-      if (match) {
-        let toPath = match[1];
-        const importFileExtension = extname(toPath);
-        if (!importFileExtension) {
-          toPath += extension; // Add Parent's extension
-        }
-        const parentDir = dirname(toPath);
-        if (parentDir === "." && !toPath.startsWith(".")) {
-          // Relative current dir URLs might or might not have `./`;
-          toPath = "./" + toPath;
-        }
-        const filename = toPath.replace(parentDir, "").substring(1);
-
-        // In Some CSS extensions like Sass, we can have imports without a `_` prefix
-        // like `@use 'filename'` for `_filename.scss`
-        const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
-        const acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
-          const resolvedPath = resolve(path, "..", file);
-          if (existsSync(resolvedPath)) {
-            acceptedFile = resolvedPath;
+  const resolvedImportPaths = (<ChildNode[]>css.root.nodes).reduce(
+    (resolvedPaths, node) => {
+      if (
+        isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
+        SUPPORTED_IMPORT_NAMES.includes(node.name)
+      ) {
+        const match = node.params.match(/['"](.*?)['"]/);
+        if (match) {
+          let toPath = match[1];
+          const importFileExtension = extname(toPath);
+          if (!importFileExtension) {
+            toPath += extension; // Add Parent's extension
           }
-          return acceptedFile;
-        }, "");
-        if (acceptedFile && !(<string[]>config.files).includes(acceptedFile)) {
-          resolvedPaths.push(acceptedFile);
+          const parentDir = dirname(toPath);
+          if (parentDir === "." && !toPath.startsWith(".")) {
+            // Relative current dir URLs might or might not have `./`;
+            toPath = "./" + toPath;
+          }
+          const filename = toPath.replace(parentDir, "").substring(1);
+
+          // In Some CSS extensions like Sass, we can have imports without a `_` prefix
+          // like `@use 'filename'` for `_filename.scss`
+          const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
+          const acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
+            const resolvedPath = resolve(path, "..", file);
+            if (existsSync(resolvedPath)) {
+              acceptedFile = resolvedPath;
+            }
+            return acceptedFile;
+          }, "");
+          if (
+            acceptedFile &&
+            !(<string[]>config.files).includes(acceptedFile)
+          ) {
+            resolvedPaths.push(acceptedFile);
+          }
         }
       }
-    }
-    return resolvedPaths;
-  }, [] as string[]);
+      return resolvedPaths;
+    },
+    [] as string[]
+  );
 
   /* Parse Imported files which are not part of the config list */
   let importDeclarations: Record<string, CSSVarDeclarations[]> = {};
@@ -226,7 +233,7 @@ const parseFile = async function (
   }
 
   return {
-    [path]: css.root.nodes.reduce<CSSVarDeclarations[]>(
+    [path]: (<ChildNode[]>css.root.nodes).reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
         const dec = getVariableDeclarations(config, node, { path });
         declarations = declarations.concat(dec);
@@ -272,6 +279,8 @@ export const parseFiles = async function (
         newVars = await parseFile(path, config);
       } catch (e) {
         errorPaths.push(path);
+        // eslint-disable-next-line no-console
+        console.warn(getCSSErrorMsg(path, e as any));
       }
       cssVars = {
         ...cssVars,

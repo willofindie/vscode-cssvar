@@ -1,5 +1,3 @@
-# CSSVar (A VSCode Extension)
-
 <div align="center">
   <img
   src="https://user-images.githubusercontent.com/11786283/113474026-dd0dd100-948a-11eb-8140-4570d7c983d3.png"
@@ -13,9 +11,16 @@
 
 ![CSS Extension Support](https://user-images.githubusercontent.com/11786283/153740157-96e5033c-2fed-4475-9844-1eb4e866ecfd.png)
 
-Details here: [Customize Extension](./customize-extension.md)
+<p align="center">
+  <img src="https://img.shields.io/badge/size-%3C%20200KB-blue?style=flat" />
+</p>
+
+
+<h1 align="center">CSS Variables</h1>
 
 ## Features:
+
+[Read how to Customize Extension](./customize-extension.md)
 
 This extension helps to autocomplete globally shared CSS Variables and a lot more.
 

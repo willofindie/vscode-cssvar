@@ -10,6 +10,7 @@ import {
   CSS_VAR_FUNCTION_NOTATION,
   JSS_REGEX_INITIATOR,
   JS_IDS,
+  SCSS_COLOR_INTERPOLATION,
   SupportedLanguageIds,
   VAR_KEYWORD_REVERSE,
 } from "./constants";
@@ -38,6 +39,13 @@ export async function normalizeVars(
     const propertyName = value.match(CSS_VAR_FUNCTION_NOTATION)?.groups?.args;
     if (propertyName) {
       const cssVar = cssVars.find(cssVar => cssVar.property === propertyName);
+      return await normalizeVars(cssVar?.value || "");
+    }
+  } else if (cssVars && SCSS_COLOR_INTERPOLATION.test(value)) {
+    // If the value is an interpolated SCSS string.
+    const result = value.match(SCSS_COLOR_INTERPOLATION);
+    if (result && result[1]) {
+      const cssVar = cssVars.find(cssVar => cssVar.property === result[1]);
       return await normalizeVars(cssVar?.value || "");
     }
   } else {
@@ -281,4 +289,30 @@ export const getVariableType = (
   }
 
   return null;
+};
+
+export const getCSSErrorMsg = (
+  filepath: string,
+  error: Record<string, any>
+) => {
+  if (
+    Object.prototype.hasOwnProperty.call(error, "name") &&
+    Object.prototype.hasOwnProperty.call(error, "reason") &&
+    Object.prototype.hasOwnProperty.call(error, "line")
+  ) {
+    return JSON.stringify(
+      {
+        name: error.name,
+        reason: error.reason,
+        file: filepath,
+        line: error.line,
+        column: error.column,
+        endLine: error.endLine,
+        endColumn: error.endColumn,
+      },
+      null,
+      2
+    );
+  }
+  return JSON.stringify(error);
 };
