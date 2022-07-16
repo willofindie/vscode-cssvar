@@ -10,6 +10,7 @@ import { CssColorProvider } from "./color-provider";
 import { CssCompletionProvider } from "./completion-provider";
 import { CACHE, DEFAULT_CONFIG } from "./constants";
 import { CssDefinitionProvider } from "./definition-provider";
+import { LOGGER } from "./logger";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
 
@@ -83,8 +84,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
-      // eslint-disable-next-line no-console
-      console.warn(err);
+      LOGGER.warn(err);
     }
   }
 }

@@ -119,11 +119,11 @@
     "vscode:prepublish": "yarn test && yarn build",
     "pub": "vsce publish",
     "prebuild": "rimraf out",
-    "build": "rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
+    "build": "cross-env NODE_ENV=production rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
     "watch": "rollup -c -m -w",
     "lint": "eslint src --ext ts",
     "lint:fix": "eslint src --ext ts --fix",
-    "test": "cross-env NODE_ENV=production jest"
+    "test": "jest"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
@@ -131,6 +131,7 @@
     "@babel/preset-typescript": "^7.16.7",
     "@rollup/plugin-commonjs": "^18.1.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
+    "@rollup/plugin-replace": "^4.0.0",
     "@types/css": "^0.0.31",
     "@types/glob": "^7.2.0",
     "@types/jest": "^26.0.24",
