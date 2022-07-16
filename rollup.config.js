@@ -1,5 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import replace from "@rollup/plugin-replace";
 import esbuild from "rollup-plugin-esbuild";
 import pkg from "./package.json";
 import tsConfig from "./tsconfig.json";
@@ -13,6 +14,9 @@ export default [
       format: "cjs",
     },
     plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || "development"),
+      }),
       resolve({
         browser: false,
         preferBuiltins: true,

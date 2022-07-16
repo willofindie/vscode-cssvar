@@ -23,6 +23,7 @@ import { dirname, extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
 import { getCSSErrorMsg, getVariableType, populateValue } from "./utils";
+import { LOGGER } from "./logger";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -127,8 +128,7 @@ export function getVariableDeclarations(
         }
         location = new Location(uri, position);
       } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error("Failed to find the Location: ", e);
+        LOGGER.error("Failed to find the Location: ", e);
       }
 
       declarations.push({
@@ -280,7 +280,7 @@ export const parseFiles = async function (
       } catch (e) {
         errorPaths.push(path);
         // eslint-disable-next-line no-console
-        console.warn(getCSSErrorMsg(path, e as any));
+        LOGGER.warn(getCSSErrorMsg(path, e as any));
       }
       cssVars = {
         ...cssVars,
