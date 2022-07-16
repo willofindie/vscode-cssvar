@@ -39,6 +39,7 @@
     "onLanguage:postcss",
     "onLanguage:svelte",
     "onLanguage:vue",
+    "onLanguage:astro",
     "onLanguage:javascript",
     "onLanguage:javascriptreact",
     "onLanguage:typescript",
