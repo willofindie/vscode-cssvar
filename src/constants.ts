@@ -15,12 +15,13 @@ export const CSS_IDS = [
   "postcss",
   "vue",
   "svelte",
+  "astro",
 ] as const;
 export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
 export type CssExtensions = Exclude<
   typeof CSS_IDS[number],
-  "vue" | "svelte" | "postcss" | "css"
+  "vue" | "svelte" | "astro" | "postcss" | "css"
 >;
 
 export type SupportedExtensionNames =
@@ -31,6 +32,7 @@ export type SupportedExtensionNames =
   | "postcss"
   | "vue"
   | "svelte"
+  | "astro"
   | "ts"
   | "tsx"
   | "jsx"
