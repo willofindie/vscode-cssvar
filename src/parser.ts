@@ -31,15 +31,21 @@ const statAsync = promisify(stat);
 const cssParseAsync = (file: string, ext: CssExtensions) => {
   const rootPaths =
     workspace.workspaceFolders?.map(folder => folder.uri.path) || [];
+  const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
+
+  LOGGER.info("Workspace Root Paths: ", rootPathsOrUndefined);
 
   const plugins = CACHE.config.postcssPlugins
     .map(plugin => {
       try {
-        return require(require.resolve(plugin, { paths: rootPaths }));
+        return require(require.resolve(plugin, {
+          paths: rootPathsOrUndefined,
+        }));
       } catch (e: any) {
         window.showErrorMessage(
           `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`
         );
+        LOGGER.error(e);
       }
       return null;
     })
@@ -57,12 +63,13 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
   if (syntaxModuleName) {
     try {
       options.syntax = require(require.resolve(syntaxModuleName, {
-        paths: rootPaths,
+        paths: rootPathsOrUndefined,
       }));
     } catch (e: any) {
       window.showErrorMessage(
         `Cannot resolve postcss syntax module ${syntaxModuleName}. Please add postcss@8 as project's dependency.`
       );
+      LOGGER.error(e);
     }
   }
 
