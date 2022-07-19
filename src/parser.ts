@@ -33,14 +33,13 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
     workspace.workspaceFolders?.map(folder => folder.uri.fsPath) || [];
   const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
 
-  LOGGER.info("Workspace Root Paths: ", rootPathsOrUndefined);
-
-  const plugins = CACHE.config.postcssPlugins
+  const plugins = CACHE.config[CACHE.activeRootPath].postcssPlugins
     .map(plugin => {
       try {
-        return require(require.resolve(plugin, {
+        const resolvedMod = require(require.resolve(plugin, {
           paths: rootPathsOrUndefined,
         }));
+        return resolvedMod;
       } catch (e: any) {
         window.showErrorMessage(
           `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`
@@ -52,7 +51,9 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
     .filter(Boolean);
 
   /* Postcss Syntax needs to be applied only for files of that type */
-  const syntaxModuleName = CACHE.config.postcssSyntax.find(moduleName => {
+  const syntaxModuleName = CACHE.config[
+    CACHE.activeRootPath
+  ].postcssSyntax.find(moduleName => {
     return moduleName === POSTCSS_SYNTAX_MODULES[ext];
   });
 
@@ -81,13 +82,15 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
  * This is an impure function, to update CACHE
  * when any file is deleted.
  */
-const updateCacheOnFileDelete = () => {
-  const deletedPaths = Object.keys(CACHE.cssVars).filter(
+const updateCacheOnFileDelete = (rootPath: string) => {
+  const deletedPaths = Object.keys(CACHE.cssVars[rootPath] || {}).filter(
     path => !existsSync(path)
   );
   if (deletedPaths.length > 0) {
     deletedPaths.forEach(path => {
-      delete CACHE.cssVars[path];
+      if (CACHE.cssVars[rootPath]) {
+        delete CACHE.cssVars[rootPath][path];
+      }
       delete CACHE.fileMetas[path];
     });
   }
@@ -174,9 +177,10 @@ export function getVariableDeclarations(
  */
 const parseFile = async function (
   path: string,
-  config: Config
+  config: Config,
+  rootPath: string
 ): Promise<Record<string, CSSVarDeclarations[]>> {
-  CACHE.filesToWatch.add(path);
+  CACHE.filesToWatch[rootPath].add(path);
   /* Parse Current File */
   const file = await readFileAsync(path, { encoding: "utf8" });
   const extension = extname(path);
@@ -232,7 +236,7 @@ const parseFile = async function (
   /* Parse Imported files which are not part of the config list */
   let importDeclarations: Record<string, CSSVarDeclarations[]> = {};
   for await (const resolvedPath of resolvedImportPaths) {
-    const declarations = await parseFile(resolvedPath, config);
+    const declarations = await parseFile(resolvedPath, config, rootPath);
     importDeclarations = {
       ...importDeclarations,
       ...declarations,
@@ -252,23 +256,23 @@ const parseFile = async function (
   };
 };
 
-/**
- * Parses a plain CSS file (even SCSS files, if they are pure CSS)
- * and retrives all the CSS variables present in all the selected
- * files. Parsing is done only once when plugin activates,
- * and everytime any file gets modified.
- */
-export const parseFiles = async function (
-  config: Config
-): Promise<[CSSVarRecord, string[]]> {
-  updateCacheOnFileDelete();
+const parseFilesForSingleFolder = async function (
+  configMap: {
+    [rootPath: string]: Config;
+  },
+  rootPath: string
+): Promise<string[]> {
+  updateCacheOnFileDelete(rootPath);
 
-  let cssVars: CSSVarRecord = CACHE.cssVars;
+  const config = configMap[rootPath];
+  let cssVars: CSSVarRecord = CACHE.cssVars[rootPath] || {};
   const isModified =
     Object.keys(CACHE.fileMetas).length !== config.files.length;
   const errorPaths: string[] = [];
   const filesArray =
-    CACHE.filesToWatch.size > 0 ? CACHE.filesToWatch : <string[]>config.files;
+    CACHE.filesToWatch[rootPath].size > 0
+      ? CACHE.filesToWatch[rootPath]
+      : <string[]>config.files;
 
   for (const path of filesArray) {
     const cachedFileMeta = CACHE.fileMetas[path];
@@ -283,11 +287,14 @@ export const parseFiles = async function (
       // Read and Parse File, only when file has modified
       let newVars = { [path]: [] as CSSVarDeclarations[] };
       try {
-        newVars = await parseFile(path, config);
+        newVars = await parseFile(path, config, rootPath);
       } catch (e) {
         errorPaths.push(path);
         // eslint-disable-next-line no-console
-        LOGGER.warn(getCSSErrorMsg(path, e as any));
+        LOGGER.warn(
+          `Failed to Parse file (${path}): `,
+          getCSSErrorMsg(path, e as any)
+        );
       }
       cssVars = {
         ...cssVars,
@@ -304,10 +311,10 @@ export const parseFiles = async function (
     }
   }
 
-  if (CACHE.cssVars !== cssVars) {
+  if (CACHE.cssVars[rootPath] !== cssVars) {
     try {
       const [vars, cssVarsMap] = await populateValue(cssVars);
-      CACHE.cssVarDefinitionsMap = vars.reduce((defs, cssVar) => {
+      CACHE.cssVarDefinitionsMap[rootPath] = vars.reduce((defs, cssVar) => {
         if (!cssVar.location) {
           return defs;
         }
@@ -319,13 +326,49 @@ export const parseFiles = async function (
           defs[key] = [cssVar.location];
         }
         return defs;
-      }, {} as CacheType["cssVarDefinitionsMap"]);
-      CACHE.cssVarsMap = cssVarsMap;
+      }, {} as CacheType["cssVarDefinitionsMap"][string]);
+      CACHE.cssVarsMap[rootPath] = cssVarsMap;
     } catch (e) {
       window.showErrorMessage(`Populating Variable Values: ${e}`);
     }
   }
 
-  CACHE.cssVars = cssVars;
-  return [CACHE.cssVars, errorPaths];
+  CACHE.cssVars[rootPath] = cssVars;
+  return errorPaths;
+};
+
+/**
+ * Parses a plain CSS file (even SCSS files, if they are pure CSS)
+ * and retrives all the CSS variables present in all the selected
+ * files. Parsing is done only once when plugin activates,
+ * and everytime any file gets modified.
+ */
+export const parseFiles = async function (
+  configMap: {
+    [rootPath: string]: Config;
+  },
+  options: {
+    parseAll?: boolean;
+  } = { parseAll: false }
+): Promise<[CSSVarRecord, string[]]> {
+  let errorPaths: string[] = [];
+  if (options.parseAll) {
+    const folders = workspace.workspaceFolders || [];
+    for await (const folder of folders) {
+      const rootPath = folder.uri.fsPath;
+      if (!CACHE.filesToWatch[rootPath]) {
+        CACHE.filesToWatch[rootPath] = new Set();
+      }
+      errorPaths = errorPaths.concat(
+        await parseFilesForSingleFolder(configMap, rootPath)
+      );
+    }
+  } else {
+    errorPaths = await parseFilesForSingleFolder(
+      configMap,
+      CACHE.activeRootPath
+    );
+  }
+
+  return [CACHE.cssVars[CACHE.activeRootPath], errorPaths];
 };

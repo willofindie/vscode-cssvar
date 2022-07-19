@@ -89,25 +89,34 @@ export const VAR_KEYWORD_REVERSE = ["(", "r", "a", "v"];
 
 export type CSSVarRecord = { [path: string]: CSSVarDeclarations[] };
 export type CacheType = {
-  cssVars: CSSVarRecord;
-  cssVarsMap: { [varName: string]: CSSVarDeclarations };
-  cssVarDefinitionsMap: { [varName: string]: Location[] };
-  filesToWatch: Set<string>;
+  cssVars: { [activeRootpath: string]: CSSVarRecord };
+  // Reverse map for easy access to CSS variable details
+  cssVarsMap: {
+    [activeRootpath: string]: { [varName: string]: CSSVarDeclarations };
+  };
+  // Keeps a map of each variable's file location
+  cssVarDefinitionsMap: {
+    [activeRootpath: string]: { [varName: string]: Location[] };
+  };
+  filesToWatch: { [activeRootpath: string]: Set<string> };
   fileMetas: {
     [path: string]: {
       path: string;
       lastModified: number;
     };
   };
-  config: Config;
+  config: { [activeRootpath: string]: Config };
+  activeRootPath: string;
 };
+
 export const CACHE: CacheType = {
   cssVars: {},
   cssVarsMap: {},
   cssVarDefinitionsMap: {},
-  filesToWatch: new Set(),
+  filesToWatch: {},
   fileMetas: {},
-  config: {} as Config,
+  config: {}, // Points to active config.
+  activeRootPath: "",
 };
 
 export const POSTCSS_SYNTAX_MODULES: Record<CssExtensions, string> = {

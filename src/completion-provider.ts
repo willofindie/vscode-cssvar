@@ -8,7 +8,7 @@ import {
 import { CACHE, SupportedLanguageIds } from "./constants";
 
 import { createCompletionItems } from "./main";
-import { restrictIntellisense } from "./utils";
+import { getActiveRootPath, restrictIntellisense } from "./utils";
 
 export class CssCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
@@ -18,6 +18,8 @@ export class CssCompletionProvider implements CompletionItemProvider {
     const firstInLine = new Position(position.line, 0);
     const language: SupportedLanguageIds =
       document.languageId as SupportedLanguageIds;
+
+    CACHE.activeRootPath = getActiveRootPath();
 
     /**
      * VSCode auto-fills extra characters post our current cursor position sometimes
@@ -46,10 +48,15 @@ export class CssCompletionProvider implements CompletionItemProvider {
     }
 
     const region = regions[regions.length - 1];
-    const completionItems = createCompletionItems(CACHE.config, CACHE.cssVars, {
-      region,
-      languageId: language,
-    });
+
+    const completionItems = createCompletionItems(
+      CACHE.config[CACHE.activeRootPath],
+      CACHE.cssVars[CACHE.activeRootPath],
+      {
+        region,
+        languageId: language,
+      }
+    );
     return new CompletionList(completionItems);
   }
 }

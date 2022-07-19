@@ -5,6 +5,11 @@ import esbuild from "rollup-plugin-esbuild";
 import pkg from "./package.json";
 import tsConfig from "./tsconfig.json";
 
+const isProd = process.env.NODE_ENV === "production";
+
+/**
+ * @type {import("rollup").RollupOptions[]}
+ */
 export default [
   {
     input: "src/extension.ts",
@@ -15,7 +20,10 @@ export default [
     },
     plugins: [
       replace({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || "development"),
+        "process.env.NODE_ENV": JSON.stringify(
+          process.env.NODE_ENV || "development"
+        ),
+        preventAssignment: true,
       }),
       resolve({
         browser: false,
@@ -25,8 +33,8 @@ export default [
         ignoreGlobal: true,
       }),
       esbuild({
-        minify: process.env.NODE_ENV === "production",
-        sourceMap: process.env.NODE_ENV !== "production",
+        minify: isProd,
+        sourceMap: !isProd,
         target: tsConfig.compilerOptions.target,
         define: {
           __VERSION__: JSON.stringify(pkg.version),

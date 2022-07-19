@@ -49,68 +49,125 @@
   "preview": false,
   "contributes": {
     "configuration": {
-      "title": "CSS Var Complete",
+      "title": "CSS Variables",
       "properties": {
         "cssvar.files": {
-          "type": [
-            "array",
-            "object",
-            "null"
-          ],
-          "default": null,
-          "description": "CSS variable file relative/absolute paths to include for the Intellisense"
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Relative/Absolute paths to CSS variable file sources",
+          "scope": "resource",
+          "examples": [
+            [
+              "src/**/*.css",
+              "styles/global.css"
+            ]
+          ]
         },
         "cssvar.extensions": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "description": "File extensions to include"
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "File extensions for which IntelliSense will be enabled",
+          "scope": "resource",
+          "examples": [
+            [
+              "css",
+              "scss",
+              "tsx",
+              "jsx"
+            ]
+          ]
         },
         "cssvar.themes": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "description": "CSS Theme classname list"
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "CSS Theme classnames used in source files",
+          "scope": "resource",
+          "examples": [
+            [
+              "dark",
+              "dim"
+            ]
+          ]
         },
         "cssvar.excludeThemedVariables": {
           "type": "boolean",
           "default": false,
-          "description": "Exclude themed variables"
+          "markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
+          "scope": "resource",
+          "examples": [
+            true,
+            false
+          ]
         },
         "cssvar.disableSort": {
           "type": "boolean",
           "default": false,
-          "description": "Disables default sorting applied by VSCode"
+          "markdownDescription": "Disables default sorting applied by VSCode",
+          "scope": "window",
+          "examples": [
+            true,
+            false
+          ]
         },
         "cssvar.enableColors": {
           "type": "boolean",
           "default": true,
-          "description": "Enable VScode's Color Representation feature when true"
+          "markdownDescription": "Enable VScode's Color Representation feature when true",
+          "scope": "window",
+          "examples": [
+            true,
+            false
+          ]
         },
         "cssvar.enableGotoDef": {
           "type": "boolean",
           "default": true,
-          "description": "Enable VScode's Goto Definition feature for CSS Variables"
+          "markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
+          "scope": "window",
+          "examples": [
+            true,
+            false
+          ]
         },
         "cssvar.postcssPlugins": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "description": "Provide PostCSS Plugins to support custom CSS features"
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Provide PostCSS Plugins to support custom CSS features. List of PostCSS plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
+          "scope": "resource",
+          "examples": [
+            [
+              "postcss-nested",
+              "webp-in-css"
+            ]
+          ]
         },
         "cssvar.postcssSyntax": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "description": "Add support for custom CSS compilers like SCSS, SASS, LESS and more"
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Add support for custom CSS compilers like SCSS, SASS, LESS and more. Currently supports: 'postcss-scss', 'postcss-sass', 'postcss-less'. List of all PostCSS syntax names can be found in [PostCSS Doc](https://github.com/postcss/postcss#syntaxes)",
+          "scope": "resource",
+          "examples": [
+            [
+              "postcss-scss",
+              "postcss-sass",
+              "postcss-less"
+            ]
+          ]
         }
       }
     }
@@ -143,7 +200,7 @@
     "@typescript-eslint/parser": "^5.17.0",
     "babel-jest": "^26.6.3",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.14.28",
+    "esbuild": "^0.14.49",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^24.7.0",
@@ -156,7 +213,7 @@
     "prettier": "^2.6.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.70.1",
-    "rollup-plugin-esbuild": "^4.8.2",
+    "rollup-plugin-esbuild": "^4.9.1",
     "typescript": "^4.6.3"
   },
   "dependencies": {

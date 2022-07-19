@@ -7,6 +7,7 @@ import {
   TextDocument,
 } from "vscode";
 import { CACHE } from "./constants";
+import { getActiveRootPath } from "./utils";
 
 export class CssDefinitionProvider implements DefinitionProvider {
   async provideDefinition(
@@ -33,7 +34,9 @@ export class CssDefinitionProvider implements DefinitionProvider {
       }
     }
 
-    const locations = CACHE.cssVarDefinitionsMap[exactMatch];
+    CACHE.activeRootPath = getActiveRootPath();
+    const locations =
+      CACHE.cssVarDefinitionsMap[CACHE.activeRootPath][exactMatch];
 
     return locations;
   }

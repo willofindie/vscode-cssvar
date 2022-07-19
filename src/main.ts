@@ -3,6 +3,7 @@ import {
   CompletionItemKind,
   Location,
   workspace,
+  WorkspaceConfiguration,
 } from "vscode";
 import { resolve } from "path";
 import fastGlob from "fast-glob";
@@ -23,8 +24,20 @@ import {
   isCSSInJS,
   isObjectProperty,
   Region,
+  getActiveRootPath,
 } from "./utils";
 import { disableDefaultSort } from "./unstable";
+
+const getConfigValue = <T extends keyof Config>(
+  config: WorkspaceConfiguration,
+  key: T
+): Config[typeof key] => {
+  let value = config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
+  if (Array.isArray(value) && value.length === 0) {
+    value = DEFAULT_CONFIG[key];
+  }
+  return value;
+};
 
 /**
  * Sets up the Plugin
@@ -34,78 +47,61 @@ import { disableDefaultSort } from "./unstable";
  *
  * @throws {@link NoWorkspaceError}
  */
-export async function setup(): Promise<{ config: Config }> {
+export async function setup(): Promise<{
+  config: { [fsPath: string]: Config };
+}> {
   if (!workspace.workspaceFolders) {
     throw new NoWorkspaceError("No Workspace found.");
   }
-  const workspaceFolder = workspace.workspaceFolders || [];
-  const isMultiRoot = workspace.workspaceFolders.length > 1;
-  const resourcePath = workspaceFolder[0]?.uri.fsPath;
-  const _config = workspace.getConfiguration(EXTENSION_NAME);
-  if (
-    isMultiRoot &&
-    (!_config.get("files") || Array.isArray(_config.get("files")))
-  ) {
-    throw new NoWorkspaceError(
-      "Provide a map object for cssvar.files property in Multi Root Workspaces"
-    );
-  }
-  const config: Record<keyof Config, ValueOf<Config>> = {} as Config;
-  for (const key in DEFAULT_CONFIG) {
-    if (isObjectProperty(DEFAULT_CONFIG, key)) {
-      switch (key) {
-        case "files": {
-          const value =
-            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
-          if (isMultiRoot) {
-            config[key] = [];
-            for (const workspaceName of Object.keys(value)) {
-              const wFolder = workspace.workspaceFolders.find(w => {
-                return new RegExp(workspaceName).test(w.name);
-              });
-              if (wFolder) {
-                const _resourcePath = wFolder.uri.fsPath;
-                const globs = (<Record<string, string[]>>value)[workspaceName];
-                const entries = await fastGlob(globs, {
-                  cwd: _resourcePath,
-                });
-                config[key] = (<string[]>config[key]).concat(
-                  entries.map((path: string) => resolve(_resourcePath, path))
-                );
-              }
-            }
-          } else {
+  const workspaceFolders = workspace.workspaceFolders || [];
+  const firstFolderPath = workspaceFolders[0]?.uri.fsPath;
+  const config = {} as { [fsPath: string]: Config };
+
+  CACHE.activeRootPath = getActiveRootPath(firstFolderPath);
+
+  for (const folder of workspaceFolders) {
+    const _config = workspace.getConfiguration(EXTENSION_NAME, folder.uri);
+    const resourcePath = folder.uri.fsPath;
+    const fsPathKey = folder.uri.fsPath;
+
+    if (!config[fsPathKey]) {
+      config[fsPathKey] = {} as Config;
+    }
+
+    for (const key in DEFAULT_CONFIG) {
+      if (isObjectProperty(DEFAULT_CONFIG, key)) {
+        switch (key) {
+          case "files": {
+            const value = getConfigValue(_config, key);
             const entries = await fastGlob(<string[]>value, {
               cwd: resourcePath,
             });
-            config[key] = entries.map((path: string) =>
+            config[fsPathKey][key] = entries.map((path: string) =>
               resolve(resourcePath, path)
             );
+            break;
           }
-          break;
-        }
-        case "extensions": {
-          const value =
-            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
-          config[key] = value.map(ext => {
-            const _ext = ext.startsWith(".")
-              ? (ext.substr(1) as SupportedExtensionNames)
-              : ext;
-            return mapShortToFullExtension(_ext);
-          });
-          break;
-        }
-        default: {
-          const value =
-            _config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
-          config[key] = value;
-          break;
+          case "extensions": {
+            const value = getConfigValue(_config, key);
+            config[fsPathKey][key] = value.map(ext => {
+              const _ext = ext.startsWith(".")
+                ? (ext.substr(1) as SupportedExtensionNames)
+                : ext;
+              return mapShortToFullExtension(_ext);
+            });
+            break;
+          }
+          default: {
+            const value = getConfigValue(_config, key);
+            config[fsPathKey][key] = value as any;
+            break;
+          }
         }
       }
     }
   }
 
-  CACHE.config = config as Config;
+  CACHE.config = config;
 
   return {
     config: CACHE.config,
