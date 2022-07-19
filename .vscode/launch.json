@@ -13,10 +13,15 @@
         "--extensionDevelopmentPath=${workspaceFolder}",
         "--disable-extension=phoenisx.cssvar"
       ],
-      "skipFiles": ["**/node_modules/**"],
-      "outFiles": [
-        "${workspaceFolder}/out/**/*.js"
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
       ],
+      "outFiles": [
+        "${workspaceFolder}/out/**/*.js",
+        "!**/node_modules/**"
+      ],
+      "skipFiles": ["**/node_modules/**"],
       "preLaunchTask": "npm: watch"
     },
     {

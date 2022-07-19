@@ -10,6 +10,7 @@ import {
 } from "vscode";
 import { parseToRgb } from "./color-parser";
 import { CACHE } from "./constants";
+import { getActiveRootPath } from "./utils";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
   new Range(new Position(startLineNumber, 0), new Position(endLineNumber, 0));
@@ -29,6 +30,8 @@ export class CssColorProvider implements DocumentColorProvider {
     let text = document.getText(
       getChunkRange(lineOffset, lineOffset + linesRead)
     );
+    CACHE.activeRootPath = getActiveRootPath();
+
     while (text) {
       const lines = text.split(eol);
       lines.pop(); // Last line will be handled in next loop
@@ -38,7 +41,7 @@ export class CssColorProvider implements DocumentColorProvider {
         for (const cssVarMatch of matches) {
           const match = cssVarMatch[0];
           const key = cssVarMatch[1].trim();
-          const hexColor = CACHE.cssVarsMap[key]?.color;
+          const hexColor = CACHE.cssVarsMap[CACHE.activeRootPath][key]?.color;
           if (hexColor && cssVarMatch.index) {
             const color = parseToRgb(hexColor);
             if (color) {

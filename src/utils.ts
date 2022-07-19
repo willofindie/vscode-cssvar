@@ -13,10 +13,11 @@ import {
   SCSS_COLOR_INTERPOLATION,
   SupportedLanguageIds,
   VAR_KEYWORD_REVERSE,
+  CACHE,
 } from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { serializeColor } from "./color-parser";
-import { Range } from "vscode";
+import { Range, window, workspace } from "vscode";
 
 /**
  * [TODO] Change this method to a more generic recursion call to
@@ -315,4 +316,14 @@ export const getCSSErrorMsg = (
     );
   }
   return JSON.stringify(error);
+};
+
+export const getActiveRootPath = (firstFolderPath = CACHE.activeRootPath) => {
+  if (window.activeTextEditor) {
+    return (
+      workspace.getWorkspaceFolder(window.activeTextEditor.document.uri)?.uri
+        .fsPath || firstFolderPath
+    );
+  }
+  return firstFolderPath;
 };
