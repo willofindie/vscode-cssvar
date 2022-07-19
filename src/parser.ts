@@ -45,7 +45,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
         window.showErrorMessage(
           `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`
         );
-        LOGGER.error(e);
+        LOGGER.error(`Failed to load postcss plugin: ${rootPaths}`, e);
       }
       return null;
     })
@@ -69,7 +69,7 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
       window.showErrorMessage(
         `Cannot resolve postcss syntax module ${syntaxModuleName}. Please add postcss@8 as project's dependency.`
       );
-      LOGGER.error(e);
+      LOGGER.error(`Failed to load postcss syntax module: ${rootPaths}`, e);
     }
   }
 

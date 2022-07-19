@@ -147,7 +147,12 @@ describe("Test Parser", () => {
   it(`parse scss imports`, async () => {
     // @ts-ignore
     workspace.workspaceFolders = [
-      { uri: { path: path.resolve(__dirname, "..", "..") } },
+      {
+        uri: {
+          path: path.resolve(__dirname, "..", ".."),
+          fsPath: path.resolve(__dirname, "..", ".."),
+        },
+      },
     ];
     const scssConfig: Config = {
       ...EXTENSION_CONFIG,
