@@ -30,7 +30,7 @@ const statAsync = promisify(stat);
 
 const cssParseAsync = (file: string, ext: CssExtensions) => {
   const rootPaths =
-    workspace.workspaceFolders?.map(folder => folder.uri.path) || [];
+    workspace.workspaceFolders?.map(folder => folder.uri.fsPath) || [];
   const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
 
   LOGGER.info("Workspace Root Paths: ", rootPathsOrUndefined);

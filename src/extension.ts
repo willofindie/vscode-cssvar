@@ -76,7 +76,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
       watcher.onDidDelete(uri => {
         // THough I don't think this is of any benefit.
-        CACHE.filesToWatch.delete(uri.path);
+        CACHE.filesToWatch.delete(uri.fsPath);
       });
 
       watchers.push(watcher);
