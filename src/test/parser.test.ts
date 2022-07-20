@@ -57,8 +57,12 @@ describe("Test Parser", () => {
       );
       const OLD_CACHE = CACHE.cssVars[CACHE.activeRootPath];
       await parseFiles(EXTENSION_CONFIG);
-      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
-      expect(OLD_CACHE[CACHE.activeRootPath]).not.toBe(CACHE.cssVars[CACHE.activeRootPath]);
+      expect(
+        Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length
+      ).toBeGreaterThan(0);
+      expect(OLD_CACHE[CACHE.activeRootPath]).not.toBe(
+        CACHE.cssVars[CACHE.activeRootPath]
+      );
     });
 
     it("Shouldn't update cache, if file wasn't modified", async () => {
@@ -98,7 +102,9 @@ describe("Test Parser", () => {
       const OLD_VARS = CACHE.cssVars[CACHE.activeRootPath];
       const OLD_FILE_META = Object.keys(CACHE.fileMetas);
       await parseFiles(updatedConfig);
-      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
+      expect(
+        Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length
+      ).toBeGreaterThan(0);
       expect(CACHE.cssVars[CACHE.activeRootPath][RENAMED_FILE]).toContainEqual({
         type: "css",
         property: "--red500",
@@ -109,7 +115,9 @@ describe("Test Parser", () => {
           uri: RENAMED_FILE,
         }),
       } as CSSVarDeclarations);
-      expect(flatMap(CACHE.cssVars[CACHE.activeRootPath])).not.toContainEqual(oldVariable);
+      expect(flatMap(CACHE.cssVars[CACHE.activeRootPath])).not.toContainEqual(
+        oldVariable
+      );
       expect(OLD_VARS).not.toBe(CACHE.cssVars[CACHE.activeRootPath]);
       expect(OLD_FILE_META.length).toBe(Object.keys(CACHE.fileMetas).length);
       expect(OLD_FILE_META).not.toEqual(Object.keys(CACHE.fileMetas));
@@ -127,8 +135,12 @@ describe("Test Parser", () => {
       };
       CACHE.config = updatedConfig;
       const [_, errorPaths] = await parseFiles(updatedConfig);
-      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
-      expect(CACHE.cssVars[CACHE.activeRootPath][RENAMED_FILE][0]).toMatchObject({
+      expect(
+        Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length
+      ).toBeGreaterThan(0);
+      expect(
+        CACHE.cssVars[CACHE.activeRootPath][RENAMED_FILE][0]
+      ).toMatchObject({
         type: "css",
         property: "--red100",
         value: "#f00",
@@ -176,6 +188,82 @@ describe("Test Parser", () => {
         path.resolve(IMPORT_BASE, "nested", "f6.scss"),
       ])
     );
+    expect(errorPaths.length).toBe(0);
+  });
+});
+
+describe("Multi Root", () => {
+  const rootPath1 = "test-1";
+  const rootPath2 = "test-2";
+
+  beforeEach(() => {
+    CACHE.filesToWatch[rootPath1] = new Set();
+    CACHE.filesToWatch[rootPath2] = new Set();
+  });
+
+  beforeAll(() => {
+    // @ts-ignore
+    workspace.workspaceFolders = [
+      {
+        uri: {
+          path: rootPath1,
+          fsPath: rootPath1,
+        },
+      },
+      {
+        uri: {
+          path: rootPath2,
+          fsPath: rootPath2,
+        },
+      },
+    ];
+  });
+
+  afterAll(() => {
+    // @ts-ignore
+    workspace.workspaceFolders = [];
+  })
+
+  it(`should have proper values for each root folder`, async () => {
+    const config: ConfigRecord = {
+      [rootPath1]: {
+        // This config will test SCSS files
+        ...DEFAULT_CONFIG,
+        postcssSyntax: ["postcss-scss"],
+        files: [IMPORT_SCSS_FILE],
+      },
+      [rootPath2]: {
+        // This config will test SCSS files
+        ...DEFAULT_CONFIG,
+        files: [RENAMED_FILE],
+      },
+    };
+    CACHE.config = config;
+    const [_, errorPaths] = await parseFiles(config, { parseAll: true });
+    expect(CACHE.filesToWatch[rootPath1].size).toBe(7);
+    expect(CACHE.filesToWatch[rootPath2].size).toBe(1);
+
+    expect(CACHE.cssVars[rootPath1][IMPORT_SCSS_FILE]).toContainEqual({
+      type: "css",
+      property: "--test-var",
+      value: "#333",
+      color: "rgb(51, 51, 51)",
+      theme: "",
+      location: expect.objectContaining({
+        uri: IMPORT_SCSS_FILE,
+      }),
+    } as CSSVarDeclarations);
+    expect(CACHE.cssVars[rootPath2][RENAMED_FILE]).toContainEqual({
+      type: "css",
+      property: "--red500",
+      value: "#f24455",
+      color: "rgb(242, 68, 85)",
+      theme: "",
+      location: expect.objectContaining({
+        uri: RENAMED_FILE,
+      }),
+    } as CSSVarDeclarations);
+
     expect(errorPaths.length).toBe(0);
   });
 });

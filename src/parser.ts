@@ -28,12 +28,12 @@ import { LOGGER } from "./logger";
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
 
-const cssParseAsync = (file: string, ext: CssExtensions) => {
+const cssParseAsync = (file: string, ext: CssExtensions, rootPath: string) => {
   const rootPaths =
     workspace.workspaceFolders?.map(folder => folder.uri.fsPath) || [];
   const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
 
-  const plugins = CACHE.config[CACHE.activeRootPath].postcssPlugins
+  const plugins = CACHE.config[rootPath].postcssPlugins
     .map(plugin => {
       try {
         const resolvedMod = require(require.resolve(plugin, {
@@ -51,11 +51,11 @@ const cssParseAsync = (file: string, ext: CssExtensions) => {
     .filter(Boolean);
 
   /* Postcss Syntax needs to be applied only for files of that type */
-  const syntaxModuleName = CACHE.config[
-    CACHE.activeRootPath
-  ].postcssSyntax.find(moduleName => {
-    return moduleName === POSTCSS_SYNTAX_MODULES[ext];
-  });
+  const syntaxModuleName = CACHE.config[rootPath].postcssSyntax.find(
+    moduleName => {
+      return moduleName === POSTCSS_SYNTAX_MODULES[ext];
+    }
+  );
 
   const options: ProcessOptions = {
     from: undefined,
@@ -186,7 +186,8 @@ const parseFile = async function (
   const extension = extname(path);
   const css = await cssParseAsync(
     file,
-    extension.replace(".", "") as CssExtensions
+    extension.replace(".", "") as CssExtensions,
+    rootPath
   );
 
   /* Find imported paths from CSS file */

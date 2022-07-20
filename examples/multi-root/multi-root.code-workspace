@@ -17,6 +17,6 @@
 			"proj-2": true,
 			"proj-3": true,
 		},
-		"cssvar.enableGotoDef": false
+		"cssvar.enableGotoDef": true
 	}
 }

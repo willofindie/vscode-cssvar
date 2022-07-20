@@ -7,7 +7,6 @@ import {
 } from "vscode";
 import { resolve } from "path";
 import fastGlob from "fast-glob";
-import { NoWorkspaceError } from "./errors";
 import {
   CACHE,
   Config,
@@ -40,19 +39,11 @@ const getConfigValue = <T extends keyof Config>(
 };
 
 /**
- * Sets up the Plugin
- *
- * TODO(shub): Cache config, to use it in places, where initial
- *  configuration is required.
- *
- * @throws {@link NoWorkspaceError}
+ * Initializes the Plugin
  */
 export async function setup(): Promise<{
   config: { [fsPath: string]: Config };
 }> {
-  if (!workspace.workspaceFolders) {
-    throw new NoWorkspaceError("No Workspace found.");
-  }
   const workspaceFolders = workspace.workspaceFolders || [];
   const firstFolderPath = workspaceFolders[0]?.uri.fsPath;
   const config = {} as { [fsPath: string]: Config };
