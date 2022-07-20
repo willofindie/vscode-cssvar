@@ -1,0 +1,4 @@
+{
+  "cssvar.files": ["**/*.scss"],
+  "cssvar.postcssSyntax": ["postcss-scss"]
+}

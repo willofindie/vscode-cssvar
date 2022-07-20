@@ -1,0 +1,4 @@
+body {
+  color: var(--bs-accordion-active-bg);
+  background-color: var(--bs-accordion-active-color);
+}
