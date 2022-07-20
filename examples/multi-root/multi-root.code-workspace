@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{ "path": "./proj-1" },
+		{ "path": "./proj-2" },
+		{ "path": "./proj-3" },
+		{ "path": "." },
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			"proj-1": true,
+			"proj-2": true,
+			"proj-3": true,
+		},
+		"cssvar.enableGotoDef": false
+	}
+}

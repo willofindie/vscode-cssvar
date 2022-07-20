@@ -1,0 +1,7 @@
+.app {
+  // Nested rules are not supported in CSS
+  .child {
+    color: var(--brand-1);
+    background-color: var(--brand-3);
+  }
+}
