@@ -21,22 +21,27 @@ jest.mock("../constants", () => {
     ...CONSTANTS,
     CACHE: {
       ...CONSTANTS.CACHE,
-      config: CONSTANTS.DEFAULT_CONFIG,
+      activeRootPath: "test",
+      config: { test: CONSTANTS.DEFAULT_CONFIG },
     },
   };
 });
 
-const EXTENSION_CONFIG: Config = {
-  ...DEFAULT_CONFIG,
-  files: [DUMMY_FILE],
+type ConfigRecord = { [rootFolder: string]: Config };
+
+const EXTENSION_CONFIG: ConfigRecord = {
+  [CACHE.activeRootPath]: {
+    ...DEFAULT_CONFIG,
+    files: [DUMMY_FILE],
+  },
 };
 
 describe("Test Parser", () => {
   const INIT_STATS = fs.statSync(DUMMY_FILE);
   beforeEach(() => {
     fs.utimesSync(DUMMY_FILE, INIT_STATS.atime, MODIFIED_DATE);
-    CACHE.cssVars = {};
-    CACHE.filesToWatch = new Set();
+    CACHE.cssVars = { [CACHE.activeRootPath]: {} };
+    CACHE.filesToWatch[CACHE.activeRootPath] = new Set();
     CACHE.fileMetas = {};
     CACHE.fileMetas[DUMMY_FILE] = {
       path: DUMMY_FILE,
@@ -50,17 +55,17 @@ describe("Test Parser", () => {
         INIT_STATS.atime,
         new Date(+MODIFIED_DATE + 3600)
       );
-      const OLD_CACHE = CACHE.cssVars;
+      const OLD_CACHE = CACHE.cssVars[CACHE.activeRootPath];
       await parseFiles(EXTENSION_CONFIG);
-      expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
-      expect(OLD_CACHE).not.toBe(CACHE.cssVars);
+      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
+      expect(OLD_CACHE[CACHE.activeRootPath]).not.toBe(CACHE.cssVars[CACHE.activeRootPath]);
     });
 
     it("Shouldn't update cache, if file wasn't modified", async () => {
-      const OLD_CACHE = CACHE.cssVars;
+      const OLD_CACHE = CACHE.cssVars[CACHE.activeRootPath];
       await parseFiles(EXTENSION_CONFIG);
-      expect(Object.keys(CACHE.cssVars).length).toBe(0);
-      expect(OLD_CACHE).toBe(CACHE.cssVars);
+      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBe(0);
+      expect(OLD_CACHE).toBe(CACHE.cssVars[CACHE.activeRootPath]);
     });
 
     it("Should update cache, if file was renamed", async () => {
@@ -78,19 +83,23 @@ describe("Test Parser", () => {
         theme: "",
       };
       CACHE.cssVars = {
-        "unknown.css": [oldVariable],
+        [CACHE.activeRootPath]: {
+          "unknown.css": [oldVariable],
+        },
       };
       //#endregion
       // Updated config should contain the latest renamed file name.
-      const updatedConfig: Config = {
-        ...EXTENSION_CONFIG,
-        files: [RENAMED_FILE],
+      const updatedConfig: ConfigRecord = {
+        [CACHE.activeRootPath]: {
+          ...EXTENSION_CONFIG[CACHE.activeRootPath],
+          files: [RENAMED_FILE],
+        },
       };
-      const OLD_VARS = CACHE.cssVars;
+      const OLD_VARS = CACHE.cssVars[CACHE.activeRootPath];
       const OLD_FILE_META = Object.keys(CACHE.fileMetas);
       await parseFiles(updatedConfig);
-      expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
-      expect(CACHE.cssVars[RENAMED_FILE]).toContainEqual({
+      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
+      expect(CACHE.cssVars[CACHE.activeRootPath][RENAMED_FILE]).toContainEqual({
         type: "css",
         property: "--red500",
         value: "#f24455",
@@ -100,8 +109,8 @@ describe("Test Parser", () => {
           uri: RENAMED_FILE,
         }),
       } as CSSVarDeclarations);
-      expect(flatMap(CACHE.cssVars)).not.toContainEqual(oldVariable);
-      expect(OLD_VARS).not.toBe(CACHE.cssVars);
+      expect(flatMap(CACHE.cssVars[CACHE.activeRootPath])).not.toContainEqual(oldVariable);
+      expect(OLD_VARS).not.toBe(CACHE.cssVars[CACHE.activeRootPath]);
       expect(OLD_FILE_META.length).toBe(Object.keys(CACHE.fileMetas).length);
       expect(OLD_FILE_META).not.toEqual(Object.keys(CACHE.fileMetas));
     });
@@ -110,32 +119,36 @@ describe("Test Parser", () => {
   describe("parseFiles handle improper CSS Files", () => {
     it("Should be able to handle few improper CSS files", async () => {
       // Updated config should contain the latest renamed file name.
-      const updatedConfig: Config = {
-        ...EXTENSION_CONFIG,
-        files: [RENAMED_FILE, BROKEN_FILE],
+      const updatedConfig: ConfigRecord = {
+        [CACHE.activeRootPath]: {
+          ...EXTENSION_CONFIG[CACHE.activeRootPath],
+          files: [RENAMED_FILE, BROKEN_FILE],
+        },
       };
       CACHE.config = updatedConfig;
       const [_, errorPaths] = await parseFiles(updatedConfig);
-      expect(Object.keys(CACHE.cssVars).length).toBeGreaterThan(0);
-      expect(CACHE.cssVars[RENAMED_FILE][0]).toMatchObject({
+      expect(Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length).toBeGreaterThan(0);
+      expect(CACHE.cssVars[CACHE.activeRootPath][RENAMED_FILE][0]).toMatchObject({
         type: "css",
         property: "--red100",
         value: "#f00",
       } as CSSVarDeclarations);
-      expect(CACHE.cssVars[BROKEN_FILE].length).toBe(0);
+      expect(CACHE.cssVars[CACHE.activeRootPath][BROKEN_FILE].length).toBe(0);
       expect(errorPaths[0]).toBe(BROKEN_FILE);
     });
   });
 
   it(`parse css imports`, async () => {
-    const cssConfig: Config = {
-      ...EXTENSION_CONFIG,
-      files: [IMPORT_CSS_FILE],
+    const cssConfig: ConfigRecord = {
+      [CACHE.activeRootPath]: {
+        ...EXTENSION_CONFIG[CACHE.activeRootPath],
+        files: [IMPORT_CSS_FILE],
+      },
     };
     CACHE.config = cssConfig;
     const [_, errorPaths] = await parseFiles(cssConfig);
-    expect(CACHE.filesToWatch.size).toBe(6);
-    expect(Array.from(CACHE.filesToWatch)).toEqual(
+    expect(CACHE.filesToWatch[CACHE.activeRootPath].size).toBe(6);
+    expect(Array.from(CACHE.filesToWatch[CACHE.activeRootPath])).toEqual(
       expect.arrayContaining([
         path.resolve(IMPORT_BASE, "f1.css"),
         path.resolve(IMPORT_BASE, "f3.css"),
@@ -145,24 +158,17 @@ describe("Test Parser", () => {
     expect(errorPaths.length).toBe(0);
   });
   it(`parse scss imports`, async () => {
-    // @ts-ignore
-    workspace.workspaceFolders = [
-      {
-        uri: {
-          path: path.resolve(__dirname, "..", ".."),
-          fsPath: path.resolve(__dirname, "..", ".."),
-        },
+    const scssConfig: ConfigRecord = {
+      [CACHE.activeRootPath]: {
+        ...EXTENSION_CONFIG[CACHE.activeRootPath],
+        postcssSyntax: ["postcss-scss"],
+        files: [IMPORT_SCSS_FILE],
       },
-    ];
-    const scssConfig: Config = {
-      ...EXTENSION_CONFIG,
-      postcssSyntax: ["postcss-scss"],
-      files: [IMPORT_SCSS_FILE],
     };
     CACHE.config = scssConfig;
     const [_, errorPaths] = await parseFiles(scssConfig);
-    expect(CACHE.filesToWatch.size).toBe(7);
-    expect(Array.from(CACHE.filesToWatch)).toEqual(
+    expect(CACHE.filesToWatch[CACHE.activeRootPath].size).toBe(7);
+    expect(Array.from(CACHE.filesToWatch[CACHE.activeRootPath])).toEqual(
       expect.arrayContaining([
         path.resolve(IMPORT_BASE, "f1.scss"),
         path.resolve(IMPORT_BASE, "_f3.scss"),
@@ -171,7 +177,5 @@ describe("Test Parser", () => {
       ])
     );
     expect(errorPaths.length).toBe(0);
-    // @ts-ignore
-    workspace.workspaceFolders = [];
   });
 });

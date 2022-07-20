@@ -5,6 +5,7 @@ import { CssColorProvider } from "../../color-provider";
 import { CSSVarDeclarations } from "../../main";
 
 jest.mock("../../constants", () => {
+  const DEFAULT_ROOT_FOLDER = "test";
   const CONSTANTS = jest.requireActual("../../constants");
   const VARIABLES_FILE = "path";
   const cssVariables = [
@@ -30,14 +31,19 @@ jest.mock("../../constants", () => {
     ...CONSTANTS,
     CACHE: {
       ...CONSTANTS.CACHE,
-      cssVars: { [VARIABLES_FILE]: cssVariables },
-      cssVarsMap: cssVariables.reduce(
-        (map, css) => ({ ...map, [css.property]: css }),
-        {}
-      ),
+      cssVars: { [DEFAULT_ROOT_FOLDER]: { [VARIABLES_FILE]: cssVariables } },
+      cssVarsMap: {
+        [DEFAULT_ROOT_FOLDER]: cssVariables.reduce(
+          (map, css) => ({ ...map, [css.property]: css }),
+          {}
+        ),
+      },
+      activeRootPath: DEFAULT_ROOT_FOLDER,
       config: {
-        ...CONSTANTS.DEFAULT_CONFIG,
-        files: [VARIABLES_FILE],
+        [DEFAULT_ROOT_FOLDER]: {
+          ...CONSTANTS.DEFAULT_CONFIG,
+          files: [VARIABLES_FILE],
+        },
       },
     },
   };
@@ -68,7 +74,7 @@ const getDocumentFromText = (text: string) => {
       }
       return null;
     },
-  } as TextDocument
+  } as TextDocument;
 };
 
 describe("Test Color Provider", () => {
@@ -96,7 +102,9 @@ describe("Test Color Provider", () => {
   });
   it("should provide color for multi-line var()", async () => {
     const colorInfos = await provider.provideDocumentColors(
-      getDocumentFromText("color: var(--color-red-300)\ncolor: var(--color-red-500)\ncolor: var(--color-red-700)")
+      getDocumentFromText(
+        "color: var(--color-red-300)\ncolor: var(--color-red-500)\ncolor: var(--color-red-700)"
+      )
     );
     expect(colorInfos.length).toBe(3);
     expect(colorInfos[1].color).toMatchObject({
@@ -109,12 +117,12 @@ describe("Test Color Provider", () => {
       expect.objectContaining({
         start: expect.objectContaining({
           line: 1,
-          character: 7
+          character: 7,
         }),
         end: expect.objectContaining({
           line: 1,
-          character: 27
-        })
+          character: 27,
+        }),
       })
     );
   });

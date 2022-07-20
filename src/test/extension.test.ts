@@ -1,10 +1,17 @@
 import path from "path";
-import { ExtensionContext, Position, Range } from "vscode";
-import { Config, DEFAULT_CONFIG, SupportedLanguageIds } from "../constants";
+import { ExtensionContext, Position, Range, workspace } from "vscode";
+import {
+  Config,
+  DEFAULT_CONFIG,
+  SupportedLanguageIds,
+  CACHE,
+} from "../constants";
 import { activate } from "../extension";
 import { setup } from "../main";
 
 var DUMMY_FILE = path.resolve("src", "test", "touch.css");
+
+const DEFAULT_ROOT_FOLDER = "test";
 
 jest.mock("../constants", () => {
   const CONSTANTS = jest.requireActual("../constants");
@@ -13,8 +20,9 @@ jest.mock("../constants", () => {
     ...CONSTANTS,
     CACHE: {
       ...CONSTANTS.CACHE,
-      config: CONSTANTS.DEFAULT_CONFIG,
-    }
+      activeRootPath: "test",
+      config: { test: CONSTANTS.DEFAULT_CONFIG },
+    },
   };
 });
 jest.mock("../main", () => {
@@ -36,11 +44,11 @@ const runActivate = async (line: string, id: SupportedLanguageIds) => {
       position: Position
     ) => Promise<any[]>;
   }[] = [];
-  await activate(({ subscriptions } as unknown) as ExtensionContext);
+  await activate({ subscriptions } as unknown as ExtensionContext);
   return await subscriptions[0].provideCompletionItems(
     { getText: () => line, languageId: id },
     new Position(0, line.length)
-  )
+  );
 };
 
 describe("Test Extension Activations and Results", () => {
@@ -49,12 +57,32 @@ describe("Test Extension Activations and Results", () => {
     _setup.mockImplementation(() =>
       Promise.resolve().then(() => ({
         config: {
-          ...DEFAULT_CONFIG,
-          files: [DUMMY_FILE],
+          [CACHE.activeRootPath]: {
+            ...DEFAULT_CONFIG,
+            files: [DUMMY_FILE],
+          },
         },
       }))
     );
   });
+
+  beforeAll(() => {
+    // @ts-ignore
+    workspace.workspaceFolders = [
+      {
+        uri: {
+          path: DEFAULT_ROOT_FOLDER,
+          fsPath: DEFAULT_ROOT_FOLDER,
+        },
+      },
+    ];
+  });
+
+  afterAll(() => {
+    // @ts-ignore Reset to default
+    workspace.workspaceFolders = [];
+  })
+
   it("should activate", async () => {
     const lines = [
       "color: -",
