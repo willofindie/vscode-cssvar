@@ -8,3 +8,7 @@
 @use "nested/f5";
 
 @import "nested/f6.scss";
+
+:root {
+  --test-var: #333;
+}
