@@ -92,6 +92,10 @@ const languages = {
 const window = {
   // eslint-disable-next-line no-console
   showErrorMessage: jest.fn(msg => console.trace(msg)),
+  // For now I am not testing switching between muti-roots
+  onDidChangeActiveTextEditor: cb => {
+    cb && cb();
+  },
 };
 
 const Uri = {
