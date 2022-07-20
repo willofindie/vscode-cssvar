@@ -1,0 +1,16 @@
+{
+  "name": "css-extensions",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "postcss": "8",
+    "postcss-scss": "^4.0.4"
+  }
+}

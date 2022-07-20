@@ -1,0 +1,12 @@
+// Single line comments is not supported in CSS.
+$color-1: #FF8A65;
+$color-2: #8D6E63;
+$color-3: #BDBDBD;
+
+:root {
+  --brand-1: #{$color-1};
+  --brand-2: #{$color-2};
+  --brand-3: #{$color-3};
+}
+
+
