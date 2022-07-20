@@ -1,4 +1,0 @@
-{
-  "cssvar.files": ["global.css", "local.css"],
-  "cssvar.extensions": ["css", "postcss"]
-}

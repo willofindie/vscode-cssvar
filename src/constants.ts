@@ -55,7 +55,7 @@ export interface Config {
 }
 
 export const DEFAULT_CONFIG: Config = {
-  files: ["index.css"],
+  files: ["**/*.css"],
   extensions: [...CSS_IDS],
   themes: [],
   postcssPlugins: [],
