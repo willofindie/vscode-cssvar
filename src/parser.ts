@@ -8,6 +8,7 @@ import postcss, {
   ProcessOptions,
   Rule,
 } from "postcss";
+import safeParser from "postcss-safe-parser";
 import { promisify } from "util";
 import {
   CACHE,
@@ -59,6 +60,7 @@ const cssParseAsync = (file: string, ext: CssExtensions, rootPath: string) => {
 
   const options: ProcessOptions = {
     from: undefined,
+    parser: safeParser,
     syntax: undefined,
   };
   if (syntaxModuleName) {

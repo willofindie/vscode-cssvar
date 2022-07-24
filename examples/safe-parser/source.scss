@@ -1,0 +1,24 @@
+// Single line comments is not supported in CSS.
+$color-1: #FF8A65;
+$color-2: #8D6E63;
+$color-3: #BDBDBD;
+
+:root {
+  --space-1: 1rem;
+  --space-2: 2rem;
+  // This is a little broken, since safe-parser considers
+  // #{$color-1} as a separate rule. LOL!! Adding a single
+  // line comments completely loses the following variable
+
+  --brand-1: #{$color-1};
+  --brand-2: #{$color-2};
+  --brand-3: #{$color-3};
+}
+
+.app {
+  // Nested rules are not supported in CSS
+  .child {
+    color: var(--brand-1);
+    background-color: var(--brand-3);
+  }
+}

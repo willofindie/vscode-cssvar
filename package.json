@@ -224,6 +224,7 @@
     "@types/jest": "^26.0.24",
     "@types/lodash": "^4.14.180",
     "@types/node": "^12.20.47",
+    "@types/postcss-safe-parser": "^5.0.1",
     "@types/vscode": "1.46.0",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
@@ -248,7 +249,8 @@
   "dependencies": {
     "culori": "^2.0.3",
     "fast-glob": "^3.2.11",
-    "postcss": "^8.4.12"
+    "postcss": "^8.4.12",
+    "postcss-safe-parser": "^6.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

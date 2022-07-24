@@ -41,18 +41,18 @@ This extension helps to autocomplete globally shared CSS Variables and a lot mor
 This Extension supports the following properties as of now:
 
 
-| **Setting**                   | **Description**                                              | **Type** | **Example**                                | **Default**                                             |
-|-------------------------------|--------------------------------------------------------------|----------|--------------------------------------------|---------------------------------------------------------|
-| `cssvar.files`                  | Relative/Absolute paths to CSS variable file sources      | string[] | ["input.css"]                           | [**/*.css]                                              |                                                                                                                                                                                                                                                            |
-| `cssvar.ignore`                  | Relative/Absolute paths to file/folder sources to be ignored      | string[] | ["ignore.css"]                           | [\**/node_modules/**]                                              |                                                                                                                                                                                                                                                            |
-| `cssvar.extensions`             | File extensions for which IntelliSense will be enabled    | string[] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"jsx"<br>] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"tsx",<br>&nbsp;&nbsp;"jsx"<br>]  |
-| `cssvar.themes`<br>Helps to bucket CSS variables based on themes used in any project | CSS Theme classnames used in source files                 | string[] | [<br>&nbsp;&nbsp;"dark",<br>&nbsp;&nbsp;"dim"<br>]             | []                                                      |
-| `cssvar.excludeThemedVariables`<br>If true, hides duplicate theme variables from the list | Exclude themed variables to remove unnecessary duplicates | boolean  |                                            | false                                                   |
-| `cssvar.disableSort`<br>Intellisense list won't be sorted | Disables default sorting applied by VSCode                | boolean  |                                            | false                                                   |
-| `cssvar.enableColors`           | Enable VScode's Color Representation feature when true    | boolean  |                                            | true                                                    |
-| `cssvar.enableGotoDef`          | Enable VScode's Goto Definition feature for CSS Variable  | boolean  |                                            | true                                                    |
-| `cssvar.postcssPlugins`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provide PostCSS Plugins to support custom CSS features    | string[] | ["postcss-nested"]                         | []                                                      |
-| `cssvar.postcssSyntax`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provides a list of custom parsers                                       | string[] | ["postcss-scss"]                           | []                                                      |
+| **Setting**                   | **Description**                                              | **Type** | **Example**                                | **Default**
+|-------------------------------|--------------------------------------------------------------|----------|--------------------------------------------|---------------------------------------------------------
+| `cssvar.files`                  | Relative/Absolute paths to CSS variable file sources      | string[] | ["input.css"]                           | [**/*.css]                                              |
+| `cssvar.ignore`                  | Relative/Absolute paths to file/folder sources to be ignored      | string[] | ["ignore.css"]                           | [\**/node_modules/**]                                              |
+| `cssvar.extensions`             | File extensions for which IntelliSense will be enabled    | string[] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"jsx"<br>] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"tsx",<br>&nbsp;&nbsp;"jsx"<br>]
+| `cssvar.themes`<br>Helps to bucket CSS variables based on themes used in any project | CSS Theme classnames used in source files                 | string[] | [<br>&nbsp;&nbsp;"dark",<br>&nbsp;&nbsp;"dim"<br>]             | []
+| `cssvar.excludeThemedVariables`<br>If true, hides duplicate theme variables from the list | Exclude themed variables to remove unnecessary duplicates | boolean  |                                            | false
+| `cssvar.disableSort`<br>Intellisense list won't be sorted | Disables default sorting applied by VSCode                | boolean  |                                            | false
+| `cssvar.enableColors`           | Enable VScode's Color Representation feature when true    | boolean  |                                            | true
+| `cssvar.enableGotoDef`          | Enable VScode's Goto Definition feature for CSS Variable  | boolean  |                                            | true
+| `cssvar.postcssPlugins`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provide PostCSS Plugins to support custom CSS features    | string[] | ["postcss-nested"]                         | []
+| `cssvar.postcssSyntax`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provides a list of custom parsers                                       | string[] | ["postcss-scss"]                           | []
 
 
 ## Screeshots:
