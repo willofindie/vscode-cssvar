@@ -1,0 +1,7 @@
+.app {
+  color: var(--color-js-1);
+  background-color: var(--color-tsx-2);
+  padding: var(--space-1);
+  border-color: var(--brand-2);
+  color: var(--color-astro-1);
+}
