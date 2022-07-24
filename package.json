@@ -70,7 +70,21 @@
           "type": "array",
           "default": [],
           "items": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "css",
+              "scss",
+              "sass",
+              "less",
+              "postcss",
+              "vue",
+              "svelte",
+              "astro",
+              "ts",
+              "tsx",
+              "jsx",
+              "js"
+            ]
           },
           "markdownDescription": "File extensions for which IntelliSense will be enabled",
           "scope": "resource",

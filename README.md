@@ -40,49 +40,19 @@ This extension helps to autocomplete globally shared CSS Variables and a lot mor
 
 This Extension supports the following properties as of now:
 
-- `cssvar.files`: Array of Strings: `string[]`
-  - Should contain relative/absolute path from your workspace root folder.
-  - Supports [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns.
-  - Only keep the `files` that have CSS Variables; this will boost the performance.
 
-- `cssvar.extensions`: Array of String: `string[]`
+| **Setting**                   | **Description**                                              | **Type** | **Example**                                | **Default**                                             |
+|-------------------------------|--------------------------------------------------------------|----------|--------------------------------------------|---------------------------------------------------------|
+| `cssvar.files`                  | Relative/Absolute paths to CSS variable file sources      | string[] | ["src/**/*.css"]                           | [**/*.css]                                              |                                                                                                                                                                                                                                                            |
+| `cssvar.extensions`             | File extensions for which IntelliSense will be enabled    | string[] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"jsx"<br>] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"tsx",<br>&nbsp;&nbsp;"jsx"<br>]  |
+| `cssvar.themes`<br>Helps to bucket CSS variables based on themes used in any project | CSS Theme classnames used in source files                 | string[] | [<br>&nbsp;&nbsp;"dark",<br>&nbsp;&nbsp;"dim"<br>]             | []                                                      |
+| `cssvar.excludeThemedVariables`<br>If true, hides duplicate theme variables from the list | Exclude themed variables to remove unnecessary duplicates | boolean  |                                            | false                                                   |
+| `cssvar.disableSort`<br>Intellisense list won't be sorted | Disables default sorting applied by VSCode                | boolean  |                                            | false                                                   |
+| `cssvar.enableColors`           | Enable VScode's Color Representation feature when true    | boolean  |                                            | true                                                    |
+| `cssvar.enableGotoDef`          | Enable VScode's Goto Definition feature for CSS Variable  | boolean  |                                            | true                                                    |
+| `cssvar.postcssPlugins`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provide PostCSS Plugins to support custom CSS features    | string[] | ["postcss-nested"]                         | []                                                      |
+| `cssvar.postcssSyntax`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provides a list of custom parsers                                       | string[] | ["postcss-scss"]                           | []                                                      |
 
-### Supported Extensions:
-```ts
-"css" | "scss" | "sass" | "less" | "postcss" | "vue" | "svelte" | "astro" | "ts" | "tsx" | "jsx" | "js"
-```
-
-> NOTE: [Open issue](https://github.com/willofindie/vscode-cssvar/issues/new) to add more extension support.
-
-- `cssvar.themes`: Array of String: `string[]`
-  - Eg: `cssvar.themes: ["dark"]`. This will help the extension
-    distinguish between similarly named variables.
-- `cssvar.excludeThemedVariables`: `boolean`
-- `cssvar.disableSort`: `boolean`
-  - Disables VSCode's default sorting functionality for this extension.
-- `cssvar.enableColors`: `boolean`
-  - Enable CSS Variable color display everywhere.
-  - If this config is changed, reload VSCode window.
-- `cssvar.enableGotoDef`: `boolean`
-  - Enable VScode's Goto Definition feature for CSS Variables
-  - If this config is changed, reload VSCode window.
-- `cssvar.postcssPlugins`: `string[]`
-  - Details for this can be read here: [Customize Extension](./customize-extension.md)
-- `cssvar.postcssSyntax`: `string[]`
-  - Details for this can be read here: [Customize Extension](./customize-extension.md)
-
-Following are defaults, which you can override in
-your User `settings.json` or Workspace `settings.json`.
-
-- `cssvar.files`: `["index.css"]`
-- `cssvar.extensions`: `["css", "scss", "sass", "less"]`
-- `cssvar.themes`: `[]`
-- `cssvar.excludeThemedVariables`: `false`
-- `cssvar.disableSort`: `false`
-- `cssvar.enableColors`: `true`
-- `cssvar.enableGotoDef`: `true`
-- `cssvar.postcssPlugins`: `[]`
-- `cssvar.postcssSyntax`: `[]`
 
 ## Screeshots:
 
