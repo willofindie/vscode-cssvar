@@ -146,7 +146,7 @@ describe("Test Parser", () => {
         value: "#f00",
       } as CSSVarDeclarations);
       expect(CACHE.cssVars[CACHE.activeRootPath][BROKEN_FILE].length).toBe(0);
-      expect(errorPaths[0]).toBe(BROKEN_FILE);
+      expect(errorPaths.length).toBe(0);
     });
   });
 
