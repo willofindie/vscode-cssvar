@@ -60,7 +60,7 @@ const cssParseAsync = (file: string, ext: CssExtensions, rootPath: string) => {
 
   const options: ProcessOptions = {
     from: undefined,
-    parser: safeParser,
+    parser: syntaxModuleName ? undefined : safeParser,
     syntax: undefined,
   };
   if (syntaxModuleName) {
