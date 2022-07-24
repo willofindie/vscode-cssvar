@@ -43,7 +43,8 @@ export type SupportedExtensionNames =
   | "javascriptreact";
 
 export interface Config {
-  files: string[] | Record<string, string[]>;
+  files: string[];
+  ignore: string[];
   extensions: SupportedExtensionNames[];
   themes: string[];
   postcssPlugins: string[];
@@ -56,6 +57,7 @@ export interface Config {
 
 export const DEFAULT_CONFIG: Config = {
   files: ["**/*.css"],
+  ignore: ["**/node_modules/**"],
   extensions: [...CSS_IDS],
   themes: [],
   postcssPlugins: [],

@@ -17,6 +17,7 @@
 			"proj-2": true,
 			"proj-3": true,
 		},
+		"cssvar.files": ["*.css"],
 		"cssvar.enableGotoDef": true
 	}
 }
