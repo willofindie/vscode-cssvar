@@ -13,7 +13,7 @@
     "intellisense"
   ],
   "description": "Intellisense support for CSS Variables",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "publisher": "phoenisx",
   "license": "MIT",
   "homepage": "https://github.com/willofindie/vscode-cssvar",
