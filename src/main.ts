@@ -64,8 +64,10 @@ export async function setup(): Promise<{
         switch (key) {
           case "files": {
             const value = getConfigValue(_config, key);
+            const ignoreList = getConfigValue(_config, "ignore");
             const entries = await fastGlob(<string[]>value, {
               cwd: resourcePath,
+              ignore: ignoreList,
             });
             config[fsPathKey][key] = entries.map((path: string) =>
               resolve(resourcePath, path)
@@ -76,7 +78,7 @@ export async function setup(): Promise<{
             const value = getConfigValue(_config, key);
             config[fsPathKey][key] = value.map(ext => {
               const _ext = ext.startsWith(".")
-                ? (ext.substr(1) as SupportedExtensionNames)
+                ? (ext.substring(1) as SupportedExtensionNames)
                 : ext;
               return mapShortToFullExtension(_ext);
             });

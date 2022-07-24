@@ -66,6 +66,21 @@
             ]
           ]
         },
+        "cssvar.ignore": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "Relative/Absolute paths to file/folder sources to ignore",
+          "scope": "resource",
+          "examples": [
+            [
+              "**/node_modules/**",
+              "styles/ignore.css"
+            ]
+          ]
+        },
         "cssvar.extensions": {
           "type": "array",
           "default": [],
