@@ -13,7 +13,7 @@
     "intellisense"
   ],
   "description": "Intellisense support for CSS Variables",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "publisher": "phoenisx",
   "license": "MIT",
   "homepage": "https://github.com/willofindie/vscode-cssvar",
@@ -52,7 +52,10 @@
       "title": "CSS Variables",
       "properties": {
         "cssvar.files": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string"
@@ -67,7 +70,10 @@
           ]
         },
         "cssvar.ignore": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string"
@@ -82,7 +88,10 @@
           ]
         },
         "cssvar.extensions": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string",
@@ -113,7 +122,10 @@
           ]
         },
         "cssvar.themes": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string"
@@ -128,7 +140,10 @@
           ]
         },
         "cssvar.excludeThemedVariables": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "default": null,
           "markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
           "scope": "resource",
@@ -138,7 +153,10 @@
           ]
         },
         "cssvar.disableSort": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "default": null,
           "markdownDescription": "Disables default sorting applied by VSCode",
           "scope": "window",
@@ -148,7 +166,10 @@
           ]
         },
         "cssvar.enableColors": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "default": null,
           "markdownDescription": "Enable VScode's Color Representation feature when true",
           "scope": "window",
@@ -158,7 +179,10 @@
           ]
         },
         "cssvar.enableGotoDef": {
-          "type": ["boolean", "null"],
+          "type": [
+            "boolean",
+            "null"
+          ],
           "default": null,
           "markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
           "scope": "window",
@@ -168,7 +192,10 @@
           ]
         },
         "cssvar.postcssPlugins": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string"
@@ -183,7 +210,10 @@
           ]
         },
         "cssvar.postcssSyntax": {
-          "type": ["array", "null"],
+          "type": [
+            "array",
+            "null"
+          ],
           "default": null,
           "items": {
             "type": "string"
