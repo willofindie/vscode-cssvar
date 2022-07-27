@@ -27,12 +27,17 @@ import {
 } from "./utils";
 import { disableDefaultSort } from "./unstable";
 
+/**
+ * Use this function only when getting values from VSCode's
+ * configuration.
+ */
 const getConfigValue = <T extends keyof Config>(
   config: WorkspaceConfiguration,
   key: T
 ): Config[typeof key] => {
-  let value = config.get<Config[typeof key]>(key) || DEFAULT_CONFIG[key];
-  if (Array.isArray(value) && value.length === 0) {
+  let value = config.get<Config[typeof key]>(key);
+  if (value == null) {
+    // Only overrride, if extension setting is untouched
     value = DEFAULT_CONFIG[key];
   }
   return value;
