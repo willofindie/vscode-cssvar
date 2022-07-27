@@ -55,6 +55,11 @@ export interface Config {
   enableGotoDef: boolean;
 }
 
+/**
+ * Remeber(shub):
+ *  VSCode's default config settings should always point to null,
+ *  because we are programatically overriding VSCode's behaviour.
+ */
 export const DEFAULT_CONFIG: Config = {
   files: ["**/*.css"],
   ignore: ["**/node_modules/**"],
@@ -64,8 +69,8 @@ export const DEFAULT_CONFIG: Config = {
   postcssSyntax: [],
   excludeThemedVariables: false,
   disableSort: false,
-  enableColors: false,
-  enableGotoDef: false,
+  enableColors: true,
+  enableGotoDef: true,
 };
 
 export const mapShortToFullExtension = (

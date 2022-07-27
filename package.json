@@ -52,8 +52,8 @@
       "title": "CSS Variables",
       "properties": {
         "cssvar.files": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string"
           },
@@ -67,8 +67,8 @@
           ]
         },
         "cssvar.ignore": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string"
           },
@@ -82,8 +82,8 @@
           ]
         },
         "cssvar.extensions": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string",
             "enum": [
@@ -113,8 +113,8 @@
           ]
         },
         "cssvar.themes": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string"
           },
@@ -128,8 +128,8 @@
           ]
         },
         "cssvar.excludeThemedVariables": {
-          "type": "boolean",
-          "default": false,
+          "type": ["boolean", "null"],
+          "default": null,
           "markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
           "scope": "resource",
           "examples": [
@@ -138,8 +138,8 @@
           ]
         },
         "cssvar.disableSort": {
-          "type": "boolean",
-          "default": false,
+          "type": ["boolean", "null"],
+          "default": null,
           "markdownDescription": "Disables default sorting applied by VSCode",
           "scope": "window",
           "examples": [
@@ -148,8 +148,8 @@
           ]
         },
         "cssvar.enableColors": {
-          "type": "boolean",
-          "default": true,
+          "type": ["boolean", "null"],
+          "default": null,
           "markdownDescription": "Enable VScode's Color Representation feature when true",
           "scope": "window",
           "examples": [
@@ -158,8 +158,8 @@
           ]
         },
         "cssvar.enableGotoDef": {
-          "type": "boolean",
-          "default": true,
+          "type": ["boolean", "null"],
+          "default": null,
           "markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
           "scope": "window",
           "examples": [
@@ -168,8 +168,8 @@
           ]
         },
         "cssvar.postcssPlugins": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string"
           },
@@ -183,8 +183,8 @@
           ]
         },
         "cssvar.postcssSyntax": {
-          "type": "array",
-          "default": [],
+          "type": ["array", "null"],
+          "default": null,
           "items": {
             "type": "string"
           },
