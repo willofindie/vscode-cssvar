@@ -1,0 +1,14 @@
+/* Variables from Bootstrap package */
+.bootstrap {
+  color: var(--bs-code-color);
+}
+
+/* Variables from Open Props package */
+.open-props {
+  border-radius: var(--radius-1);
+}
+
+/* Varibles from Pollen package */
+.pollen {
+  color: var(--color-blue-300);
+}

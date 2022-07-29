@@ -1,3 +1,4 @@
 {
   "cssvar.files": ["../node_modules/bootstrap/dist/css/bootstrap.css"],
+  "cssvar.ignore": []
 }

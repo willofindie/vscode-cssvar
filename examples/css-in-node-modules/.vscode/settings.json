@@ -1,0 +1,24 @@
+{
+  // Since we want to scan css files inside `node_modules as well
+  // we need to set cssvar.ignore property to empty array
+  "cssvar.ignore": [],
+
+  // Scann all .css files, which is the default
+  // "cssvar.files": [ "**/*.css" ]
+
+  // Uncomment the following if you only need to scan Pollen css files
+  // "cssvar.files": [ "./node_modules/pollen-css/pollen.css" ]
+
+  // Uncomment the following if you only want to scan Bootstrap css files
+  // "cssvar.files": [ "node_modules/bootstrap/dist/css/bootstrap.css" ]
+
+  // Uncomment the following if you only want to scan Open Props css files
+  // "cssvar.files": [ "node_modules/open-props/open-props.min.css" ]
+
+  // Supporting only required css files from node_modules
+  "cssvar.files": [
+    "node_modules/pollen-css/pollen.css",
+    "node_modules/bootstrap/dist/css/bootstrap.css",
+    "node_modules/open-props/open-props.min.css"
+  ]
+}

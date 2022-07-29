@@ -1,5 +1,5 @@
 .app {
-  color: var(--bs-accordion-active-bg);
+  color: var(--bs-accordion-active-color);
   border-radius: var(--bs-border-radius);
   border-color: var(--bs-border-color);
 }

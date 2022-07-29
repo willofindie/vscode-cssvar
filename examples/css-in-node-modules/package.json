@@ -1,0 +1,17 @@
+{
+  "name": "css-in-node-modules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.2.0",
+    "open-props": "^1.4.4",
+    "pollen-css": "^4.3.1"
+  }
+}
