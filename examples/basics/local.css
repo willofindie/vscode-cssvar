@@ -1,8 +1,17 @@
+@import url("./global.css");
+@import url("./theme.css");
+
 :root {
-  --color: red;
-  --fg-color: blue;
+  --color-default-bg: #A6B9CA;
+  --color-default-fg: #223548;
 }
+
 body {
-  color: var(--color-purple-300);
-  background-color: var(--color);
+  color: var(--color-default-fg);
+  background-color: var(--color-default-bg);
+}
+
+.container {
+  width: var(--container-size);
+  padding: var(--container-padding);
 }
