@@ -1,0 +1,13 @@
+/* Nested variables */
+:root {
+  /* Following two variables will change respective to media-queries */
+  --container-size: 100%;
+  --container-padding: 0.5rem;
+}
+
+@media screen and (min-width: 960px) {
+  :root {
+    --container-size: 900px;
+    --container-padding: 1rem;
+  }
+}
