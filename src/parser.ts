@@ -166,6 +166,17 @@ export function getVariableDeclarations(
     }
   }
 
+  // Parse nested rules inside media queries
+  if (
+    isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
+    node.name === "media"
+  ) {
+    for (const _node of node.nodes) {
+      const decls = getVariableDeclarations(config, _node, options);
+      declarations = declarations.concat(decls);
+    }
+  }
+
   return declarations;
 }
 
