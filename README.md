@@ -3,74 +3,248 @@
   src="https://user-images.githubusercontent.com/11786283/113474026-dd0dd100-948a-11eb-8140-4570d7c983d3.png"
   height="150"
   alt="CssVar Icon" />
-  <img
-  src="https://user-images.githubusercontent.com/11786283/112747300-16999480-8fd2-11eb-9f21-41a77abb332c.png"
-  height="150"
-  alt="CssVar Icon" />
 </div>
 
-![CSS Extension Support](https://user-images.githubusercontent.com/11786283/153740157-96e5033c-2fed-4475-9844-1eb4e866ecfd.png)
 
-<p align="center">
+<h1 align="center">
+  CSS Variables
+</h1>
+
+<div align="center">
+  <p align="center">
+    <i><b>Please vote/rate and star this project to show your support.</b></i>
+    :heart:
+  </p>
+
+  <a href="https://github.com/willofindie/vscode-cssvar">
+    <img src="https://img.shields.io/github/stars/willofindie/vscode-cssvar?style=social" />
+  </a>
+  &nbsp;&nbsp;
   <img src="https://img.shields.io/badge/size-%3C%20200KB-blue?style=flat" />
+  &nbsp;&nbsp;
+  <a href="https://marketplace.visualstudio.com/items?itemName=phoenisx.cssvar">
+    <img src="https://img.shields.io/visual-studio-marketplace/i/phoenisx.cssvar?label=vsc%20installs" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://open-vsx.org/extension/phoenisx/cssvar">
+    <img src="https://img.shields.io/open-vsx/dt/phoenisx/cssvar?color=yellowgreen&label=ovsx%20installs" />
+  </a>
+  <br />
+  <a href="https://marketplace.visualstudio.com/items?itemName=phoenisx.cssvar&ssr=false#review-details">
+    <img src="https://img.shields.io/visual-studio-marketplace/r/phoenisx.cssvar?label=vsc%20rating" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://open-vsx.org/extension/phoenisx/cssvar/reviews">
+    <img src="https://img.shields.io/open-vsx/rating/phoenisx/cssvar?color=yellowgreen&label=ovsx%20rating" />
+  </a>
+</div>
+
+## :bulb: Features:
+
+This extension helps provide autocompletion IntelliSense
+for globally shared CSS Variables and more.
+
+<br>
+
+### Auto Completion, Color swatches, Goto Definition
+
+Auto Completion, Color swatches and Goto Definition support
+for CSS Variables across VSCode workspaces
+
+<p>
+  <img
+    alt="Autocomplete, Color Swatches"
+    src="https://user-images.githubusercontent.com/11786283/183150980-15b8b464-566f-49fa-a842-9c50615ab2e9.gif"
+    width="49%"
+  />
+  <img
+    alt="Variables Goto Definition"
+    src="https://user-images.githubusercontent.com/11786283/183150992-8d83ea67-518b-42ae-a856-e28a0336ff2c.gif"
+    width="49%"
+  />
 </p>
 
+Autocompletion available in CSS, SASS, JS, TS and more extensions.
 
-<h1 align="center">CSS Variables</h1>
+<br/>
 
-## Features:
+### Customization
 
-[Read how to Customize Extension](./customize-extension.md)
+If your project uses **SASS/LESS**, and you are facing issues to setup this extension,
+please read [Customization](./customize-extension.md) Doc.
 
-This extension helps to autocomplete globally shared CSS Variables and a lot more.
+<br/>
 
-* [Provides Auto Completion](#working-example) for CSS Variables across VSCode workspaces.
-* Supports CSS, SASS, JS, TS etc. Find complete list in [Supported Extensions](#supported-extensions).
-* [Color swatch](#show-variable-colors) attached to each usage of `var(--color-variable)`.
-* [Goto Definition for CSS Variables](#supports-goto-definitions).
-* [Customization](./customize-extension.md)
-  * If your project uses **SASS/LESS**, and you are facing issues to setup this extension, please
-    read [Customization](./customize-extension.md) Doc.
-* [Theme Support](./theming.md)
-* *CSS Level 4 color spec support is limited*, to keep the bundle size small
-  * Except `color()` api, every other CSS color is supported. Please find
-    details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
+### Theme Support
 
-## Supported Configs:
+Read more about [Theming here](./theming.md)
+
+| Theming | Excluding duplicates when using themes
+|---------|--------------------------------------
+| ![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif) | ![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
+
+<br/>
+
+### CSS Level 4 color spec support
+
+Limited support to keep bundle size small.
+<br/>Except `color()` api, every other CSS color is supported.
+Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
+
+<br/><br/>
+
+## :hammer_and_wrench: Supported Configs:
 
 This Extension supports the following properties as of now:
 
 
-| **Setting**                   | **Description**                                              | **Type** | **Example**                                | **Default**
-|-------------------------------|--------------------------------------------------------------|----------|--------------------------------------------|---------------------------------------------------------
-| `cssvar.files`                  | Relative/Absolute paths to CSS variable file sources      | string[] | ["input.css"]                           | [**/*.css]                                              |
-| `cssvar.ignore`                  | Relative/Absolute paths to file/folder sources to be ignored      | string[] | ["ignore.css"]                           | [\**/node_modules/**]                                              |
-| `cssvar.extensions`             | File extensions for which IntelliSense will be enabled    | string[] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"jsx"<br>] | [<br>&nbsp;&nbsp;"css",<br>&nbsp;&nbsp;"scss",<br>&nbsp;&nbsp;"sass",<br>&nbsp;&nbsp;"less",<br>&nbsp;&nbsp;"postcss",<br>&nbsp;&nbsp;"vue",<br>&nbsp;&nbsp;"svelte",<br>&nbsp;&nbsp;"astro"<br>]
-| `cssvar.themes`<br>Helps to bucket CSS variables based on themes used in any project | CSS Theme classnames used in source files                 | string[] | [<br>&nbsp;&nbsp;"dark",<br>&nbsp;&nbsp;"dim"<br>]             | []
-| `cssvar.excludeThemedVariables`<br>If true, hides duplicate theme variables from the list | Exclude themed variables to remove unnecessary duplicates | boolean  |                                            | false
-| `cssvar.disableSort`<br>Intellisense list won't be sorted | Disables default sorting applied by VSCode                | boolean  |                                            | false
-| `cssvar.enableColors`           | Enable VScode's Color Representation feature when true    | boolean  |                                            | true
-| `cssvar.enableGotoDef`          | Enable VScode's Goto Definition feature for CSS Variable  | boolean  |                                            | true
-| `cssvar.postcssPlugins`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provide PostCSS Plugins to support custom CSS features    | string[] | ["postcss-nested"]                         | []
-| `cssvar.postcssSyntax`<br>Details for this can be read here: [Customize Extension](./customize-extension.md) | Provides a list of custom parsers                                       | string[] | ["postcss-scss"]                           | []
-
-
-## Screeshots:
-
-### Working Example
-![Working Example](https://user-images.githubusercontent.com/11786283/112746381-07174d00-8fcc-11eb-82eb-d9b27540a956.gif)
-
-### Show Variable Colors
-![Var Colors](https://user-images.githubusercontent.com/11786283/153472208-91fc1c43-fa88-41c6-b1f2-4465369634d9.gif)
-
-### Supports Goto Definitions
-![Var Goto Definition](https://user-images.githubusercontent.com/11786283/153715008-24f9a0c2-e26d-48c9-9a8c-35152c7279bb.gif)
-
-
-### Theming Support:
-![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif)
-
-![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
-
+<table>
+<thead>
+  <tr align="left">
+    <th><b>Setting</b></th>
+    <th><b>Description</b></th>
+    <th><b>Type</b></th>
+    <th><b>Default</b></th>
+  </tr>
+</thead>
+<tbody>
+  <tr align="left">
+    <td><code>cssvar.files</code></td>
+    <td>
+      Relative/Absolute paths to CSS variable file sources
+    </td>
+    <td><code>string[]</code></td>
+    <td><br>
+      <pre lang="js">["**/*.css"]</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td><code>cssvar.ignore</code></td>
+    <td>
+      Relative/Absolute paths to file/folder sources to be ignored
+    </td>
+    <td><code>string[]</code></td>
+    <td><br>
+      <pre lang="js">["**/node_modules/**"]</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td><code>cssvar.extensions</code></td>
+    <td>File extensions in which IntelliSense will be enabled</td>
+    <td><code>string[]</code></td>
+    <td>
+      <br>
+      <pre lang="js">[
+  "css",
+  "scss",
+  "sass",
+  "less",
+  "postcss",
+  "vue",
+  "svelte",
+  "astro"
+]</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td>
+      <code>cssvar.themes</code>
+      <br>Helps to bucket CSS variables based on themes used in any project
+    </td>
+    <td>
+      <br>CSS Theme classnames used in source files
+      <br>E.g.<pre lang="js">["dark","dim"]</pre>
+    </td>
+    <td><code>string[]</code></td>
+    <td>
+      <br>
+      <pre lang="js">[]</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td>
+      <code>cssvar.excludeThemedVariables</code>
+      <br>If <code>true</code>, hides duplicate theme variables from the list
+    </td>
+    <td>Exclude themed variables to remove unnecessary duplicates</td>
+    <td><code>boolean</code></td>
+    <td>
+      <br>
+      <pre lang="js">false</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td>
+      <code>cssvar.disableSort</code>
+      <br>Intellisense list won't be sorted
+    </td>
+    <td>Disables default sorting applied by VSCode</td>
+    <td><code>boolean</code></td>
+    <td>
+      <br>
+      <pre lang="js">false</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td><code>cssvar.enableColors</code></td>
+    <td>Enable VScode's Color Representation feature when <code>true</code></td>
+    <td><code>boolean</code></td>
+    <td>
+      <br>
+      <pre lang="js">true</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td><code>cssvar.enableGotoDef</code></td>
+    <td>Enable VScode's Goto Definition feature for CSS Variable</td>
+    <td><code>boolean</code></td>
+    <td>
+      <br>
+      <pre lang="js">true</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td>
+      <code>cssvar.postcssPlugins</code>
+      <br>Details for this can be read here: <a href="./customize-extension.md">Customize Extension</a>
+    </td>
+    <td>
+      <br>Provide PostCSS Plugins to support custom CSS features
+      <br>E.g.<pre lang="js">["postcss-nested"]</pre>
+    </td>
+    <td><code>string[]</code></td>
+    <td>
+      <br>
+      <pre lang="js">[]</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
+    <td>
+      <code>cssvar.postcssSyntax</code>
+      <br>Details for this can be read here: <a href="./customize-extension.md">Customize Extension</a>
+    </td>
+    <td>
+      <br>Provides custom syntax parser
+      <br>E.g.<pre lang="js">["postcss-scss"]</pre>
+    </td>
+    <td><code>string[]</code></td>
+    <td>
+      <br>
+      <pre lang="js">[]</pre>
+      <br>
+    </td>
+  </tr>
+</tbody>
+</table>
+<br/><br/>
 
 > NOTE: Please [raise an issue](https://github.com/willofindie/vscode-cssvar/issues/new) for any feature request or a bug fix.
