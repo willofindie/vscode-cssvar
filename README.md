@@ -48,8 +48,11 @@ for globally shared CSS Variables and more.
 
 ### Auto Completion, Color swatches, Goto Definition
 
-Auto Completion, Color swatches and Goto Definition support
-for CSS Variables across VSCode workspaces
+This extension has in-built support for parsing: `css`, `scss`, `less`, `js`, `jsx`, `ts`, `tsx`
+source file extensions and providing CSS variable suggestions from them.
+
+For `js`, `jsx`, `ts`, `tsx`, only [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) parsing is supported.
+
 
 <p>
   <img
@@ -64,26 +67,25 @@ for CSS Variables across VSCode workspaces
   />
 </p>
 
-Autocompletion available in CSS, SASS, JS, TS and more extensions.
-
 <br/>
 
 ### Customization
 
-If your project uses **SASS/LESS**, and you are facing issues to setup this extension,
-please read [Customization](./customize-extension.md) Doc.
+If your project uses `sass` or `styl` or some other custom source file extension, and you are
+facing issues to setup this VSCode extension, please read
+[Customization][customize-extension-link] Doc.
 
 <br/>
 
 ### Theme Support
 
-Read more about [Theming here](./theming.md)
+Read more about [Theming here][theme-link]
 
 | Theming | Excluding duplicates when using themes
 |---------|--------------------------------------
 | ![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif) | ![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
 
-If you are still seeing duplicates, disable [VSCode's default variable IntelliSense for the same file](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
+If you are still seeing duplicates, disable [VSCode's IntelliSense for variable suggestions](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
 
 ```jsonc
 {
@@ -124,7 +126,7 @@ This Extension supports the following properties as of now:
   <tr align="left">
     <td><code>cssvar.files</code></td>
     <td>
-      Relative/Absolute paths to CSS variable file sources
+      Relative/Absolute paths to CSS variable source files
     </td>
     <td><code>string[]</code></td>
     <td><br>
@@ -227,7 +229,7 @@ This Extension supports the following properties as of now:
   <tr align="left">
     <td>
       <code>cssvar.postcssPlugins</code>
-      <br>Details for this can be read here: <a href="./customize-extension.md">Customize Extension</a>
+      <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>
     </td>
     <td>
       <br>Provide PostCSS Plugins to support custom CSS features
@@ -243,7 +245,7 @@ This Extension supports the following properties as of now:
   <tr align="left">
     <td>
       <code>cssvar.postcssSyntax</code>
-      <br>Details for this can be read here: <a href="./customize-extension.md">Customize Extension</a>
+      <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>
     </td>
     <td>
       <br>Provides custom syntax parser
@@ -261,3 +263,6 @@ This Extension supports the following properties as of now:
 <br/><br/>
 
 > NOTE: Please [raise an issue](https://github.com/willofindie/vscode-cssvar/issues/new) for any feature request or a bug fix.
+
+[customize-extension-link]: ./docs/customize-extension.md
+[theme-link]: ./docs/theming.md

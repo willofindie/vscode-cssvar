@@ -1,4 +1,9 @@
 {
   "cssvar.files": ["**/*.css", "**/*.scss"],
-  "cssvar.postcssSyntax": ["postcss-scss"]
+  "[css]":  {
+    "editor.suggest.showVariables": false
+  },
+  "[scss]":  {
+    "editor.suggest.showVariables": false
+  }
 }
