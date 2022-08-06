@@ -8,7 +8,7 @@ import postcss, {
   ProcessOptions,
   Rule,
 } from "postcss";
-import safeParser from "postcss-safe-parser";
+import { getParser } from "./third-party/get-parser";
 import { promisify } from "util";
 import {
   CACHE,
@@ -29,7 +29,11 @@ import { LOGGER } from "./logger";
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
 
-const cssParseAsync = (file: string, ext: CssExtensions, rootPath: string) => {
+const cssParseAsync = async (
+  file: string,
+  ext: CssExtensions,
+  rootPath: string
+) => {
   const rootPaths =
     workspace.workspaceFolders?.map(folder => folder.uri.fsPath) || [];
   const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
@@ -60,9 +64,10 @@ const cssParseAsync = (file: string, ext: CssExtensions, rootPath: string) => {
 
   const options: ProcessOptions = {
     from: undefined,
-    parser: syntaxModuleName ? undefined : safeParser,
+    parser: syntaxModuleName ? undefined : await getParser(ext),
     syntax: undefined,
   };
+
   if (syntaxModuleName) {
     try {
       options.syntax = require(require.resolve(syntaxModuleName, {
@@ -315,6 +320,7 @@ const parseFilesForSingleFolder = async function (
         ...newVars,
       };
     }
+
     if (!cachedFileMeta) {
       CACHE.fileMetas[path] = {
         path,

@@ -83,6 +83,19 @@ Read more about [Theming here](./theming.md)
 |---------|--------------------------------------
 | ![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif) | ![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
 
+If you are still seeing duplicates, disable [VSCode's default variable IntelliSense for the same file](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
+
+```jsonc
+{
+  "[css]" : {
+    "editor.suggest.showVariables": false
+  },
+  "[scss]" : {
+    "editor.suggest.showVariables": false
+  },
+}
+```
+
 <br/>
 
 ### CSS Level 4 color spec support
