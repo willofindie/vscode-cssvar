@@ -21,7 +21,7 @@ export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
 export type CssExtensions = Exclude<
   typeof CSS_IDS[number],
-  "vue" | "svelte" | "astro" | "postcss" | "css"
+  "vue" | "svelte" | "astro"
 >;
 
 export type SupportedExtensionNames =
@@ -126,10 +126,8 @@ export const CACHE: CacheType = {
   activeRootPath: "",
 };
 
-export const POSTCSS_SYNTAX_MODULES: Record<CssExtensions, string> = {
-  scss: "postcss-scss",
+export const POSTCSS_SYNTAX_MODULES: Record<string, string> = {
   sass: "postcss-sass",
-  less: "postcss-less",
 };
 
 /**

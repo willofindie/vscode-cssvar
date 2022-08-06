@@ -15,3 +15,8 @@ rollup.config.js
 **/*.map
 **/*.ts
 yarn-error.log
+__mocks__
+babel.config.js
+coverage
+jest.config.js
+TASKS.md
