@@ -53,7 +53,7 @@ export interface Config {
   extensions: SupportedExtensionNames[];
   themes: string[];
   postcssPlugins: string[];
-  postcssSyntax: string[];
+  postcssSyntax: Record<string, string>;
   excludeThemedVariables: boolean;
   disableSort: boolean;
   enableColors: boolean;
@@ -71,7 +71,7 @@ export const DEFAULT_CONFIG: Config = {
   extensions: [...CSS_IDS],
   themes: [],
   postcssPlugins: [],
-  postcssSyntax: [],
+  postcssSyntax: {},
   excludeThemedVariables: false,
   disableSort: false,
   enableColors: true,
@@ -129,10 +129,6 @@ export const CACHE: CacheType = {
   fileMetas: {},
   config: {}, // Points to active config.
   activeRootPath: "",
-};
-
-export const POSTCSS_SYNTAX_MODULES: Record<string, string> = {
-  sass: "postcss-sass",
 };
 
 /**

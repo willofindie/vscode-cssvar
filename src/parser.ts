@@ -17,7 +17,6 @@ import {
   CSSVarRecord,
   SUPPORTED_CSS_RULE_TYPES,
   CacheType,
-  POSTCSS_SYNTAX_MODULES,
   CssExtensions,
   SUPPORTED_IMPORT_NAMES,
   JsExtensions,
@@ -58,11 +57,7 @@ const cssParseAsync = async (
     .filter(Boolean);
 
   /* Postcss Syntax needs to be applied only for files of that type */
-  const syntaxModuleName = CACHE.config[rootPath].postcssSyntax.find(
-    moduleName => {
-      return moduleName === POSTCSS_SYNTAX_MODULES[ext];
-    }
-  );
+  const syntaxModuleName = CACHE.config[rootPath].postcssSyntax[ext];
 
   const options: ProcessOptions = {
     from: undefined,
