@@ -13,11 +13,15 @@ The following list of source file extensions does not need any customization.
 
 - CSS or CSS-like files: `css`, `scss`, `less`.
 - JS or JS-like files: `js`, `jsx`, `ts`, `tsx`.
-  - Supports parsing [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) only
+  - Limited support for statically parsing [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
+  - Apologies, but I will not officially support in-built JS/TS file parsing.
+    __*You can still add support for it by adding `lit` syntax parser,*__
+    __*using [postcss-lit](https://github.com/43081j/postcss-lit) parser,*__
+    __*as described in the next section*__.
 
 <br>
 
-## Adding support for a new Syntax
+## Adding support for a new syntax
 
 > ***For customizations to work, you need to have
 [postcss](https://github.com/postcss/postcss) `v8+` installed in your local project's `node_modules`.***

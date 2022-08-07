@@ -81,9 +81,18 @@ facing issues to setup this VSCode extension, please read
 
 Read more about [Theming here][theme-link]
 
-| Theming | Excluding duplicates when using themes
-|---------|--------------------------------------
-| ![Theming](https://user-images.githubusercontent.com/11786283/112832552-1ae9ae80-90b3-11eb-8505-9fef822e5709.gif) | ![Exclude Themed Variables](https://user-images.githubusercontent.com/11786283/112832562-2046f900-90b3-11eb-93df-3d94deb1c9f6.gif)
+<p>
+  <img
+    alt="Theming"
+    src="https://user-images.githubusercontent.com/11786283/183304293-c665e051-cd51-4cd8-bc88-1ff5a150fcee.gif"
+    width="49%"
+  />
+  <img
+    alt="Exclude Duplicates"
+    src="https://user-images.githubusercontent.com/11786283/183304299-6fab3d53-46fc-4cf1-91b0-9b0f69ea0d03.gif"
+    width="49%"
+  />
+</p>
 
 If you are still seeing duplicates, disable [VSCode's IntelliSense for variable suggestions](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
 
