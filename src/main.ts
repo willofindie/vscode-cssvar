@@ -89,6 +89,24 @@ export async function setup(): Promise<{
             });
             break;
           }
+          case "postcssSyntax": {
+            const syntaxes = _config.get<Record<string, string[]>>(key);
+            if (syntaxes) {
+              config[fsPathKey][key] = Object.keys(syntaxes).reduce(
+                (syntaxMap, key) => {
+                  if (Object.prototype.hasOwnProperty.call(syntaxes, key)) {
+                    const exts = syntaxes[key];
+                    exts.forEach(ext => {
+                      syntaxMap[ext] = key;
+                    });
+                  }
+                  return syntaxMap;
+                },
+                {} as Config["postcssSyntax"]
+              );
+            }
+            break;
+          }
           default: {
             const value = getConfigValue(_config, key);
             config[fsPathKey][key] = value as any;

@@ -207,7 +207,7 @@
           "items": {
             "type": "string"
           },
-          "markdownDescription": "Provide PostCSS Plugins to support custom CSS features. List of PostCSS plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
+          "markdownDescription": "Provide __PostCSS__ plugins to support custom CSS features. List of __PostCSS__ plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
           "scope": "resource",
           "examples": [
             [
@@ -217,23 +217,43 @@
           ]
         },
         "cssvar.postcssSyntax": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string"
+          "type": "object",
+          "default": {},
+          "properties": {
+            "postcss-sass": {
+              "type": "array",
+              "description": "Sass (.sass) source file extensions to parse",
+              "default": ["sass"],
+              "examples": [["sass"]]
+            },
+            "postcss-html": {
+              "type": "array",
+              "description": "HTML (.html) source file extensions to parse",
+              "default": ["html"],
+              "examples": [["html", "ejs"]]
+            },
+            "sugarss": {
+              "type": "array",
+              "description": "SugarSS (.sss) source file extensions to parse",
+              "default": ["sss"],
+              "examples": [["sss"]]
+            },
+            "postcss-styl": {
+              "type": "array",
+              "description": "Stylus (.styl) source file extensions to parse. Repo: https://github.com/stylus/postcss-styl",
+              "default": ["styl"],
+              "examples": [["styl"]]
+            },
+            "postcss-lit": {
+              "type": "array",
+              "description": "To parse Lit templates in JS/TS source files. Repo: https://github.com/43081j/postcss-lit",
+              "default": ["ts"],
+              "examples": [["js", "ts"]]
+            }
           },
-          "markdownDescription": "Add support for custom CSS compilers like SCSS, SASS, LESS and more. Currently supports: 'postcss-scss', 'postcss-sass', 'postcss-less'. List of all PostCSS syntax names can be found in [PostCSS Doc](https://github.com/postcss/postcss#syntaxes)",
-          "scope": "resource",
-          "examples": [
-            [
-              "postcss-scss",
-              "postcss-sass",
-              "postcss-less"
-            ]
-          ]
+          "additionalProperties": true,
+          "markdownDescription": "Add support for custom CSS syntaxes like `sass`, `styl` and more. Details on Customization can be [read here](https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md)",
+          "scope": "resource"
         }
       }
     }

@@ -51,7 +51,7 @@ for globally shared CSS Variables and more.
 This extension has in-built support for parsing: `css`, `scss`, `less`, `js`, `jsx`, `ts`, `tsx`
 source file extensions and providing CSS variable suggestions from them.
 
-For `js`, `jsx`, `ts`, `tsx`, only [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) parsing is supported.
+Details can be read in [Customization Doc][customize-extension-link].
 
 
 <p>
