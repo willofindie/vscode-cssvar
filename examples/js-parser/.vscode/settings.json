@@ -1,0 +1,12 @@
+{
+  "cssvar.files": [
+    "src/global/*.tsx",
+    "src/global/*.jsx",
+  ],
+  "cssvar.extensions": [
+    "css",
+    "scss",
+    "tsx",
+    "jsx"
+  ]
+}

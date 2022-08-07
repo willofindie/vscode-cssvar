@@ -1,0 +1,20 @@
+:root {
+  --color-red-100: #FFCDD2;
+  --color-red-500: #F44336;
+  --color-red-900: #B71C1C;
+
+  --color-green-100: #C8E6C9;
+  --color-green-500: #4CAF50;
+  --color-green-900: #1B5E20;
+
+}
+
+body {
+  --card-color: var(--color-red-900);
+  --card-background: var(--color-red-100);
+}
+
+body.dark {
+  --card-color: var(--color-green-900);
+  --card-background: var(--color-green-100);
+}
