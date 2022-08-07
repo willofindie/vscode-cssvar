@@ -42,6 +42,11 @@ export type SupportedExtensionNames =
   | "javascript"
   | "javascriptreact";
 
+export type JsExtensions = Extract<
+  SupportedExtensionNames,
+  "js" | "jsx" | "ts" | "tsx"
+>;
+
 export interface Config {
   files: string[];
   ignore: string[];

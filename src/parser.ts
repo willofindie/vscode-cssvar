@@ -8,7 +8,8 @@ import postcss, {
   ProcessOptions,
   Rule,
 } from "postcss";
-import { getParser } from "./third-party/get-parser";
+import { getParser } from "./third-party";
+import preProcessor from "./pre-processors";
 import { promisify } from "util";
 import {
   CACHE,
@@ -19,6 +20,7 @@ import {
   POSTCSS_SYNTAX_MODULES,
   CssExtensions,
   SUPPORTED_IMPORT_NAMES,
+  JsExtensions,
 } from "./constants";
 import { dirname, extname, resolve } from "path";
 
@@ -30,8 +32,8 @@ const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
 
 const cssParseAsync = async (
-  file: string,
-  ext: CssExtensions,
+  content: string,
+  ext: CssExtensions | JsExtensions,
   rootPath: string
 ) => {
   const rootPaths =
@@ -82,7 +84,8 @@ const cssParseAsync = async (
   }
 
   /* Parse a single file, with a syntax if provided */
-  return postcss(plugins).process(file, options);
+  const preProcessedContent = await preProcessor(content, ext);
+  return postcss(plugins).process(preProcessedContent, options);
 };
 
 /**
@@ -204,7 +207,7 @@ const parseFile = async function (
   const extension = extname(path);
   const css = await cssParseAsync(
     file,
-    extension.replace(".", "") as CssExtensions,
+    extension.replace(".", "") as CssExtensions | JsExtensions,
     rootPath
   );
 

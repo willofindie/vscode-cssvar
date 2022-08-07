@@ -23,10 +23,10 @@ The following list of source file extensions does not need any customization.
 [postcss](https://github.com/postcss/postcss) `v8+` installed in your local project's `node_modules`.***
 
 First, install any syntax parser from the list provided [here][syntax-list].
-E.g. read the following to add support for `sass` CSS Extension.
+The following example helps demonstrate adding support for `sass` CSS Extension.
 
 
-Install [postcss-sass][sass-syntax] npm module on your system:
+Install [postcss-sass][sass-syntax] package on your system:
 
 ```sh
 yarn add -D postcss @csstools/postcss-sass
