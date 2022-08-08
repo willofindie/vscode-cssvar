@@ -8,5 +8,8 @@
     "scss",
     "tsx",
     "jsx"
-  ]
+  ],
+  // "cssvar.postcssSyntax": {
+  //   "postcss-syntax": ["js", "jsx", "ts", "tsx"]
+  // }
 }
