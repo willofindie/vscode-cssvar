@@ -13,13 +13,14 @@ The following list of source file extensions does not need any customization.
 
 - CSS or CSS-like files: `css`, `scss`, `less`.
 - JS or JS-like files: `js`, `jsx`, `ts`, `tsx`.
-  - Limited support for statically parsing [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals).
-  - Apologies, but I will not officially support in-built JS/TS file parsing.
-    __*You can still add support for it by adding `lit` syntax parser,*__
-    __*using [postcss-lit](https://github.com/43081j/postcss-lit) parser,*__
-    __*as described in the next section*__.
+  - Statically parses [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). No customization needed
 
-<br>
+> `cssvar` has minimal support for parsing JS/TS files.
+> __*If you are facing issues with JS/TS source file parsing try*__
+> __*using [postcss-css-in-js][css-in-js] parser,*__
+> __*as described in the [following section](#example-ii)*__.
+
+<br><br>
 
 ## Adding support for a new syntax
 
@@ -38,11 +39,14 @@ or from the list below.
   [sugarss](https://github.com/postcss/sugarss)
 - Syntax Parser for [Stylus](https://stylus-lang.com/) CSS extension:
   [postcss-styl](https://github.com/stylus/postcss-styl)
+- Syntax parser for `css-in-js` in JS/TS source files:
+  [postcss-css-in-js][css-in-js]
 - Syntax parser for Lit templates in JS/TS source files:
   [postcss-lit](https://github.com/43081j/postcss-lit)
 
 <br>
-<br>
+
+### Example I
 
 The following example helps demonstrate adding support for `sass` CSS Extension.
 <br>Install [postcss-sass][sass-syntax] package on your system:
@@ -63,9 +67,33 @@ Once the above is done, edit your `cssvar` config to use this syntax:
 }
 ```
 
+<br>
 
+### Example II
+
+The following example helps demonstrate adding support for `css-in-js` parsing support.
+<br>Install [postcss-css-in-js][css-in-js] and [postcss-syntax](https://github.com/gucong3000/postcss-syntax) packages
+on your system:
+
+```sh
+yarn add -D postcss postcss-syntax @stylelint/postcss-css-in-js
+```
+
+Once the above is done, edit your `cssvar` config to use this syntax:
+
+```jsonc
+// .vscode/settings.json
+{
+  "cssvar.postcssSyntax": {
+    "postcss-syntax": ["js", "jsx", "ts", "tsx"]
+  }
+}
+```
+
+To see this setup working, uncomment this syntax in [js-parser example](../examples/js-parser/.vscode/settings.json#L12)
 
 
 [syntax-list]: https://github.com/postcss/postcss#syntaxes
 [sass-syntax]: https://github.com/AleshaOleg/postcss-sass
 [nested-plugin]: https://github.com/postcss/postcss-nested
+[css-in-js]: https://github.com/stylelint/postcss-css-in-js

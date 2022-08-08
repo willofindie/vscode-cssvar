@@ -217,7 +217,7 @@ This Extension supports the following properties as of now:
   </tr>
   <tr align="left">
     <td><code>cssvar.enableColors</code></td>
-    <td>Enable VScode's Color Representation feature when <code>true</code></td>
+    <td>Enable VSCode's Color Representation feature when <code>true</code></td>
     <td><code>boolean</code></td>
     <td>
       <br>
@@ -227,7 +227,7 @@ This Extension supports the following properties as of now:
   </tr>
   <tr align="left">
     <td><code>cssvar.enableGotoDef</code></td>
-    <td>Enable VScode's Goto Definition feature for CSS Variable</td>
+    <td>Enable VSCode's Goto Definition feature for CSS Variable</td>
     <td><code>boolean</code></td>
     <td>
       <br>
@@ -237,28 +237,29 @@ This Extension supports the following properties as of now:
   </tr>
   <tr align="left">
     <td>
-      <code>cssvar.postcssPlugins</code>
+      <code>cssvar.postcssSyntax</code>
       <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>
     </td>
     <td>
-      <br>Provide PostCSS Plugins to support custom CSS features
-      <br>E.g.<pre lang="js">["postcss-nested"]</pre>
+      <br>Provides custom syntax parser for the mapped file extensions.
+      <br>E.g.<pre lang="js">{
+  "sugarss": ["sss"]
+}</pre>
     </td>
-    <td><code>string[]</code></td>
+    <td><code>Record&lt;string,string[]<br>&gt;</code></td>
     <td>
       <br>
-      <pre lang="js">[]</pre>
+      <pre lang="js">{}</pre>
       <br>
     </td>
   </tr>
   <tr align="left">
     <td>
-      <code>cssvar.postcssSyntax</code>
-      <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>
+      <code>cssvar.postcssPlugins</code>
     </td>
     <td>
-      <br>Provides custom syntax parser
-      <br>E.g.<pre lang="js">["postcss-scss"]</pre>
+      <br>Provide PostCSS Plugins to support custom CSS features
+      <br>E.g.<pre lang="js">["postcss-nested"]</pre>
     </td>
     <td><code>string[]</code></td>
     <td>

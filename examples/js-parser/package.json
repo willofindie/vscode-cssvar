@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "@linaria/core": "^4.1.1",
-    "@linaria/react": "^4.1.2"
+    "@linaria/react": "^4.1.2",
+    "@stylelint/postcss-css-in-js": "^0.38.0",
+    "postcss": "^8.4.16",
+    "postcss-syntax": "^0.36.2"
   }
 }
