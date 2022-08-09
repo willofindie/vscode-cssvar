@@ -61,6 +61,7 @@ const TEMPLATE_ESCAPE = "\\".charCodeAt(0);
 // with a line feed.
 const LF = "\n".charCodeAt(0);
 
+export const JS_BLOCK = "jsblock";
 export const templateLiteralPreProcessor = async (input: string) => {
   let charIndex = 0;
   let started = false;
@@ -78,7 +79,7 @@ export const templateLiteralPreProcessor = async (input: string) => {
       // This is inside template literal
       if (jsCodeStarted && jsBlockDepth === 0 && code === JS_BLOCK__END) {
         // Template literals with JS expressions are ignored, thus we need to replace it with some CSS content
-        stringBuilder.push("inherit");
+        stringBuilder.push(JS_BLOCK);
         jsCodeStarted = false;
       } else if (jsCodeStarted) {
         // Ignore every char here
@@ -100,7 +101,7 @@ export const templateLiteralPreProcessor = async (input: string) => {
         stringBuilder.push(nextChar);
         charIndex += 1;
       } else if (code === TEMPLATE_HEAD_START && nextCode === JS_BLOCK_START) {
-        // Start of JS code block, which we can ignore and replace with empty spaces for proper charpositions
+        // Start of JS code block, which we can ignore and replace with empty spaces/line breaks for proper char positions
         jsCodeStarted = true;
         charIndex += 1;
       } else if (code === TEMPLATE_START_END) {

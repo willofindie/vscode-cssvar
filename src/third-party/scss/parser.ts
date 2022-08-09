@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * Ref: https://github.com/postcss/postcss-scss
  * I have modified it to work with my extension and use ES6 syntax and
@@ -7,7 +8,6 @@
 
 import { Comment, Node } from "postcss";
 import type { Token } from "postcss/lib/tokenize";
-// import type } from "postcss/lib/parser";
 import SafeParser from "../safe-parser";
 
 import NestedDeclaration from "./nested-declaration";

@@ -9,7 +9,7 @@ import postcss, {
   Rule,
 } from "postcss";
 import { getParser } from "./third-party";
-import preProcessor from "./pre-processors";
+import preProcessor, { JS_BLOCK } from "./pre-processors";
 import { promisify } from "util";
 import {
   CACHE,
@@ -116,6 +116,9 @@ type ParsingOptions = {
 /**
  * Get CSS Variable Declarations Array
  * from PostCSS AST of a CSS file.
+ *
+ * Since we are using safe-parser, we should manually remove
+ * nodes with improper prop name or values in it.
  */
 export function getVariableDeclarations(
   config: Config,
@@ -126,8 +129,10 @@ export function getVariableDeclarations(
   const { path = "" } = options;
 
   if (isNodeType<Declaration>(node, SUPPORTED_CSS_RULE_TYPES[1])) {
-    const type = getVariableType(node.prop);
-    if (type) {
+    const prop = node.prop.trim();
+    const value = node.value && node.value.trim();
+    const type = getVariableType(prop);
+    if (type && !!value && value !== JS_BLOCK) {
       let location: Location | undefined = undefined;
       try {
         const uri = Uri.file(path);
@@ -148,8 +153,8 @@ export function getVariableDeclarations(
 
       declarations.push({
         type,
-        property: node.prop,
-        value: node.value,
+        property: prop,
+        value: value,
         location,
         theme: options.theme || "",
       });
