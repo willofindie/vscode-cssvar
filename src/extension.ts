@@ -14,6 +14,7 @@ import { CssDefinitionProvider } from "./definition-provider";
 import { LOGGER } from "./logger";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
+import { isObjectProperty } from "./utils";
 
 const watchers: FileSystemWatcher[] = [];
 
@@ -117,7 +118,7 @@ export function deactivate(): void {
  */
 function updateStatus(event: TextEditor | undefined) {
   if (event) {
-    if (Object.prototype.hasOwnProperty.call(event, "document")) {
+    if (isObjectProperty(event, "document")) {
       const rootPath =
         workspace.getWorkspaceFolder((<TextEditor>event).document.uri)?.uri
           .fsPath || CACHE.activeRootPath;

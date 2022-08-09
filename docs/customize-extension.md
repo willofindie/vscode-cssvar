@@ -16,7 +16,8 @@ The following list of source file extensions does not need any customization.
   - Statically parses [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). No customization needed
 
 > `cssvar` has minimal support for parsing JS/TS files.
-> __*If you are facing issues with JS/TS source file parsing try*__
+> __*This won't be required, but in case you face issues with*__
+> __*JS/TS source file parsing try*__
 > __*using [postcss-css-in-js][css-in-js] parser,*__
 > __*as described in the [following section](#example-ii)*__.
 

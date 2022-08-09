@@ -8,9 +8,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "postcss": "8",
-    "postcss-scss": "^4.0.4"
-  }
+  "license": "ISC"
 }

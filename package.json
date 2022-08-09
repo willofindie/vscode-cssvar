@@ -223,32 +223,76 @@
             "postcss-sass": {
               "type": "array",
               "description": "Sass (.sass) source file extensions to parse",
-              "default": ["sass"],
-              "examples": [["sass"]]
+              "default": [
+                "sass"
+              ],
+              "examples": [
+                [
+                  "sass"
+                ]
+              ]
             },
             "postcss-html": {
               "type": "array",
               "description": "HTML (.html) source file extensions to parse",
-              "default": ["html"],
-              "examples": [["html", "ejs"]]
+              "default": [
+                "html"
+              ],
+              "examples": [
+                [
+                  "html",
+                  "ejs"
+                ]
+              ]
             },
             "sugarss": {
               "type": "array",
               "description": "SugarSS (.sss) source file extensions to parse",
-              "default": ["sss"],
-              "examples": [["sss"]]
+              "default": [
+                "sss"
+              ],
+              "examples": [
+                [
+                  "sss"
+                ]
+              ]
             },
             "postcss-styl": {
               "type": "array",
               "description": "Stylus (.styl) source file extensions to parse. Repo: https://github.com/stylus/postcss-styl",
-              "default": ["styl"],
-              "examples": [["styl"]]
+              "default": [
+                "styl"
+              ],
+              "examples": [
+                [
+                  "styl"
+                ]
+              ]
+            },
+            "postcss-syntax": {
+              "type": "array",
+              "description": "To parse template literals in JS/TS source files. Details: https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md",
+              "default": [],
+              "examples": [
+                [
+                  "js",
+                  "ts",
+                  "sass"
+                ]
+              ]
             },
             "postcss-lit": {
               "type": "array",
               "description": "To parse Lit templates in JS/TS source files. Repo: https://github.com/43081j/postcss-lit",
-              "default": ["ts"],
-              "examples": [["js", "ts"]]
+              "default": [
+                "ts"
+              ],
+              "examples": [
+                [
+                  "js",
+                  "ts"
+                ]
+              ]
             }
           },
           "additionalProperties": true,
@@ -307,8 +351,7 @@
     "culori": "^2.0.3",
     "fast-glob": "^3.2.11",
     "postcss": "^8.4.12",
-    "postcss-less": "^6.0.0",
-    "postcss-scss": "^4.0.4"
+    "postcss-less": "^6.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
