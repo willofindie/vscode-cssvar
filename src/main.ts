@@ -91,7 +91,7 @@ export async function setup(): Promise<{
           }
           case "postcssSyntax": {
             const syntaxes = _config.get<Record<string, string[]>>(key);
-            if (syntaxes) {
+            if (syntaxes && !Array.isArray(syntaxes)) {
               config[fsPathKey][key] = Object.keys(syntaxes).reduce(
                 (syntaxMap, key) => {
                   if (isObjectProperty(syntaxes, key)) {
@@ -104,6 +104,8 @@ export async function setup(): Promise<{
                 },
                 {} as Config["postcssSyntax"]
               );
+            } else {
+              config[fsPathKey][key] = {};
             }
             break;
           }
