@@ -30,6 +30,7 @@ describe("Test Extension Main", () => {
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
+            type: "css",
             property: "--red-A100",
             value: "red",
             theme: "",
@@ -37,6 +38,7 @@ describe("Test Extension Main", () => {
         ],
         "./src/02.css": [
           {
+            type: "css",
             property: "--red-500",
             value: "red",
             theme: "",
@@ -62,6 +64,7 @@ describe("Test Extension Main", () => {
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
+            type: "css",
             property: "--red-A100",
             value: "red",
             theme: "",
@@ -69,6 +72,7 @@ describe("Test Extension Main", () => {
         ],
         "./src/02.css": [
           {
+            type: "css",
             property: "--red-500",
             value: "red",
             theme: "",
