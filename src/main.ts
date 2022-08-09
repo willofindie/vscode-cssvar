@@ -94,7 +94,7 @@ export async function setup(): Promise<{
             if (syntaxes) {
               config[fsPathKey][key] = Object.keys(syntaxes).reduce(
                 (syntaxMap, key) => {
-                  if (Object.prototype.hasOwnProperty.call(syntaxes, key)) {
+                  if (isObjectProperty(syntaxes, key)) {
                     const exts = syntaxes[key];
                     exts.forEach(ext => {
                       syntaxMap[ext] = key;

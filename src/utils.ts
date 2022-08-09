@@ -297,9 +297,9 @@ export const getCSSErrorMsg = (
   error: Record<string, any>
 ) => {
   if (
-    Object.prototype.hasOwnProperty.call(error, "name") &&
-    Object.prototype.hasOwnProperty.call(error, "reason") &&
-    Object.prototype.hasOwnProperty.call(error, "line")
+    isObjectProperty(error, "name") &&
+    isObjectProperty(error, "reason") &&
+    isObjectProperty(error, "line")
   ) {
     return JSON.stringify(
       {
