@@ -1,5 +1,5 @@
 import { CssExtensions, JsExtensions } from "../constants";
-import { templateLiteralPreProcessor } from "./template-literals";
+import { templateLiteralPreProcessor, JS_BLOCK } from "./template-literals";
 
 export default async function preProcessContent(
   input: string,
@@ -16,3 +16,5 @@ export default async function preProcessContent(
       return input;
   }
 }
+
+export { JS_BLOCK };
