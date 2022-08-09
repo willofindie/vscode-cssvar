@@ -16,15 +16,6 @@ export default styled.div`
 export const RandomComponent = () => {
   const classes = ["foo", "bar"];
 
-  // All the below console.logs causes issue, but for now let's neglect it unless someone raises any issue
-  // This is because, I don't want to officially support JS/TS parsing, as it's a lot of overhead.
-  console.log(`--random: error`);
-  console.log(`-- foo: ${"foo"}`);
-  console.log(`--fuzz: ${"fuzz"}`);
-  console.log(`--flex: `, "flex");
-
-  console.log(`>>> bob--flex: `, "flex");
-
   return (
     <div className={`${classes[0]}`}>
       <p className={`baz ${classes[1] === "bar" ? "bizz" : "fizz"}`}>

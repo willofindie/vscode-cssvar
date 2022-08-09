@@ -173,7 +173,6 @@ describe("Test Parser", () => {
     const scssConfig: ConfigRecord = {
       [CACHE.activeRootPath]: {
         ...EXTENSION_CONFIG[CACHE.activeRootPath],
-        postcssSyntax: ["postcss-scss"],
         files: [IMPORT_SCSS_FILE],
       },
     };
@@ -229,7 +228,6 @@ describe("Multi Root", () => {
       [rootPath1]: {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
-        postcssSyntax: ["postcss-scss"],
         files: [IMPORT_SCSS_FILE],
       },
       [rootPath2]: {
