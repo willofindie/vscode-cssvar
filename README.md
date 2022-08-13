@@ -168,7 +168,11 @@ This Extension supports the following properties as of now:
   "postcss",
   "vue",
   "svelte",
-  "astro"
+  "astro",
+  "ts",
+  "tsx",
+  "js",
+  "jsx"
 ]</pre>
       <br>
     </td>

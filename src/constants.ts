@@ -68,7 +68,7 @@ export interface Config {
 export const DEFAULT_CONFIG: Config = {
   files: ["**/*.css"],
   ignore: ["**/node_modules/**"],
-  extensions: [...CSS_IDS],
+  extensions: [...SUPPORTED_LANGUAGE_IDS],
   themes: [],
   postcssPlugins: [],
   postcssSyntax: {},
