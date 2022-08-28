@@ -8,9 +8,9 @@ import {
   EndOfLine,
   Position,
 } from "vscode";
-import { parseToRgb } from "./color-parser";
-import { CACHE } from "./constants";
-import { getActiveRootPath } from "./utils";
+import { parseToRgb } from "../color-parser";
+import { CACHE } from "../constants";
+import { getActiveRootPath } from "../utils";
 
 const getChunkRange = (startLineNumber: number, endLineNumber: number): Range =>
   new Range(new Position(startLineNumber, 0), new Position(endLineNumber, 0));

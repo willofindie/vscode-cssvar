@@ -5,10 +5,10 @@ import {
   Range,
   TextDocument,
 } from "vscode";
-import { CACHE, SupportedLanguageIds } from "./constants";
+import { CACHE, SupportedLanguageIds } from "../constants";
 
-import { createCompletionItems } from "./main";
-import { getActiveRootPath, restrictIntellisense } from "./utils";
+import { createCompletionItems } from "../main";
+import { getActiveRootPath, restrictIntellisense } from "../utils";
 
 export class CssCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(
