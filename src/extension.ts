@@ -7,10 +7,10 @@ import {
   RelativePattern,
   TextEditor,
 } from "vscode";
-import { CssColorProvider } from "./color-provider";
-import { CssCompletionProvider } from "./completion-provider";
+import { CssColorProvider } from "./providers/color-provider";
+import { CssCompletionProvider } from "./providers/completion-provider";
 import { CACHE, DEFAULT_CONFIG } from "./constants";
-import { CssDefinitionProvider } from "./definition-provider";
+import { CssDefinitionProvider } from "./providers/definition-provider";
 import { LOGGER } from "./logger";
 import { setup } from "./main";
 import { parseFiles } from "./parser";

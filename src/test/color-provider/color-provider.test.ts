@@ -1,7 +1,7 @@
 import { EndOfLine, TextDocument } from "vscode";
 import { parseToRgb } from "../../color-parser";
 
-import { CssColorProvider } from "../../color-provider";
+import { CssColorProvider } from "../../providers/color-provider";
 import { CSSVarDeclarations } from "../../main";
 
 jest.mock("../../constants", () => {

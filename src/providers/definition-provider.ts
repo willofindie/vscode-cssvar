@@ -6,8 +6,8 @@ import {
   Range,
   TextDocument,
 } from "vscode";
-import { CACHE } from "./constants";
-import { getActiveRootPath } from "./utils";
+import { CACHE } from "../constants";
+import { getActiveRootPath } from "../utils";
 
 export class CssDefinitionProvider implements DefinitionProvider {
   async provideDefinition(

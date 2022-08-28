@@ -28,8 +28,17 @@ import { Root, Node } from "postcss";
 import type { Token } from "postcss/lib/tokenize";
 import Parser from "postcss/lib/parser";
 
+// FIXME(shub) all these failures should change the parsed AST node and remove
+// the node from the tree, as they are invalid.
+// One possible solution is to call super.method() and wrap it inside
+// try/catch block, without overriding these exception methods
+// I just need to override `decl()` method with try/catch to make things work
 export default abstract class SafeParser extends Parser {
   //#region Errors
+  /**
+   * This method should only throw if passed tokens contain CSS custom properties
+   * with prop startsWith `--`, after this get's fixed
+   */
   unknownWord(tokens: Token[]) {
     this.spaces += tokens.map(i => i[1]).join("");
     // console.log("Unknown Word: ", tokens);
