@@ -11,15 +11,20 @@ import { CACHE } from "../constants";
 import { getActiveRootPath } from "../utils";
 
 const getMDString = (
+  prop: string,
   realValue: string,
   renderedValue: string,
   theme: string
-) => `
-__Variable Details__
-- Real: \`${realValue}\`
-- Rendererd: \`${renderedValue}\`
-${theme !== "" ? `\nTheme: [\`${theme}\`]` : ""}
-`;
+) => {
+  const mdString = new MarkdownString("__Variable Details__\n", true);
+  mdString.appendCodeblock(`${prop}: ${realValue};`, "scss");
+  mdString.appendMarkdown(
+    `- Rendererd: \`${renderedValue}\`\n${
+      theme !== "" ? `- Theme: [\`${theme}\`]` : "- Theme: _none_"
+    } \n`
+  );
+  return mdString;
+};
 
 export class CssHoverProvider implements HoverProvider {
   provideHover(
@@ -59,13 +64,11 @@ export class CssHoverProvider implements HoverProvider {
       CACHE.activeRootPath = getActiveRootPath();
       const varDetails =
         CACHE.cssVarsMap[CACHE.activeRootPath][hoverDetails.name];
-      const content = new MarkdownString(
-        getMDString(
-          varDetails.real,
-          varDetails.color || varDetails.value,
-          varDetails.theme
-        ),
-        true
+      const content = getMDString(
+        varDetails.property,
+        varDetails.real,
+        varDetails.color || varDetails.value,
+        varDetails.theme
       );
       return new Hover(content, hoverDetails.range);
     }
