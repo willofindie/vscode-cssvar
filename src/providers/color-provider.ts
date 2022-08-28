@@ -39,7 +39,6 @@ export class CssColorProvider implements DocumentColorProvider {
         const matches = line ? line.matchAll(/var\s*\((.*?)\)/g) : [];
         const exactLineNumber = lineNumer + lineOffset;
         for (const cssVarMatch of matches) {
-          const match = cssVarMatch[0];
           const key = cssVarMatch[1].trim();
           const hexColor = CACHE.cssVarsMap[CACHE.activeRootPath][key]?.color;
           if (hexColor && cssVarMatch.index) {
@@ -49,10 +48,7 @@ export class CssColorProvider implements DocumentColorProvider {
                 color: new Color(color.r, color.g, color.b, color.alpha ?? 1),
                 range: new Range(
                   new Position(exactLineNumber, cssVarMatch.index),
-                  new Position(
-                    exactLineNumber,
-                    cssVarMatch.index + match.length
-                  )
+                  new Position(exactLineNumber, cssVarMatch.index + 4)
                 ),
               };
               colorInfo.push(info);
@@ -71,17 +67,7 @@ export class CssColorProvider implements DocumentColorProvider {
   async provideColorPresentations(
     _color: Color,
     _context: { document: TextDocument; range: Range }
-  ): Promise<ColorPresentation[]> {
-    const colorPresentations: ColorPresentation[] = [];
-
-    // colorPresentations.push(
-    //   new ColorPresentation(
-    //     `${color.red}${color.green}${color.blue}${
-    //       color.alpha
-    //     } ::: ${document.getText(range)}`
-    //   )
-    // );
-
-    return colorPresentations;
+  ): Promise<ColorPresentation[] | null> {
+    return null;
   }
 }

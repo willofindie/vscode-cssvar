@@ -155,6 +155,7 @@ export function getVariableDeclarations(
         type,
         property: prop,
         value: value,
+        real: value,
         location,
         theme: options.theme || "",
       });

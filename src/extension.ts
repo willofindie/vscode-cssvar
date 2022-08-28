@@ -15,6 +15,7 @@ import { LOGGER } from "./logger";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
 import { isObjectProperty } from "./utils";
+import { CssHoverProvider } from "./providers/hover-provider";
 
 const watchers: FileSystemWatcher[] = [];
 
@@ -57,6 +58,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
       const definitionDisposable = languages.registerDefinitionProvider(
         config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
         new CssDefinitionProvider()
+      );
+      context.subscriptions.push(definitionDisposable);
+    }
+
+    if (config[CACHE.activeRootPath].enableHover) {
+      const definitionDisposable = languages.registerHoverProvider(
+        config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
+        new CssHoverProvider()
       );
       context.subscriptions.push(definitionDisposable);
     }

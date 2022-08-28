@@ -58,6 +58,7 @@ export interface Config {
   disableSort: boolean;
   enableColors: boolean;
   enableGotoDef: boolean;
+  enableHover: boolean;
 }
 
 /**
@@ -76,6 +77,7 @@ export const DEFAULT_CONFIG: Config = {
   disableSort: false,
   enableColors: true,
   enableGotoDef: true,
+  enableHover: true,
 };
 
 export const mapShortToFullExtension = (

@@ -240,6 +240,16 @@ This Extension supports the following properties as of now:
     </td>
   </tr>
   <tr align="left">
+    <td><code>cssvar.enableHover</code></td>
+    <td>Enable VScode's Hover IntelliSense feature for CSS Variables</td>
+    <td><code>boolean</code></td>
+    <td>
+      <br>
+      <pre lang="js">true</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
     <td>
       <code>cssvar.postcssSyntax</code>
       <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>

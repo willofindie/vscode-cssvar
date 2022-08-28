@@ -1,0 +1,75 @@
+import {
+  CancellationToken,
+  Hover,
+  HoverProvider,
+  MarkdownString,
+  Position,
+  Range,
+  TextDocument,
+} from "vscode";
+import { CACHE } from "../constants";
+import { getActiveRootPath } from "../utils";
+
+const getMDString = (
+  realValue: string,
+  renderedValue: string,
+  theme: string
+) => `
+__Variable Details__
+- Real: \`${realValue}\`
+- Rendererd: \`${renderedValue}\`
+${theme !== "" ? `\nTheme: [\`${theme}\`]` : ""}
+`;
+
+export class CssHoverProvider implements HoverProvider {
+  provideHover(
+    document: TextDocument,
+    position: Position,
+    _: CancellationToken
+  ): Hover | null {
+    const range = new Range(
+      position.translate({ characterDelta: -position.character }),
+      position.with({ line: position.line + 1, character: 0 })
+    );
+    const text = document.getText(range);
+
+    const matches = text.matchAll(/var\s*\((.*?)\)/g);
+    let hoverDetails: {
+      name: string;
+      range: Range;
+    } | null = null;
+    for (const match of matches) {
+      const start = match.index
+        ? match.index + (match[0].length - match[1].length - 1)
+        : 0;
+      const end = start + match[1].length;
+      if (position.character >= start && position.character <= end) {
+        hoverDetails = {
+          name: match[1],
+          range: new Range(
+            range.start.translate({ characterDelta: start }),
+            range.start.translate({ characterDelta: end })
+          ),
+        };
+        break;
+      }
+    }
+
+    if (hoverDetails) {
+      CACHE.activeRootPath = getActiveRootPath();
+      const varDetails =
+        CACHE.cssVarsMap[CACHE.activeRootPath][hoverDetails.name];
+      const content = new MarkdownString(
+        getMDString(
+          varDetails.real,
+          varDetails.color || varDetails.value,
+          varDetails.theme
+        ),
+        true
+      );
+      return new Hover(content, hoverDetails.range);
+    }
+
+    return null;
+  }
+}
