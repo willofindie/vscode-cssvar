@@ -198,6 +198,19 @@
             false
           ]
         },
+        "cssvar.enableHover": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null,
+          "markdownDescription": "Enable VScode's Hover IntelliSense feature for CSS Variables",
+          "scope": "window",
+          "examples": [
+            true,
+            false
+          ]
+        },
         "cssvar.postcssPlugins": {
           "type": [
             "array",

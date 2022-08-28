@@ -130,6 +130,7 @@ export interface CSSVarDeclarations {
   type: "css" | "sass" | "less";
   property: string;
   value: string;
+  real: string;
   location?: Location;
   theme: string;
   color?: string;
