@@ -98,7 +98,7 @@ describe("Test Color Provider", () => {
       alpha: red300!.alpha ?? 1,
     });
     expect(colorInfos[0].range.start.character).toBe(7);
-    expect(colorInfos[0].range.end.character).toBe(27);
+    expect(colorInfos[0].range.end.character).toBe(11);
   });
   it("should provide color for multi-line var()", async () => {
     const colorInfos = await provider.provideDocumentColors(
@@ -121,7 +121,7 @@ describe("Test Color Provider", () => {
         }),
         end: expect.objectContaining({
           line: 1,
-          character: 27,
+          character: 11,
         }),
       })
     );
