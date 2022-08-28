@@ -84,6 +84,7 @@ describe("Test Parser", () => {
         type: "css",
         property: "--red",
         value: "rgb(255, 0, 0)",
+        real: "rgb(255, 0, 0)",
         theme: "",
       };
       CACHE.cssVars = {
@@ -109,6 +110,7 @@ describe("Test Parser", () => {
         type: "css",
         property: "--red500",
         value: "#f24455",
+        real: "#f24455",
         color: "rgb(242, 68, 85)",
         theme: "",
         location: expect.objectContaining({
@@ -245,6 +247,7 @@ describe("Multi Root", () => {
       type: "css",
       property: "--test-var",
       value: "#333",
+      real: "#333",
       color: "rgb(51, 51, 51)",
       theme: "",
       location: expect.objectContaining({
@@ -255,6 +258,7 @@ describe("Multi Root", () => {
       type: "css",
       property: "--red500",
       value: "#f24455",
+      real: "#f24455",
       color: "rgb(242, 68, 85)",
       theme: "",
       location: expect.objectContaining({

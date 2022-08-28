@@ -12,6 +12,10 @@
 		"esModuleInterop": true,
 		"strictNullChecks": true
 	},
+	"include": [
+		"src",
+		"@types"
+	],
 	"exclude": [
 		"node_modules",
 		".vscode-test",

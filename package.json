@@ -324,7 +324,7 @@
     "watch": "rollup -c -m -w",
     "lint": "eslint src --ext ts",
     "lint:fix": "eslint src --ext ts --fix",
-    "test": "jest"
+    "test": "tsc --project ./tsconfig.json --noEmit & jest"
   },
   "devDependencies": {
     "@babel/core": "^7.17.8",
