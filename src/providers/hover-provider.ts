@@ -19,7 +19,7 @@ const getMDString = (
   const mdString = new MarkdownString("__Variable Details__\n", true);
   mdString.appendCodeblock(`${prop}: ${realValue};`, "scss");
   mdString.appendMarkdown(
-    `- Rendererd: \`${renderedValue}\`\n${
+    `- Rendered: \`${renderedValue}\`\n${
       theme !== "" ? `- Theme: [\`${theme}\`]` : "- Theme: _none_"
     } \n`
   );
