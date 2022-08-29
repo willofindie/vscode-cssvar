@@ -52,6 +52,9 @@ process.stdin.on("end", function () {
       changelogs.refactor.push(msg.split("refactor:")[1]);
     } else if (/doc:/.test(msg)) {
       changelogs.doc.push(msg.split("doc:")[1]);
+    } else {
+      // Push everything else to `feature`, to track the commits and remove them later.
+      changelogs.feature.push(msg);
     }
   }
   console.log(`## [${releaseTag.substring(1)}] - ${lastReleaseDate}`);
