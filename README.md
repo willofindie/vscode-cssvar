@@ -44,6 +44,11 @@
 This extension helps provide autocompletion IntelliSense
 for globally shared CSS Variables and more.
 
+### How the extension works:
+- When adding a new CSS declaration property value, press `--`.
+- This opens a completion list dropdown, with all the CSS variables in the list.
+- Select and add the variable of your choice, to autocomplete.
+
 <br>
 
 ### Auto Completion, Color swatches, Goto Definition
