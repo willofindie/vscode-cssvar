@@ -6,6 +6,7 @@ const rootClass = css`
 
   .head {
     font-size: var(--h1);
+    padding: var(--space-1);
   }
 `;
 

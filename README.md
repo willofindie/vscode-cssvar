@@ -99,25 +99,13 @@ Read more about [Theming here][theme-link]
   />
 </p>
 
-If you are still seeing duplicates, disable [VSCode's IntelliSense for variable suggestions](https://code.visualstudio.com/docs/getstarted/settings#_default-settings).
-
-```jsonc
-{
-  "[css]" : {
-    "editor.suggest.showVariables": false
-  },
-  "[scss]" : {
-    "editor.suggest.showVariables": false
-  },
-}
-```
-
 <br/>
 
 ### CSS Level 4 color spec support
 
 Limited support to keep bundle size small.
-<br/>Except `color()` api, every other CSS color is supported.
+<br/>
+Except for `color(`)` api, every other CSS color is supported.
 Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
 
 <br/><br/>
@@ -188,7 +176,7 @@ This Extension supports the following properties as of now:
       <br>Helps to bucket CSS variables based on themes used in any project
     </td>
     <td>
-      <br>CSS Theme classnames used in source files
+      <br>CSS Theme class names used in source files
       <br>E.g.<pre lang="js">["dark","dim"]</pre>
     </td>
     <td><code>string[]</code></td>

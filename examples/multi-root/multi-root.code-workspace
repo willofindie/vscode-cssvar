@@ -17,6 +17,8 @@
 			"proj-2": true,
 			"proj-3": true,
 		},
+		// Override default settings and do not lookup for css files recursively
+		// when in the root folder of the workspace
 		"cssvar.files": ["*.css"],
 		"cssvar.enableGotoDef": true
 	}
