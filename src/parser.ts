@@ -20,6 +20,7 @@ import {
   CssExtensions,
   SUPPORTED_IMPORT_NAMES,
   JsExtensions,
+  SUPPORTED_EVALUATING_ATRULES,
 } from "./constants";
 import { dirname, extname, resolve } from "path";
 
@@ -178,7 +179,7 @@ export function getVariableDeclarations(
   // Parse nested rules inside media queries
   if (
     isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
-    node.name === "media"
+    SUPPORTED_EVALUATING_ATRULES.has(node.name)
   ) {
     for (const _node of node.nodes) {
       const decls = getVariableDeclarations(config, _node, options);
@@ -217,7 +218,7 @@ const parseFile = async function (
     (resolvedPaths, node) => {
       if (
         isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
-        SUPPORTED_IMPORT_NAMES.includes(node.name)
+        SUPPORTED_IMPORT_NAMES.has(node.name)
       ) {
         const match = node.params.match(/['"](.*?)['"]/);
         if (match) {

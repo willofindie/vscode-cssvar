@@ -4,4 +4,6 @@
 .inverse {
   background-color: base.$primary-color;
   color: var(--red-8);
+  border-color: var(--color-purple-300);
+  border-width: var(--size-sm);
 }

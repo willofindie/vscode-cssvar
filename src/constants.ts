@@ -236,4 +236,5 @@ export const SCSS_COLOR_INTERPOLATION = /^#{\s*?(\$\S+?)\s*}$/i;
 export const CSS_VAR_FUNCTION_NOTATION = /^var\s*\((?<args>.*?)\)$/i;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl", "atrule"] as const;
-export const SUPPORTED_IMPORT_NAMES = ["import", "use", "forward"];
+export const SUPPORTED_IMPORT_NAMES = new Set(["import", "use", "forward"]);
+export const SUPPORTED_EVALUATING_ATRULES = new Set(["media", "mixin"]);
