@@ -91,10 +91,11 @@ Once the above is done, edit your `cssvar` config to use this syntax:
 }
 ```
 
-To see this setup working, uncomment this syntax in [js-parser example](../examples/js-parser/.vscode/settings.json#L12)
+To see this setup working, uncomment this syntax in [js-parser example][js-parser-eg-line-link]
 
 
 [syntax-list]: https://github.com/postcss/postcss#syntaxes
 [sass-syntax]: https://github.com/AleshaOleg/postcss-sass
 [nested-plugin]: https://github.com/postcss/postcss-nested
 [css-in-js]: https://github.com/stylelint/postcss-css-in-js
+[js-parser-eg-line-link]: https://github.com/willofindie/vscode-cssvar/blob/main/examples/js-parser/.vscode/settings.json#L6

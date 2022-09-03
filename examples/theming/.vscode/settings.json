@@ -1,7 +1,4 @@
 {
   "cssvar.themes": ["dark", "dim"],
   "cssvar.excludeThemedVariables": true,
-  "[css]": {
-    "editor.suggest.showVariables": false
-  }
 }

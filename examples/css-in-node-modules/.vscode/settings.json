@@ -20,5 +20,6 @@
     "node_modules/pollen-css/pollen.css",
     "node_modules/bootstrap/dist/css/bootstrap.css",
     "node_modules/open-props/open-props.min.css"
-  ]
+  ],
+  "cssvar.disableSort": true
 }

@@ -3,12 +3,6 @@
     "src/global/*.tsx",
     "src/global/*.jsx",
   ],
-  "cssvar.extensions": [
-    "css",
-    "scss",
-    "tsx",
-    "jsx"
-  ],
   // "cssvar.postcssSyntax": {
   //   "postcss-syntax": ["js", "jsx", "ts", "tsx"]
   // }

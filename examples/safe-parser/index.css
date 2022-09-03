@@ -4,4 +4,5 @@
   padding: var(--space-1);
   border-color: var(--brand-2);
   color: var(--color-astro-1);
+  border-width: var(--space-2);
 }

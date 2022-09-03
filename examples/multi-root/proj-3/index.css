@@ -1,4 +1,8 @@
 body {
   color: var(--bs-accordion-active-bg);
   background-color: var(--bs-accordion-active-color);
+
+  border-radius: var(--bs-border-radius);
+  border-color: var(--bs-teal);
+  border-width: var(--bs-border-width);
 }
