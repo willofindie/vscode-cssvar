@@ -1,0 +1,7 @@
+@use 'variables';
+@use 'base';
+
+.inverse {
+  background-color: base.$primary-color;
+  color: var(--red-8);
+}
