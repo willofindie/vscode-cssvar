@@ -237,4 +237,19 @@ export const CSS_VAR_FUNCTION_NOTATION = /^var\s*\((?<args>.*?)\)$/i;
 
 export const SUPPORTED_CSS_RULE_TYPES = ["rule", "decl", "atrule"] as const;
 export const SUPPORTED_IMPORT_NAMES = new Set(["import", "use", "forward"]);
-export const SUPPORTED_EVALUATING_ATRULES = new Set(["media", "mixin"]);
+
+/**
+ * Since CSS variables are global by nature, any variable defined in the
+ * source files that get's imported in CSS files should be considered for
+ * evaluation.
+ */
+export const SUPPORTED_EVALUATING_ATRULES = new Set([
+  // css specific at-rules
+  "media",
+  // css at-rules which are new or rarely used.
+  "page",
+  "supports",
+  "layer",
+  // scss specific at-rules
+  "mixin",
+]);
