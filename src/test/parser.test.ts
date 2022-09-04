@@ -198,8 +198,8 @@ describe("Multi Root", () => {
   const rootPath2 = "test-2";
 
   beforeEach(() => {
-    CACHE.filesToWatch[rootPath1] = new Set();
-    CACHE.filesToWatch[rootPath2] = new Set();
+    CACHE.filesToWatch = {};
+    CACHE.fileMetas = {};
   });
 
   beforeAll(() => {
