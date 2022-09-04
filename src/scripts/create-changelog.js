@@ -43,15 +43,15 @@ process.stdin.on("end", function () {
     }
 
     if (/feat:/.test(msg)) {
-      changelogs.feature.push(msg.split("feat:")[1]);
+      changelogs.feature.push(msg.split("feat:").join(" "));
     } else if (/fix:/.test(msg)) {
-      changelogs.fix.push(msg.split("fix:")[1]);
+      changelogs.fix.push(msg.split("fix:").join(" "));
     } else if (/chore:/.test(msg)) {
-      changelogs.chore.push(msg.split("chore:")[1]);
+      changelogs.chore.push(msg.split("chore:").join(" "));
     } else if (/refactor:/.test(msg)) {
-      changelogs.refactor.push(msg.split("refactor:")[1]);
+      changelogs.refactor.push(msg.split("refactor:").join(" "));
     } else if (/doc:/.test(msg)) {
-      changelogs.doc.push(msg.split("doc:")[1]);
+      changelogs.doc.push(msg.split("doc:").join(" "));
     } else {
       // Push everything else to `feature`, to track the commits and remove them later.
       changelogs.feature.push(msg);
