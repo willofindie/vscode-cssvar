@@ -31,6 +31,15 @@ import { LOGGER } from "./logger";
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
 
+const removeListingDuplcates = (vars: CSSVarDeclarations[]) => {
+  const uniques = new Map();
+  vars.forEach(decl => {
+    uniques.set(decl.property, decl);
+  });
+  // Map iteration happens in insertion order.
+  return Array.from(uniques.values());
+};
+
 const cssParseAsync = async (
   content: string,
   ext: CssExtensions | JsExtensions,
@@ -164,6 +173,7 @@ export function getVariableDeclarations(
   }
 
   if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
+    // For proper theming, following filter condition should be improved
     const [theme] = config.themes.filter(theme => node.selector.match(theme));
     if (!config.excludeThemedVariables || !theme) {
       for (const _node of node.nodes) {
@@ -336,6 +346,7 @@ const parseFilesForSingleFolder = async function (
     }
   }
 
+  const dedupedCSSVars = cssVars;
   if (CACHE.cssVars[rootPath] !== cssVars) {
     try {
       const [vars, cssVarsMap] = await populateValue(cssVars);
@@ -356,9 +367,19 @@ const parseFilesForSingleFolder = async function (
     } catch (e) {
       window.showErrorMessage(`Populating Variable Values: ${e}`);
     }
+
+    // For now we will remove duplicates per file only
+    // Later we can improve this and put the logic behind a `dedupe` config
+    // which will `true` by default to remove duplicates across files in a folder.
+    for (const prop in dedupedCSSVars) {
+      if (Object.prototype.hasOwnProperty.call(dedupedCSSVars, prop)) {
+        dedupedCSSVars[prop] = removeListingDuplcates(dedupedCSSVars[prop]);
+      }
+    }
   }
 
-  CACHE.cssVars[rootPath] = cssVars;
+  CACHE.cssVars[rootPath] = dedupedCSSVars;
+
   return errorPaths;
 };
 

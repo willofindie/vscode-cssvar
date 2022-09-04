@@ -5,6 +5,19 @@ developers who are using this extension can help file better bugs with details o
 This will help maintainers of this extension to quickly resolve the issue, with provided reproduction
 of the issue.
 
+## Test the extension in isolation
+
+- Disable all extensions
+![Disable all extensions](https://user-images.githubusercontent.com/11786283/188285728-bc301bd4-89de-476e-aca0-9cbbeb5010e7.png)
+
+- Enable just this extension: `phoenisx.cssvar`
+<img width="686" alt="image" src="https://user-images.githubusercontent.com/11786283/188295886-5d6e29bf-8faf-497e-ad0b-3fc978e2ae86.png">
+
+- Test if the extension works properly after this, if not please follow the steps from next section
+- *You should enable all your installed extensions, once done testing the extension*
+![Enable all extensions](https://user-images.githubusercontent.com/11786283/188285738-cc3dead9-2465-4690-8db1-c0c47bb2ab98.png)
+
+
 ## How to look into Console Errors/Warnings for this extension
 
 ### Step 1:

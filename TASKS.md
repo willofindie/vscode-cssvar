@@ -4,6 +4,7 @@
   after `:` and before `;`
   - This is required because VSCode triggers it's own intellisense in CSS files, when declarations are auto completed,
     which doesn't trigger the completion provider for this extension.
+- Add support for CSS @property at-rule: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
 
 
 ## Notes:
