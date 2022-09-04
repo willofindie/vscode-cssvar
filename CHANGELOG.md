@@ -30,8 +30,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Breaking Change:
 - Support all compatible PostCSS syntax parsers
   - This requires users to update their `settings.json` file for property `cssvar.postcssSyntax`
-  - Setting `cssvar.postcssSyntax` excepts a key-value object now.
-  - Details can be read in [Customization Doc](https://github.com/willofindie/vscode-cssvar/blob/main/docs/customize-extension.md)
+  - Setting `cssvar.postcssSyntax` accepts a key-value object now.
+    - Details can be read in [Customization Doc](https://github.com/willofindie/vscode-cssvar/blob/main/docs/customize-extension.md)
 
 ### Addded
 - In-built support for `scss`/`css` safe parsers and `less` parser.

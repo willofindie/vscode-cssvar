@@ -46,8 +46,9 @@
  *
  * Things to consider:
  *  - If JS file is considered as source, it shouldn't throw error while parsing and affect user ongoing task
- *  - JS files can continously change, which can trigger a the parser many times. This is fine,
- *    and I feel parser should trigger only when file is saved.
+ *  - JS files can continously change, which can trigger the parser many times. This is fine
+ *    as parser triggers only when file is saved. Though, this a users responsibility to keep
+ *    such CSS variable source files in different module, that doesn't change so frequently.
  */
 
 const TEMPLATE_START_END = "`".charCodeAt(0);

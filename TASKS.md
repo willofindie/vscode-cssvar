@@ -5,6 +5,8 @@
   - This is required because VSCode triggers it's own intellisense in CSS files, when declarations are auto completed,
     which doesn't trigger the completion provider for this extension.
 - Add support for CSS @property at-rule: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
+- `statsSync` used for cache invalidation needs to be improvised for failure cases
+  - This can happen when a file is deleted and does not exist anymore.
 
 
 ## Notes:

@@ -300,8 +300,6 @@ const parseFilesForSingleFolder = async function (
 
   const config = configMap[rootPath];
   let cssVars: CSSVarRecord = CACHE.cssVars[rootPath] || {};
-  const isModified =
-    Object.keys(CACHE.fileMetas).length !== config.files.length;
   const errorPaths: string[] = [];
   const filesArray =
     CACHE.filesToWatch[rootPath].size > 0
@@ -313,11 +311,7 @@ const parseFilesForSingleFolder = async function (
     const meta = await statAsync(path);
     const lastModified = meta.mtimeMs;
 
-    if (
-      isModified ||
-      !cachedFileMeta ||
-      lastModified !== cachedFileMeta.lastModified
-    ) {
+    if (!cachedFileMeta || lastModified !== cachedFileMeta.lastModified) {
       // Read and Parse File, only when file has modified
       let newVars = { [path]: [] as CSSVarDeclarations[] };
       try {
@@ -371,14 +365,18 @@ const parseFilesForSingleFolder = async function (
     // For now we will remove duplicates per file only
     // Later we can improve this and put the logic behind a `dedupe` config
     // which will `true` by default to remove duplicates across files in a folder.
-    for (const prop in dedupedCSSVars) {
-      if (Object.prototype.hasOwnProperty.call(dedupedCSSVars, prop)) {
-        dedupedCSSVars[prop] = removeListingDuplcates(dedupedCSSVars[prop]);
+    for (const filePath in cssVars) {
+      if (
+        Object.prototype.hasOwnProperty.call(cssVars, filePath) &&
+        (!(CACHE.cssVars && CACHE.cssVars[rootPath]) ||
+          cssVars[filePath] !== CACHE.cssVars[rootPath][filePath])
+      ) {
+        dedupedCSSVars[filePath] = removeListingDuplcates(cssVars[filePath]);
       }
     }
   }
 
-  CACHE.cssVars[rootPath] = dedupedCSSVars;
+  CACHE.cssVars[rootPath] = cssVars;
 
   return errorPaths;
 };
