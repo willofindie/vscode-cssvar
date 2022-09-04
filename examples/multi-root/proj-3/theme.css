@@ -1,14 +1,8 @@
 :root {
-  --primary-text: var(--gray-9);
+  --primary-text: var(--gray-7);
   --primary-bg: var(--gray-0);
   --container-spacing: var(--size-3);
 }
-
-:root.dark {
-  --primary-text: var(--gray-0);
-  --primary-bg: var(--gray-9);
-}
-
 
 @media (min-width: 600px) {
   :root {

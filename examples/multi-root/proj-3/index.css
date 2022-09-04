@@ -1,4 +1,5 @@
 @import "./theme.css";
+@import "./theme.dark.css";
 
 body {
   color: var(--primary-text);

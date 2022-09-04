@@ -1,0 +1,4 @@
+:root.dark {
+  --primary-text: var(--gray-0);
+  --primary-bg: var(--gray-9);
+}
