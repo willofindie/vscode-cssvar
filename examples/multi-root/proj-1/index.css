@@ -6,6 +6,4 @@
 .app {
   color: var(--color-1);
   background-color: var(--color-1);
-
-  border-width: var(--size-1);
 }

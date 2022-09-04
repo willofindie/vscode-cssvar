@@ -1,5 +1,5 @@
 {
-  "cssvar.files": ["../node_modules/open-props/open-props.min.css", "index.css"],
+  "cssvar.files": ["../node_modules/open-props/open-props.min.css", "theme*.css"],
   "cssvar.ignore": [],
   "cssvar.disableSort": true,
   "cssvar.themes": [
