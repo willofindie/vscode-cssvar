@@ -1,4 +1,10 @@
 {
-  "cssvar.files": ["../node_modules/bootstrap/dist/css/bootstrap.css"],
-  "cssvar.ignore": []
+  "cssvar.files": ["../node_modules/open-props/open-props.min.css", "index.css"],
+  "cssvar.ignore": [],
+  "cssvar.disableSort": true,
+  "cssvar.themes": [
+    "dark",
+    "dim"
+  ],
+  "cssvar.excludeThemedVariables": false
 }

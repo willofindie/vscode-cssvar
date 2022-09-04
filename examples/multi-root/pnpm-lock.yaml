@@ -1,52 +1,13 @@
 lockfileVersion: 5.4
 
 specifiers:
-  bootstrap: ^5.2.0
-  postcss: ^8.4.14
-  postcss-scss: ^4.0.4
+  open-props: ^1.4.14
 
 dependencies:
-  bootstrap: 5.2.0
-  postcss: 8.4.14
-  postcss-scss: 4.0.4_postcss@8.4.14
+  open-props: 1.4.14
 
 packages:
 
-  /bootstrap/5.2.0:
-    resolution: {integrity: sha512-qlnS9GL6YZE6Wnef46GxGv1UpGGzAwO0aPL1yOjzDIJpeApeMvqV24iL+pjr2kU4dduoBA9fINKWKgMToobx9A==}
-    peerDependencies:
-      '@popperjs/core': ^2.11.5
-    dev: false
-
-  /nanoid/3.3.4:
-    resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
-    dev: false
-
-  /picocolors/1.0.0:
-    resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}
-    dev: false
-
-  /postcss-scss/4.0.4_postcss@8.4.14:
-    resolution: {integrity: sha512-aBBbVyzA8b3hUL0MGrpydxxXKXFZc5Eqva0Q3V9qsBOLEMsjb6w49WfpsoWzpEgcqJGW4t7Rio8WXVU9Gd8vWg==}
-    engines: {node: '>=12.0'}
-    peerDependencies:
-      postcss: ^8.3.3
-    dependencies:
-      postcss: 8.4.14
-    dev: false
-
-  /postcss/8.4.14:
-    resolution: {integrity: sha512-E398TUmfAYFPBSdzgeieK2Y1+1cpdxJx8yXbK/m57nRhKSmk1GB2tO4lbLBtlkfPQTDKfe4Xqv1ASWPpayPEig==}
-    engines: {node: ^10 || ^12 || >=14}
-    dependencies:
-      nanoid: 3.3.4
-      picocolors: 1.0.0
-      source-map-js: 1.0.2
-    dev: false
-
-  /source-map-js/1.0.2:
-    resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
-    engines: {node: '>=0.10.0'}
+  /open-props/1.4.14:
+    resolution: {integrity: sha512-EkTUczMzty8mIvnWGpC41ELIejARiuljsXTEz7YDRKJn5dJ1/njsLTpNhn2rsM3JSW95p4G94ojsgzxbaiFmNA==}
     dev: false

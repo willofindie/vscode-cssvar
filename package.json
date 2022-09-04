@@ -166,7 +166,7 @@
           ],
           "default": null,
           "markdownDescription": "Disables default sorting applied by VSCode",
-          "scope": "window",
+          "scope": "resource",
           "examples": [
             true,
             false

@@ -1,8 +1,11 @@
-body {
-  color: var(--bs-accordion-active-bg);
-  background-color: var(--bs-accordion-active-color);
+@import "./theme.css";
 
-  border-radius: var(--bs-border-radius);
-  border-color: var(--bs-teal);
-  border-width: var(--bs-border-width);
+body {
+  color: var(--primary-text);
+  background-color: var(--primary-bg);
+  padding: var(--container-spacing);
+
+  border-radius: var(--radius-2);
+  border-color: var(--gradient-16);
+  border-width: var(--border-size-1);
 }

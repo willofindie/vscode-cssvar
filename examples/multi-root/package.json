@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^5.2.0",
-    "postcss": "^8.4.14",
-    "postcss-scss": "^4.0.4"
+    "open-props": "^1.4.14"
   }
 }

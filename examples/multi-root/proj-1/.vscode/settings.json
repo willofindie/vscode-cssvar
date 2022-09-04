@@ -1,3 +1,4 @@
 {
+  "cssvar.files": ["../node_modules/open-props/open-props.min.css"],
   "cssvar.ignore": ["broken.css"]
 }
