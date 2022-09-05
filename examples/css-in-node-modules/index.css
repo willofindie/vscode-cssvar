@@ -5,7 +5,7 @@
 
 /* Variables from Open Props package */
 .open-props {
-  border-radius: var(--radius-1);
+  border-radius: var(--radius-100);
   border-color: var(--red-5);
   border-width: var(--size-2);
 }

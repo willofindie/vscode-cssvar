@@ -7,6 +7,7 @@
 - Add support for CSS @property at-rule: https://developer.mozilla.org/en-US/docs/Web/CSS/@property
 - `statsSync` used for cache invalidation needs to be improvised for failure cases
   - This can happen when a file is deleted and does not exist anymore.
+- Add compatibility with https://github.com/enyancc/vscode-ext-color-highlight
 
 
 ## Notes:
