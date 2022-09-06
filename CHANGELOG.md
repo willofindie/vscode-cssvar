@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.2.1] - 2022-09-05
-### Addded
+## [2.2.1](https://github.com/willofindie/vscode-cssvar/compare/v2.2.0...v2.2.1) - 2022-09-05
+### Features
 - [#65](https://github.com/willofindie/vscode-cssvar/issues/65) Dedupe CSS variables per file.
 - Evaluate less used css at-rules like `@supports`
 - Evaluate @forward scss import rules
@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - examples | remove old example code
 
 
-## [2.2.0] - 2022-08-28
-### Addded
+## [2.2.0](https://github.com/willofindie/vscode-cssvar/compare/v2.1.0...v2.2.0) - 2022-08-28
+### Features
 - Support for Hover details for CSS variable source.
 - Enable Intellisense for all supported extensions by default, no config needed.
 
@@ -29,19 +29,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for type-checking for `git-push` hooks.
 
 
-## [2.1.0] - 2022-08-09
+## [2.1.0](https://github.com/willofindie/vscode-cssvar/compare/v2.0.0...v2.1.0) - 2022-08-09
 ### Fixed
 - Add backwards compatibility for `cssvar.postcssSyntax` setting.
 
 
-## [2.0.0] - 2022-08-09
-### Breaking Change:
+## [2.0.0](https://github.com/willofindie/vscode-cssvar/compare/v1.8.1...v2.0.0) - 2022-08-09
+### ⚠️&nbsp; Breaking Change:
 - Support all compatible PostCSS syntax parsers
   - This requires users to update their `settings.json` file for property `cssvar.postcssSyntax`
   - Setting `cssvar.postcssSyntax` accepts a key-value object now.
     - Details can be read in [Customization Doc](https://github.com/willofindie/vscode-cssvar/blob/main/docs/customize-extension.md)
 
-### Addded
+### Features
 - In-built support for `scss`/`css` safe parsers and `less` parser.
 - Support parsing `js`, `ts`, `jsx` and `tsx` template literals.
   - Provides CSS variable intellisense from source files with `styled-components`.
@@ -50,16 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ignore some of the improper template literals while parsing JS source files.
 
 
-## [1.8.1] - 2022-08-06
+## [1.8.1](https://github.com/willofindie/vscode-cssvar/compare/v1.8.0...v1.8.1) - 2022-08-06
 - Better docs
 
-## [1.8.0] - 2022-08-01
-### Addded
+## [1.8.0](https://github.com/willofindie/vscode-cssvar/compare/v1.7.1...v1.8.0) - 2022-08-01
+### Features
 - Support evaluating `@media` queries
 - Improve usage example.
 
 
-## [1.7.1] - 2022-07-27
+## [1.7.1](https://github.com/willofindie/vscode-cssvar/compare/v1.7.0...v1.7.1) - 2022-07-27
 ### Added
 - Improved test cases
 
@@ -67,19 +67,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Default settings getting overriden
 
 
-## [1.7.0] - 2022-07-24
-### Addded
+## [1.7.0](https://github.com/willofindie/vscode-cssvar/compare/v1.6.0...v1.7.0) - 2022-07-24
+### Features
 - Support Safe parser to not fail while parsing any type of file.
   - This adds support for parsing any source file added by mistake or on purpose.
 
-## [1.6.0] - 2022-07-24
-### Addded
+## [1.6.0](https://github.com/willofindie/vscode-cssvar/compare/v1.5.0...v1.6.0) - 2022-07-24
+### Features
 - Support for `ignore` file paths.
 - Updated documentation.
 
 
-## [1.5.0] - 2022-07-21
-### Addded
+## [1.5.0](https://github.com/willofindie/vscode-cssvar/compare/v1.4.0...v1.5.0) - 2022-07-21
+### Features
 - [#32](https://github.com/willofindie/vscode-cssvar/issues/32) Multi Root workspaces support.
 - Usage examples
 - Doc on how to [debug extension](https://github.com/willofindie/vscode-cssvar/blob/main/docs/debug-extension.md)
@@ -88,21 +88,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Properly support VSCode v1.46+
 
 
-## [1.4.0] - 2022-03-29
+## [1.4.0](https://github.com/willofindie/vscode-cssvar/compare/v1.3.0...v1.4.0) - 2022-03-29
 ### Fixed
 - [#28](https://github.com/willofindie/vscode-cssvar/issues/28) Colors definition stopped working post CSS lvl4 spec support
 
-## [1.3.0] - 2022-03-23
-### Addded
+## [1.3.0](https://github.com/willofindie/vscode-cssvar/compare/v1.2.0...v1.3.0) - 2022-03-23
+### Features
 - Support for recursive/nested color parsing, to provide color details for nested variables.
 
-## [1.2.0] - 2022-03-12
+## [1.2.0](https://github.com/willofindie/vscode-cssvar/compare/v1.1.0...v1.2.0) - 2022-03-12
 ### Fixed
 - [#22](https://github.com/willofindie/vscode-cssvar/issues/22) CSS Level 4 Color parsing error.
 
 
-## [1.1.0] - 2022-03-06
-### Addded
+## [1.1.0](https://github.com/willofindie/vscode-cssvar/compare/v1.0.0...v1.1.0) - 2022-03-06
+### Features
 - Support for [PostCSS](https://github.com/postcss/postcss) plugins/syntax parsers.
 - Evaluate `@imports` urls inside css files.
   - Limited support for css import for local or `node_modules` files.
@@ -113,8 +113,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Nested CSS url paths.
 
 
-## [1.0.0] - 2022-02-12
-### Addded
+## [1.0.0](https://github.com/willofindie/vscode-cssvar/compare/ad660e...v1.0.0) - 2022-02-12
+### Features
 - Support CSS variable autocompletion intellisense.
 - Support Goto Definitions for CSS Variables
 - Support VSCode color info.
