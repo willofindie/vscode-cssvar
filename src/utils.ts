@@ -315,7 +315,7 @@ export const getCSSErrorMsg = (
       2
     );
   }
-  return JSON.stringify(error);
+  return error;
 };
 
 export const getActiveRootPath = (firstFolderPath = CACHE.activeRootPath) => {
