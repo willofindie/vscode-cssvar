@@ -5,6 +5,8 @@ import {
   workspace,
   WorkspaceConfiguration,
 } from "vscode";
+import { tmpdir } from "os";
+import { mkdirSync } from "fs";
 import { resolve } from "path";
 import fastGlob from "fast-glob";
 import {
@@ -54,6 +56,10 @@ export async function setup(): Promise<{
   const config = {} as { [fsPath: string]: Config };
 
   CACHE.activeRootPath = getActiveRootPath(firstFolderPath);
+  if (!CACHE.tmpDir) {
+    CACHE.tmpDir = resolve(tmpdir(), EXTENSION_NAME);
+    mkdirSync(CACHE.tmpDir, { recursive: true });
+  }
 
   for (const folder of workspaceFolders) {
     const _config = workspace.getConfiguration(EXTENSION_NAME, folder.uri);

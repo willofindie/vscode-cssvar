@@ -121,6 +121,7 @@ export type CacheType = {
   };
   config: { [activeRootpath: string]: Config };
   activeRootPath: string;
+  tmpDir: string;
 };
 
 export const CACHE: CacheType = {
@@ -131,6 +132,7 @@ export const CACHE: CacheType = {
   fileMetas: {},
   config: {}, // Points to active config.
   activeRootPath: "",
+  tmpDir: "",
 };
 
 /**
