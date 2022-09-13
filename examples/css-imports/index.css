@@ -1,0 +1,21 @@
+@import './local.css';
+
+/* Following is very specific to webpack/react projects */
+/* I won't be supporting this in this extension, as a user can import */
+/* such css files from extension settings */
+/* @import '~open-props/open-props.min.css' */
+
+@import 'node_modules/open-props/open-props.min.css';
+
+/* Following import syntax is supported by vite projects */
+/* Again this is very bundler specific and will not be supported */
+/* @import 'pollen-css/pollen.css'; */
+
+@import url(https://unpkg.com/pollen-css@4.4.0/pollen.css);
+
+body {
+  color: var(--red-2);
+  padding: var(--gap-md);
+  border-color: var(--color-red);
+  grid-template-columns: var(--grid-page);
+}
