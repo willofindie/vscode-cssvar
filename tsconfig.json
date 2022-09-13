@@ -7,10 +7,10 @@
 			"esnext"
 		],
 		"sourceMap": true,
-		"rootDir": "src",
 		"strict": true,
 		"esModuleInterop": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"resolveJsonModule": true
 	},
 	"include": [
 		"src",
