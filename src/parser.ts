@@ -27,6 +27,7 @@ import { dirname, extname, resolve } from "path";
 import { CSSVarDeclarations } from "./main";
 import { getCSSErrorMsg, getVariableType, populateValue } from "./utils";
 import { LOGGER } from "./logger";
+import { getFetch } from "./remote-paths";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -213,12 +214,17 @@ const parseFile = async function (
   config: Config,
   rootPath: string
 ): Promise<Record<string, CSSVarDeclarations[]>> {
-  CACHE.filesToWatch[rootPath].add(path);
+  let content = "";
   /* Parse Current File */
-  const file = await readFileAsync(path, { encoding: "utf8" });
+  if (path.startsWith("http")) {
+    content = await getFetch(path);
+  } else {
+    content = await readFileAsync(path, { encoding: "utf8" });
+  }
+  CACHE.filesToWatch[rootPath].add(path);
   const extension = extname(path);
   const css = await cssParseAsync(
-    file,
+    content,
     extension.replace(".", "") as CssExtensions | JsExtensions,
     rootPath
   );
@@ -230,30 +236,37 @@ const parseFile = async function (
         isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
         SUPPORTED_IMPORT_NAMES.has(node.name)
       ) {
-        const match = node.params.match(/['"](.*?)['"]/);
+        const match = node.params.match(
+          /(['"](.*?)['"])|(url\(['"]?(.*?)['"]?\))/
+        );
         if (match) {
-          let toPath = match[1];
-          const importFileExtension = extname(toPath);
-          if (!importFileExtension) {
-            toPath += extension; // Add Parent's extension
-          }
-          const parentDir = dirname(toPath);
-          if (parentDir === "." && !toPath.startsWith(".")) {
-            // Relative current dir URLs might or might not have `./`;
-            toPath = "./" + toPath;
-          }
-          const filename = toPath.replace(parentDir, "").substring(1);
-
-          // In Some CSS extensions like Sass, we can have imports without a `_` prefix
-          // like `@use 'filename'` for `_filename.scss`
-          const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
-          const acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
-            const resolvedPath = resolve(path, "..", file);
-            if (existsSync(resolvedPath)) {
-              acceptedFile = resolvedPath;
+          let toPath = match[2] || match[4];
+          let acceptedFile = "";
+          if (toPath.startsWith("http")) {
+            acceptedFile = toPath;
+          } else {
+            const importFileExtension = extname(toPath);
+            if (!importFileExtension) {
+              toPath += extension; // Add Parent's extension
             }
-            return acceptedFile;
-          }, "");
+            const parentDir = dirname(toPath);
+            if (parentDir === "." && !toPath.startsWith(".")) {
+              // Relative current dir URLs might or might not have `./`;
+              toPath = "./" + toPath;
+            }
+            const filename = toPath.replace(parentDir, "").substring(1);
+
+            // In Some CSS extensions like Sass, we can have imports without a `_` prefix
+            // like `@use 'filename'` for `_filename.scss`
+            const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
+            acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
+              const resolvedPath = resolve(path, "..", file);
+              if (existsSync(resolvedPath)) {
+                acceptedFile = resolvedPath;
+              }
+              return acceptedFile;
+            }, "");
+          }
           if (
             acceptedFile &&
             !(<string[]>config.files).includes(acceptedFile)
@@ -398,15 +411,22 @@ export const parseFiles = async function (
   let errorPaths: string[] = [];
   if (options.parseAll) {
     const folders = workspace.workspaceFolders || [];
-    for await (const folder of folders) {
+    const promises: Promise<string[]>[] = [];
+    for (const folder of folders) {
       const rootPath = folder.uri.fsPath;
       if (!CACHE.filesToWatch[rootPath]) {
         CACHE.filesToWatch[rootPath] = new Set();
       }
-      errorPaths = errorPaths.concat(
-        await parseFilesForSingleFolder(configMap, rootPath)
-      );
+      promises.push(parseFilesForSingleFolder(configMap, rootPath));
     }
+
+    const allPromiseSettled = await Promise.allSettled(promises);
+    errorPaths = allPromiseSettled.reduce((errorPaths, settled) => {
+      if (settled.status === "fulfilled") {
+        return [...settled.value, ...errorPaths];
+      }
+      return errorPaths;
+    }, [] as string[]);
   } else {
     errorPaths = await parseFilesForSingleFolder(
       configMap,
