@@ -18,6 +18,8 @@ import {
 import { CSSVarDeclarations } from "./main";
 import { serializeColor } from "./color-parser";
 import { Range, window, workspace } from "vscode";
+import { URL } from "url";
+import { resolve } from "path";
 
 /**
  * [TODO] Change this method to a more generic recursion call to
@@ -326,4 +328,12 @@ export const getActiveRootPath = (firstFolderPath = CACHE.activeRootPath) => {
     );
   }
   return firstFolderPath;
+};
+
+export const getCachedRemoteFilePath = (url: URL) => {
+  const pathTokens = url.pathname.split("/");
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const filename = pathTokens.pop()!;
+  const parentpath = resolve(CACHE.tmpDir, ...pathTokens);
+  return [parentpath, resolve(parentpath, filename)];
 };

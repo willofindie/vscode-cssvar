@@ -25,9 +25,15 @@ import {
 import { dirname, extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
-import { getCSSErrorMsg, getVariableType, populateValue } from "./utils";
+import {
+  getCachedRemoteFilePath,
+  getCSSErrorMsg,
+  getVariableType,
+  populateValue,
+} from "./utils";
 import { LOGGER } from "./logger";
-import { getFetch } from "./remote-paths";
+import { fetchAndCacheAsset } from "./remote-paths";
+import { URL } from "url";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -215,14 +221,19 @@ const parseFile = async function (
   rootPath: string
 ): Promise<Record<string, CSSVarDeclarations[]>> {
   let content = "";
-  /* Parse Current File */
+  let filepath = path;
+  let extension = extname(filepath);
+
   if (path.startsWith("http")) {
-    content = await getFetch(path);
-  } else {
-    content = await readFileAsync(path, { encoding: "utf8" });
+    filepath = getCachedRemoteFilePath(new URL(path))[1];
+    extension = ".css";
+    if (!existsSync(filepath)) {
+      await fetchAndCacheAsset(path);
+    }
   }
-  CACHE.filesToWatch[rootPath].add(path);
-  const extension = extname(path);
+
+  content = await readFileAsync(filepath, { encoding: "utf8" });
+  CACHE.filesToWatch[rootPath].add(filepath);
   const css = await cssParseAsync(
     content,
     extension.replace(".", "") as CssExtensions | JsExtensions,
@@ -240,7 +251,7 @@ const parseFile = async function (
           /(['"](.*?)['"])|(url\(['"]?(.*?)['"]?\))/
         );
         if (match) {
-          let toPath = match[2] || match[4];
+          let toPath = match[2] || match[4] || "";
           let acceptedFile = "";
           if (toPath.startsWith("http")) {
             acceptedFile = toPath;
@@ -260,7 +271,7 @@ const parseFile = async function (
             // like `@use 'filename'` for `_filename.scss`
             const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
             acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
-              const resolvedPath = resolve(path, "..", file);
+              const resolvedPath = resolve(filepath, "..", file);
               if (existsSync(resolvedPath)) {
                 acceptedFile = resolvedPath;
               }
@@ -291,9 +302,9 @@ const parseFile = async function (
   }
 
   return {
-    [path]: (<ChildNode[]>css.root.nodes).reduce<CSSVarDeclarations[]>(
+    [filepath]: (<ChildNode[]>css.root.nodes).reduce<CSSVarDeclarations[]>(
       (declarations, node: Node) => {
-        const dec = getVariableDeclarations(config, node, { path });
+        const dec = getVariableDeclarations(config, node, { path: filepath });
         declarations = declarations.concat(dec);
         return declarations;
       },
@@ -320,18 +331,28 @@ const parseFilesForSingleFolder = async function (
       : <string[]>config.files;
 
   for (const path of filesArray) {
-    const cachedFileMeta = CACHE.fileMetas[path];
-    const meta = await statAsync(path);
+    // Path can be local or remote asset paths;
+    let filepath = path;
+
+    if (path.startsWith("http")) {
+      filepath = getCachedRemoteFilePath(new URL(path))[1];
+    }
+
+    const cachedFileMeta = CACHE.fileMetas[filepath];
+    const meta = await statAsync(filepath);
     const lastModified = meta.mtimeMs;
 
     if (!cachedFileMeta || lastModified !== cachedFileMeta.lastModified) {
       // Read and Parse File, only when file has modified
-      let newVars = { [path]: [] as CSSVarDeclarations[] };
+      let newVars = { [filepath]: [] as CSSVarDeclarations[] };
       try {
+        // Pass the actual `path` here which can be a url as well and not
+        // the `filepath` which points to the tmp/filepath for URLs and `path`
+        // for local files.
         newVars = await parseFile(path, config, rootPath);
       } catch (e) {
-        errorPaths.push(path);
-        // eslint-disable-next-line no-console
+        errorPaths.push(filepath);
+        // Log errors for actual URL paths, and not the cached filepaths.
         LOGGER.warn(
           `Failed to Parse file (${path}): `,
           getCSSErrorMsg(path, e as any)
@@ -344,12 +365,12 @@ const parseFilesForSingleFolder = async function (
     }
 
     if (!cachedFileMeta) {
-      CACHE.fileMetas[path] = {
-        path,
+      CACHE.fileMetas[filepath] = {
+        path: filepath,
         lastModified,
       };
     } else {
-      CACHE.fileMetas[path].lastModified = lastModified;
+      CACHE.fileMetas[filepath].lastModified = lastModified;
     }
   }
 

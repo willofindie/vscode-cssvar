@@ -1,3 +1,10 @@
+/**
+ * The extension will cache all remote url imports, irrespective of them having
+ * any CSS variables or not. The files are stored in `$TMPDIR/cssvar` temp folder
+ * if you ever want to manually remove them. These files will automatically be
+ * cleaned up by your OS, if not used for a specific period of time or after a reboot.
+ */
+@import "https://cdn.jsdelivr.net/npm/modern-normalize@1.1.0/modern-normalize.min.css";
 @import './local.css';
 
 /* Following is very specific to webpack/react projects */
@@ -5,7 +12,7 @@
 /* such css files from extension settings */
 /* @import '~open-props/open-props.min.css' */
 
-@import 'node_modules/open-props/open-props.min.css';
+@import url('node_modules/open-props/red.min.css') layer(utilities) print, screen;
 
 /* Following import syntax is supported by vite projects */
 /* Again this is very bundler specific and will not be supported */
@@ -15,7 +22,10 @@
 
 body {
   color: var(--red-2);
+  width: var(--width-sm);
   padding: var(--gap-md);
   border-color: var(--color-red);
   grid-template-columns: var(--grid-page);
+  background-color: var(--c-blue);
+  border-top-color: var(--orange-2);
 }

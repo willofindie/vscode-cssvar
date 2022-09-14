@@ -1,6 +1,5 @@
 import { createWriteStream, existsSync, mkdirSync, unlink } from "fs";
-import { resolve } from "path";
-import { PassThrough, Readable } from "stream";
+import { Readable } from "stream";
 import { get, IncomingMessage } from "http";
 import { get as sGet } from "https";
 import { URL } from "url";
@@ -11,7 +10,7 @@ import {
   BrotliDecompress,
 } from "zlib";
 import { version } from "../package.json";
-import { CACHE } from "./constants";
+import { getCachedRemoteFilePath } from "./utils";
 
 //#region Get Fetch, replacement for fetch() Browser API
 // Once VSCode officially starts supporting Node v17.5+
@@ -28,8 +27,16 @@ const CSSGetError = class extends Error {
   }
 };
 
-export const getFetch = (url: string) =>
-  new Promise<string>((res, rej) => {
+/**
+ * This fetch method is tailored to work with only CSS assets.
+ * If we try to fetch any other type of asset, this method will throw
+ * It will try to fetch the asset and save it in a temp file as a cache.
+ * If it fails it will throw a custom error.
+ *
+ * @param url Remote URL path for css asset
+ */
+export const fetchAndCacheAsset = (url: string) =>
+  new Promise<void>((res, rej) => {
     const _url = new URL(url);
     let httpGet = sGet;
 
@@ -56,19 +63,13 @@ export const getFetch = (url: string) =>
           return;
         }
 
-        const pathTokens = _url.pathname.split("/");
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const filename = pathTokens.pop()!;
-        const parentpath = resolve(CACHE.tmpDir, ...pathTokens);
-        const filepath = resolve(parentpath, filename);
+        const [parentpath, filepath] = getCachedRemoteFilePath(_url);
 
         if (!existsSync(parentpath)) {
           mkdirSync(parentpath, { recursive: true });
         }
 
-        let inmemContent = "";
         const data = createWriteStream(filepath, { encoding: "utf-8" });
-        const tunnel = new PassThrough();
         const checkFailure = () => {
           if (!message.complete) {
             /**
@@ -106,15 +107,11 @@ export const getFetch = (url: string) =>
         if (decompressorPipe) {
           decompressedPipe = message.pipe(decompressorPipe);
         }
+        decompressedPipe.pipe(data);
 
-        decompressedPipe.pipe(tunnel).pipe(data);
-
-        tunnel.on("data", d => {
-          inmemContent += d.toString();
-        });
         message.on("close", checkFailure);
         message.on("end", checkFailure);
-        data.on("close", () => res(inmemContent));
+        data.on("close", () => res());
         data.on("error", rej);
       }
     ).on("error", rej);
