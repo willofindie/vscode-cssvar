@@ -12,6 +12,7 @@ import fastGlob from "fast-glob";
 import {
   CACHE,
   Config,
+  CSSVarLocation,
   CSSVarRecord,
   DEFAULT_CONFIG,
   EXTENSION_NAME,
@@ -19,6 +20,7 @@ import {
   SUFFIX,
   SupportedExtensionNames,
   SupportedLanguageIds,
+  WorkspaceConfig,
 } from "./constants";
 import {
   getCSSDeclarationArray,
@@ -26,6 +28,7 @@ import {
   isObjectProperty,
   Region,
   getActiveRootPath,
+  getRemoteCSSVarLocation,
 } from "./utils";
 import { disableDefaultSort } from "./unstable";
 
@@ -33,11 +36,11 @@ import { disableDefaultSort } from "./unstable";
  * Use this function only when getting values from VSCode's
  * configuration.
  */
-const getConfigValue = <T extends keyof Config>(
+const getConfigValue = <T extends keyof WorkspaceConfig>(
   config: WorkspaceConfiguration,
   key: T
-): Config[typeof key] => {
-  let value = config.get<Config[typeof key]>(key);
+): WorkspaceConfig[typeof key] => {
+  let value = config.get<WorkspaceConfig[typeof key]>(key);
   if (value == null) {
     // Only overrride, if extension setting is untouched
     value = DEFAULT_CONFIG[key];
@@ -74,14 +77,37 @@ export async function setup(): Promise<{
       if (isObjectProperty(DEFAULT_CONFIG, key)) {
         switch (key) {
           case "files": {
-            const value = getConfigValue(_config, key);
+            const values = getConfigValue(_config, key) as string[];
             const ignoreList = getConfigValue(_config, "ignore");
-            const entries = await fastGlob(<string[]>value, {
+            const [localGlobs, remoteRoutes] = values.reduce(
+              (globs: [string[], CSSVarLocation[]], glob) => {
+                if (glob.startsWith("http")) {
+                  const remoteCssvarLocation = getRemoteCSSVarLocation(glob);
+                  globs[1].push(remoteCssvarLocation);
+                } else {
+                  globs[0].push(glob);
+                }
+                return globs;
+              },
+              [[], []]
+            );
+            const localEntries = await fastGlob(localGlobs, {
               cwd: resourcePath,
               ignore: ignoreList,
             });
-            config[fsPathKey][key] = entries.map((path: string) =>
-              resolve(resourcePath, path)
+            const entries = [...localEntries, ...remoteRoutes];
+            config[fsPathKey][key] = entries.map<CSSVarLocation>(
+              (path: string | CSSVarLocation) => {
+                if (typeof path === "string") {
+                  return {
+                    local: resolve(resourcePath, path),
+                    remote: "",
+                    isRemote: false,
+                  };
+                } else {
+                  return path;
+                }
+              }
             );
             break;
           }

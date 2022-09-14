@@ -47,8 +47,20 @@ export type JsExtensions = Extract<
   "js" | "jsx" | "ts" | "tsx"
 >;
 
+export type CSSVarLocation = {
+  local: string;
+  remote: string;
+  isRemote: boolean;
+};
+
+/**
+ * Since the inmem config this project maintains is completely diffent than
+ * what user-facing setting types are, it was necessary to separate these two
+ * types into their own.
+ */
 export interface Config {
-  files: string[];
+  files: CSSVarLocation[];
+  // Ignore could be a glob as well.
   ignore: string[];
   extensions: SupportedExtensionNames[];
   themes: string[];
@@ -61,12 +73,16 @@ export interface Config {
   enableHover: boolean;
 }
 
+export type WorkspaceConfig = Omit<Config, "files"> & {
+  files: string[];
+};
+
 /**
  * Remeber(shub):
  *  VSCode's default config settings should always point to null,
  *  because we are programatically overriding VSCode's behaviour.
  */
-export const DEFAULT_CONFIG: Config = {
+export const DEFAULT_CONFIG: WorkspaceConfig = {
   files: ["**/*.css"],
   ignore: ["**/node_modules/**"],
   extensions: [...SUPPORTED_LANGUAGE_IDS],
@@ -112,6 +128,7 @@ export type CacheType = {
   cssVarDefinitionsMap: {
     [activeRootpath: string]: { [varName: string]: Location[] };
   };
+  // Following propety should always point to a local file path
   filesToWatch: { [activeRootpath: string]: Set<string> };
   fileMetas: {
     [path: string]: {
