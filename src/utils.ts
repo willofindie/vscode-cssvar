@@ -20,6 +20,7 @@ import { serializeColor } from "./color-parser";
 import { Range, window, workspace } from "vscode";
 import { URL } from "url";
 import { resolve } from "path";
+import { existsSync } from "fs";
 
 /**
  * [TODO] Change this method to a more generic recursion call to
@@ -336,4 +337,15 @@ export const getCachedRemoteFilePath = (url: URL) => {
   const filename = pathTokens.pop()!;
   const parentpath = resolve(CACHE.tmpDir, ...pathTokens);
   return [parentpath, resolve(parentpath, filename)];
+};
+
+export const getRemoteCSSVarLocation = (url: string) => {
+  const tmpFilePath = getCachedRemoteFilePath(new URL(url))[1];
+  const alreadyCached = existsSync(tmpFilePath);
+  return {
+    local: getCachedRemoteFilePath(new URL(url))[1],
+    remote: url,
+    // Consider the URL to be local, if it's already cached
+    isRemote: !alreadyCached,
+  };
 };

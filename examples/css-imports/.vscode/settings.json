@@ -1,0 +1,6 @@
+{
+  "cssvar.files": [
+    "*.css",
+    "https://unpkg.com/open-props@1.4.14/violet.min.css"
+  ]
+}

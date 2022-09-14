@@ -84,6 +84,7 @@ export const fetchAndCacheAsset = (url: string) =>
                     `Premature request termination: ${message.complete}`
                   )
                 );
+                return;
               }
               rej(err);
             });

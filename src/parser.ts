@@ -21,19 +21,19 @@ import {
   SUPPORTED_IMPORT_NAMES,
   JsExtensions,
   SUPPORTED_EVALUATING_ATRULES,
+  CSSVarLocation,
 } from "./constants";
 import { dirname, extname, resolve } from "path";
 
 import { CSSVarDeclarations } from "./main";
 import {
-  getCachedRemoteFilePath,
   getCSSErrorMsg,
+  getRemoteCSSVarLocation,
   getVariableType,
   populateValue,
 } from "./utils";
 import { LOGGER } from "./logger";
 import { fetchAndCacheAsset } from "./remote-paths";
-import { URL } from "url";
 
 const readFileAsync = promisify(readFile);
 const statAsync = promisify(stat);
@@ -216,24 +216,21 @@ export function getVariableDeclarations(
  * Cache such file paths to a set to watch them change.
  */
 const parseFile = async function (
-  path: string,
+  cssvarLocation: CSSVarLocation,
   config: Config,
   rootPath: string
 ): Promise<Record<string, CSSVarDeclarations[]>> {
   let content = "";
-  let filepath = path;
-  let extension = extname(filepath);
+  let extension = extname(cssvarLocation.local);
+  const allLocalFiles = config.files.map(file => file.local);
 
-  if (path.startsWith("http")) {
-    filepath = getCachedRemoteFilePath(new URL(path))[1];
+  if (cssvarLocation.isRemote) {
     extension = ".css";
-    if (!existsSync(filepath)) {
-      await fetchAndCacheAsset(path);
-    }
+    await fetchAndCacheAsset(cssvarLocation.remote);
   }
 
-  content = await readFileAsync(filepath, { encoding: "utf8" });
-  CACHE.filesToWatch[rootPath].add(filepath);
+  content = await readFileAsync(cssvarLocation.local, { encoding: "utf8" });
+  CACHE.filesToWatch[rootPath].add(cssvarLocation.local);
   const css = await cssParseAsync(
     content,
     extension.replace(".", "") as CssExtensions | JsExtensions,
@@ -252,9 +249,9 @@ const parseFile = async function (
         );
         if (match) {
           let toPath = match[2] || match[4] || "";
-          let acceptedFile = "";
+          let acceptedFile: CSSVarLocation;
           if (toPath.startsWith("http")) {
-            acceptedFile = toPath;
+            acceptedFile = getRemoteCSSVarLocation(toPath);
           } else {
             const importFileExtension = extname(toPath);
             if (!importFileExtension) {
@@ -271,24 +268,25 @@ const parseFile = async function (
             // like `@use 'filename'` for `_filename.scss`
             const acceptedFiles = [toPath, `${parentDir}/_${filename}`];
             acceptedFile = acceptedFiles.reduce((acceptedFile, file) => {
-              const resolvedPath = resolve(filepath, "..", file);
+              const resolvedPath = resolve(cssvarLocation.local, "..", file);
               if (existsSync(resolvedPath)) {
-                acceptedFile = resolvedPath;
+                acceptedFile = {
+                  local: resolvedPath,
+                  remote: "",
+                  isRemote: false,
+                };
               }
               return acceptedFile;
-            }, "");
+            }, {} as CSSVarLocation);
           }
-          if (
-            acceptedFile &&
-            !(<string[]>config.files).includes(acceptedFile)
-          ) {
+          if (acceptedFile && !allLocalFiles.includes(acceptedFile.local)) {
             resolvedPaths.push(acceptedFile);
           }
         }
       }
       return resolvedPaths;
     },
-    [] as string[]
+    [] as CSSVarLocation[]
   );
 
   /* Parse Imported files which are not part of the config list */
@@ -302,14 +300,15 @@ const parseFile = async function (
   }
 
   return {
-    [filepath]: (<ChildNode[]>css.root.nodes).reduce<CSSVarDeclarations[]>(
-      (declarations, node: Node) => {
-        const dec = getVariableDeclarations(config, node, { path: filepath });
-        declarations = declarations.concat(dec);
-        return declarations;
-      },
-      []
-    ),
+    [cssvarLocation.local]: (<ChildNode[]>css.root.nodes).reduce<
+      CSSVarDeclarations[]
+    >((declarations, node: Node) => {
+      const dec = getVariableDeclarations(config, node, {
+        path: cssvarLocation.local,
+      });
+      declarations = declarations.concat(dec);
+      return declarations;
+    }, []),
     ...importDeclarations,
   };
 };
@@ -328,49 +327,68 @@ const parseFilesForSingleFolder = async function (
   const filesArray =
     CACHE.filesToWatch[rootPath].size > 0
       ? CACHE.filesToWatch[rootPath]
-      : <string[]>config.files;
+      : config.files;
 
   for (const path of filesArray) {
     // Path can be local or remote asset paths;
-    let filepath = path;
+    const cssvarLocation: CSSVarLocation =
+      typeof path === "string"
+        ? {
+            local: path,
+            remote: "",
+            isRemote: false,
+          }
+        : path;
 
-    if (path.startsWith("http")) {
-      filepath = getCachedRemoteFilePath(new URL(path))[1];
-    }
-
-    const cachedFileMeta = CACHE.fileMetas[filepath];
-    const meta = await statAsync(filepath);
-    const lastModified = meta.mtimeMs;
-
-    if (!cachedFileMeta || lastModified !== cachedFileMeta.lastModified) {
+    const cachedFileMeta = CACHE.fileMetas[cssvarLocation.local];
+    const executeParsing = async (location: CSSVarLocation) => {
       // Read and Parse File, only when file has modified
-      let newVars = { [filepath]: [] as CSSVarDeclarations[] };
+      let newVars = { [location.local]: [] as CSSVarDeclarations[] };
       try {
         // Pass the actual `path` here which can be a url as well and not
         // the `filepath` which points to the tmp/filepath for URLs and `path`
         // for local files.
-        newVars = await parseFile(path, config, rootPath);
+        newVars = await parseFile(location, config, rootPath);
       } catch (e) {
-        errorPaths.push(filepath);
+        errorPaths.push(location.local);
         // Log errors for actual URL paths, and not the cached filepaths.
         LOGGER.warn(
           `Failed to Parse file (${path}): `,
-          getCSSErrorMsg(path, e as any)
+          getCSSErrorMsg(location.remote || location.local, e as any)
         );
       }
-      cssVars = {
+      return {
         ...cssVars,
         ...newVars,
       };
+    };
+
+    let lastModified = 0;
+    if (existsSync(cssvarLocation.local)) {
+      const meta = await statAsync(cssvarLocation.local);
+      lastModified = meta.mtimeMs;
+      if (!cachedFileMeta || lastModified !== cachedFileMeta.lastModified) {
+        cssVars = await executeParsing(cssvarLocation);
+      }
+    } else {
+      cssVars = await executeParsing(cssvarLocation);
+    }
+
+    if (cssvarLocation.isRemote) {
+      // Once the file is parsed, the local temp file would already be generated
+      // We need to get it's modified time, so that in subsequent calls, CSS fetched
+      // from remote URLs are not parsed again.
+      const meta = await statAsync(cssvarLocation.local);
+      lastModified = meta.mtimeMs;
     }
 
     if (!cachedFileMeta) {
-      CACHE.fileMetas[filepath] = {
-        path: filepath,
+      CACHE.fileMetas[cssvarLocation.local] = {
+        path: cssvarLocation.local,
         lastModified,
       };
     } else {
-      CACHE.fileMetas[filepath].lastModified = lastModified;
+      CACHE.fileMetas[cssvarLocation.local].lastModified = lastModified;
     }
   }
 

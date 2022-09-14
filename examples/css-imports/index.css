@@ -28,4 +28,5 @@ body {
   grid-template-columns: var(--grid-page);
   background-color: var(--c-blue);
   border-top-color: var(--orange-2);
+  box-shadow: 0 0 3px 0 var(--violet-2);
 }
