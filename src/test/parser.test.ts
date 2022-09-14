@@ -5,6 +5,8 @@ import fs from "fs";
 import { Config, DEFAULT_CONFIG, CACHE } from "../constants";
 import { CSSVarDeclarations } from "../main";
 import flatMap from "lodash/flatMap";
+import { getLocalCSSVarLocation } from "./test-utilities";
+import { fetchAndCacheAsset } from "../remote-paths";
 
 const MODIFIED_DATE = new Date("2021-04-12T08:58:58.676Z");
 const DUMMY_FILE = path.resolve("src", "test", "touch.css");
@@ -27,12 +29,14 @@ jest.mock("../constants", () => {
   };
 });
 
+jest.mock('../remote-paths');
+
 type ConfigRecord = { [rootFolder: string]: Config };
 
 const EXTENSION_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
-    files: [DUMMY_FILE],
+    files: [getLocalCSSVarLocation(DUMMY_FILE)],
   },
 };
 
@@ -97,7 +101,7 @@ describe("Test Parser", () => {
       const updatedConfig: ConfigRecord = {
         [CACHE.activeRootPath]: {
           ...EXTENSION_CONFIG[CACHE.activeRootPath],
-          files: [RENAMED_FILE],
+          files: [getLocalCSSVarLocation(RENAMED_FILE)],
         },
       };
       const OLD_VARS = CACHE.cssVars[CACHE.activeRootPath];
@@ -124,6 +128,26 @@ describe("Test Parser", () => {
       expect(OLD_FILE_META.length).toBe(Object.keys(CACHE.fileMetas).length);
       expect(OLD_FILE_META).not.toEqual(Object.keys(CACHE.fileMetas));
     });
+
+    it("Should call remote URLs only once", async () => {
+      // Updated config should contain the latest renamed file name.
+      const updatedConfig: ConfigRecord = {
+        [CACHE.activeRootPath]: {
+          ...EXTENSION_CONFIG[CACHE.activeRootPath],
+          files: [{
+            local: path.resolve(__dirname, "fixtures/theming.css"), // Does nothing, just to make jest happy
+            remote: "http://example.com/v0.12.3/foo.css",
+            isRemote: true,
+          }],
+        },
+      };
+
+      await parseFiles(updatedConfig);
+      expect(fetchAndCacheAsset).toHaveBeenCalledTimes(1);
+      jest.resetAllMocks();
+      await parseFiles(updatedConfig);
+      expect(fetchAndCacheAsset).toHaveBeenCalledTimes(0);
+    })
   });
 
   describe("parseFiles handle improper CSS Files", () => {
@@ -132,7 +156,7 @@ describe("Test Parser", () => {
       const updatedConfig: ConfigRecord = {
         [CACHE.activeRootPath]: {
           ...EXTENSION_CONFIG[CACHE.activeRootPath],
-          files: [RENAMED_FILE, BROKEN_FILE],
+          files: [getLocalCSSVarLocation(RENAMED_FILE), getLocalCSSVarLocation(BROKEN_FILE)],
         },
       };
       CACHE.config = updatedConfig;
@@ -156,7 +180,7 @@ describe("Test Parser", () => {
     const cssConfig: ConfigRecord = {
       [CACHE.activeRootPath]: {
         ...EXTENSION_CONFIG[CACHE.activeRootPath],
-        files: [IMPORT_CSS_FILE],
+        files: [getLocalCSSVarLocation(IMPORT_CSS_FILE)],
       },
     };
     CACHE.config = cssConfig;
@@ -175,7 +199,7 @@ describe("Test Parser", () => {
     const scssConfig: ConfigRecord = {
       [CACHE.activeRootPath]: {
         ...EXTENSION_CONFIG[CACHE.activeRootPath],
-        files: [IMPORT_SCSS_FILE],
+        files: [getLocalCSSVarLocation(IMPORT_SCSS_FILE)],
       },
     };
     CACHE.config = scssConfig;
@@ -230,12 +254,12 @@ describe("Multi Root", () => {
       [rootPath1]: {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
-        files: [IMPORT_SCSS_FILE],
+        files: [getLocalCSSVarLocation(IMPORT_SCSS_FILE)],
       },
       [rootPath2]: {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
-        files: [RENAMED_FILE],
+        files: [getLocalCSSVarLocation(RENAMED_FILE)],
       },
     };
     CACHE.config = config;

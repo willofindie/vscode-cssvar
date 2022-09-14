@@ -2,6 +2,7 @@ import { Position, Range } from "vscode";
 import { Config, CSSVarRecord, DEFAULT_CONFIG } from "../constants";
 import { createCompletionItems } from "../main";
 import { Region } from "../utils";
+import { getLocalCSSVarLocation } from "./test-utilities";
 
 jest.mock("../constants", () => ({
   ...jest.requireActual("../constants"),
@@ -25,6 +26,11 @@ describe("Test Extension Main", () => {
     it("Should return CompletionItems with Sorting On", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
+        files: [{
+          local: "",
+          remote: "",
+          isRemote: false,
+        }],
         disableSort: false,
       }
       const cssVars: CSSVarRecord = {
@@ -61,6 +67,11 @@ describe("Test Extension Main", () => {
     it("Should return CompletionItems with Sorting Disabled", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
+        files: [{
+          local: "",
+          remote: "",
+          isRemote: false,
+        }],
         disableSort: true,
       }
       const cssVars: CSSVarRecord = {
@@ -100,6 +111,7 @@ describe("Test Extension Main", () => {
     it("Should return CompletionItems with 3 and 2digit sortText", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
+        files: [getLocalCSSVarLocation("")],
         disableSort: true,
       }
       const cssVars1: CSSVarRecord = Array(11)
