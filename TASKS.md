@@ -8,8 +8,6 @@
 - `statsSync` used for cache invalidation needs to be improvised for failure cases
   - This can happen when a file is deleted and does not exist anymore.
 - Add compatibility with https://github.com/enyancc/vscode-ext-color-highlight
-- Test if `/tmp` files from ` /var/folders/cy/sn2s2ttx7mndbf4mbwffxb500000gn/T//cssvar` got deleted after
-  3-30days or not!!
 - Precached files in file watcher, once removed from source css files (like from @import paths)
   still stays cached. Steps to reproduce:
   - Open `css-imports` project -> After the files are parsed, update any import for `open-props` with a new

@@ -1,8 +1,8 @@
 import { resolve } from "path";
-import fs from "fs";
-import preProcessContent, { JS_BLOCK } from "../../pre-processors";
+import { JS_BLOCK } from "../../pre-processors";
 import { parseFiles } from "../../parser";
 import { CACHE, Config, CSSVarRecord, DEFAULT_CONFIG } from "../../constants";
+import { getLocalCSSVarLocation } from "../test-utilities";
 
 jest.mock("../../constants", () => {
   const CONSTANTS = jest.requireActual("../../constants");
@@ -25,7 +25,7 @@ const JSX_FILE_PATH = resolve(__dirname, "..", "fixtures", "edge-cases.jsx");
 const MOCK_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
-    files: [JSX_FILE_PATH],
+    files: [getLocalCSSVarLocation(JSX_FILE_PATH)],
   },
 };
 

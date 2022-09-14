@@ -2,6 +2,7 @@ import { parseFiles } from "../parser";
 import path from "path";
 
 import { Config, DEFAULT_CONFIG, CACHE } from "../constants";
+import { getLocalCSSVarLocation } from "./test-utilities";
 
 const THEMING_CSS = path.resolve("src", "test", "fixtures", "theming.css");
 
@@ -23,7 +24,7 @@ type ConfigRecord = { [rootFolder: string]: Config };
 const CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
-    files: [THEMING_CSS],
+    files: [getLocalCSSVarLocation(THEMING_CSS)],
   },
 };
 
