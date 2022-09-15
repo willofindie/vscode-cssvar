@@ -281,5 +281,17 @@ This Extension supports the following properties as of now:
 
 > NOTE: Please [raise an issue](https://github.com/willofindie/vscode-cssvar/issues/new) for any feature request or a bug fix.
 
+---
+
+<h3 align="center">Phoenisx Sponsors</h3>
+
+<p align="center">
+  <a href="./img/sponsors.svg">
+    <img src='./img/sponsors.svg'/>
+  </a>
+</p>
+
+
+
 [customize-extension-link]: ./docs/customize-extension.md
 [theme-link]: ./docs/theming.md
