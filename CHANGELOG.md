@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.2](https://github.com/willofindie/vscode-cssvar/compare/v2.2.1...v2.2.2) - 2022-09-15
+### Features
+- [#63](https://github.com/willofindie/vscode-cssvar/issues/63) Add support to fetch remote http file content
+  - Remote file present in CSS `@import` or in extension setting will be fetched.
+- Add sponsors to Readme
+### Fixed
+- Definition Provider for url imports
+- Test cases
+
 ## [2.2.1](https://github.com/willofindie/vscode-cssvar/compare/v2.2.0...v2.2.1) - 2022-09-05
 ### Features
 - [#65](https://github.com/willofindie/vscode-cssvar/issues/65) Dedupe CSS variables per file.

@@ -286,8 +286,8 @@ This Extension supports the following properties as of now:
 <h3 align="center">Phoenisx Sponsors</h3>
 
 <p align="center">
-  <a href="./img/sponsors.svg">
-    <img src='./img/sponsors.svg'/>
+  <a href="./img/sponsors.png">
+    <img src='./img/sponsors.png'/>
   </a>
 </p>
 
