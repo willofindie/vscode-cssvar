@@ -13,7 +13,7 @@
 <div align="center">
   <p align="center">
     <i><b>Please vote/rate and star this project to show your support.</b></i>
-    :heart:
+    ❤️
   </p>
 
   <a href="https://github.com/willofindie/vscode-cssvar">
@@ -39,7 +39,7 @@
   </a>
 </div>
 
-## :bulb: Features:
+## 💡 Features:
 
 This extension helps provide autocompletion IntelliSense
 for globally shared CSS Variables and more.
@@ -110,7 +110,7 @@ Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.
 
 <br/><br/>
 
-## :hammer_and_wrench: Supported Configs:
+## 🛠 Supported Configs:
 
 This Extension supports the following properties as of now:
 
