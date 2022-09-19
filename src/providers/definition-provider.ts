@@ -6,7 +6,7 @@ import {
   Range,
   TextDocument,
 } from "vscode";
-import { CACHE } from "../constants";
+import { CACHE, PATTERN_ALL_VARIABLE_USAGES } from "../constants";
 import { getActiveRootPath } from "../utils";
 
 export class CssDefinitionProvider implements DefinitionProvider {
@@ -21,7 +21,7 @@ export class CssDefinitionProvider implements DefinitionProvider {
       )
     );
 
-    const matches = text.matchAll(/var\s*\((.*?)\)/g);
+    const matches = text.matchAll(PATTERN_ALL_VARIABLE_USAGES);
     let exactMatch = "";
     for (const match of matches) {
       const start = match.index
