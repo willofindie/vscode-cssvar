@@ -37,6 +37,7 @@ const EXTENSION_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(DUMMY_FILE)],
+    mode: ["off", { ignore: [] }],
   },
 };
 
@@ -255,11 +256,13 @@ describe("Multi Root", () => {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation(IMPORT_SCSS_FILE)],
+        mode: ["off", { ignore: [] }],
       },
       [rootPath2]: {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation(RENAMED_FILE)],
+        mode: ["off", { ignore: [] }],
       },
     };
     CACHE.config = config;
