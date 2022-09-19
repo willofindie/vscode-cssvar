@@ -108,180 +108,16 @@ Limited support to keep bundle size small.
 Except for `color(`)` api, every other CSS color is supported.
 Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
 
-<br/><br/>
+<br>
 
-## 🛠 Supported Configs:
+## 🔖 Appendix:
 
-This Extension supports the following properties as of now:
+- [Extension setting details][settings-link]
+- [Extension Customization][customize-extension-link]
+- [Theming Support][theme-link]
+- [Debugging the extension][debug-link]
 
-
-<table>
-<thead>
-  <tr align="left">
-    <th><b>Setting</b></th>
-    <th><b>Description</b></th>
-    <th><b>Type</b></th>
-    <th><b>Default</b></th>
-  </tr>
-</thead>
-<tbody>
-  <tr align="left">
-    <td><code>cssvar.files</code></td>
-    <td>
-      Relative/Absolute paths to CSS variable source files
-    </td>
-    <td><code>string[]</code></td>
-    <td><br>
-      <pre lang="js">["**/*.css"]</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td><code>cssvar.ignore</code></td>
-    <td>
-      Relative/Absolute paths to file/folder sources to be ignored
-    </td>
-    <td><code>string[]</code></td>
-    <td><br>
-      <pre lang="js">["**/node_modules/**"]</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td><code>cssvar.extensions</code></td>
-    <td>File extensions in which IntelliSense will be enabled</td>
-    <td><code>string[]</code></td>
-    <td>
-      <br>
-      <pre lang="js">[
-  "css",
-  "scss",
-  "sass",
-  "less",
-  "postcss",
-  "vue",
-  "svelte",
-  "astro",
-  "ts",
-  "tsx",
-  "js",
-  "jsx"
-]</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td>
-      <code>cssvar.themes</code>
-      <br>Helps to bucket CSS variables based on themes used in any project
-    </td>
-    <td>
-      <br>CSS Theme class names used in source files
-      <br>E.g.<pre lang="js">["dark","dim"]</pre>
-    </td>
-    <td><code>string[]</code></td>
-    <td>
-      <br>
-      <pre lang="js">[]</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td>
-      <code>cssvar.excludeThemedVariables</code>
-      <br>If <code>true</code>, hides duplicate theme variables from the list
-    </td>
-    <td>Exclude themed variables to remove unnecessary duplicates</td>
-    <td><code>boolean</code></td>
-    <td>
-      <br>
-      <pre lang="js">false</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td>
-      <code>cssvar.disableSort</code>
-      <br>Intellisense list won't be sorted
-    </td>
-    <td>Disables default sorting applied by VSCode</td>
-    <td><code>boolean</code></td>
-    <td>
-      <br>
-      <pre lang="js">false</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td><code>cssvar.enableColors</code></td>
-    <td>Enable VSCode's Color Representation feature when <code>true</code></td>
-    <td><code>boolean</code></td>
-    <td>
-      <br>
-      <pre lang="js">true</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td><code>cssvar.enableGotoDef</code></td>
-    <td>Enable VSCode's Goto Definition feature for CSS Variable</td>
-    <td><code>boolean</code></td>
-    <td>
-      <br>
-      <pre lang="js">true</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td><code>cssvar.enableHover</code></td>
-    <td>Enable VScode's Hover IntelliSense feature for CSS Variables</td>
-    <td><code>boolean</code></td>
-    <td>
-      <br>
-      <pre lang="js">true</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td>
-      <code>cssvar.postcssSyntax</code>
-      <br>Details for this can be read here: <a href="./docs/customize-extension.md">Customize Extension</a>
-    </td>
-    <td>
-      <br>Provides custom syntax parser for the mapped file extensions.
-      <br>E.g.<pre lang="js">{
-  "sugarss": ["sss"]
-}</pre>
-    </td>
-    <td><code>Record&lt;string,string[]<br>&gt;</code></td>
-    <td>
-      <br>
-      <pre lang="js">{}</pre>
-      <br>
-    </td>
-  </tr>
-  <tr align="left">
-    <td>
-      <code>cssvar.postcssPlugins</code>
-    </td>
-    <td>
-      <br>Provide PostCSS Plugins to support custom CSS features
-      <br>E.g.<pre lang="js">["postcss-nested"]</pre>
-    </td>
-    <td><code>string[]</code></td>
-    <td>
-      <br>
-      <pre lang="js">[]</pre>
-      <br>
-    </td>
-  </tr>
-</tbody>
-</table>
-<br/><br/>
-
-> NOTE: Please [raise an issue](https://github.com/willofindie/vscode-cssvar/issues/new) for any feature request or a bug fix.
-
----
+<br><br><br><br>
 
 <h3 align="center">Phoenisx Sponsors</h3>
 
@@ -293,5 +129,8 @@ This Extension supports the following properties as of now:
 
 
 
+
+[settings-link]: ./feature-contributions.md
 [customize-extension-link]: ./docs/customize-extension.md
 [theme-link]: ./docs/theming.md
+[debug-link]: ./docs/debug-extension.md
