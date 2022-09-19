@@ -141,6 +141,23 @@ export async function setup(): Promise<{
             }
             break;
           }
+          case "mode": {
+            const mode = _config.get<WorkspaceConfig["mode"]>(key);
+            let _mode: Config["mode"];
+            if (typeof mode === "string") {
+              _mode = [mode, { ignore: [] }];
+            } else if (
+              Array.isArray(mode) &&
+              mode.length > 0 &&
+              mode.length < 3
+            ) {
+              _mode = [mode[0], mode[1] || { ignore: [] }];
+            } else {
+              _mode = ["off", { ignore: [] }];
+            }
+            config[fsPathKey][key] = _mode;
+            break;
+          }
           default: {
             const value = getConfigValue(_config, key);
             config[fsPathKey][key] = value as any;

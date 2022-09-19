@@ -1,3 +1,15 @@
 {
-  "cssvar.files": ["source.*"]
+  "cssvar.files": ["source.*"],
+
+  // Override default setting it to error
+  // "cssvar.mode": "error"
+
+  // OR
+  "cssvar.mode": ["warn", {
+    "ignore": [
+      "^--astro-.*",
+      "ignore-.*?",
+      "--color-astro-3",
+    ]
+  }]
 }

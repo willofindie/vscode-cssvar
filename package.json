@@ -336,8 +336,8 @@
 							],
 							"enumDescriptions": [
 								"Disable CSS Variable linting",
-								"Enable CSS Variable linting with `warn` specifier",
-								"Enable CSS Variable linting with `error` specifier"
+								"Enable CSS Variable linting with `warn` severity",
+								"Enable CSS Variable linting with `error` severity"
 							]
 						},
 						{
@@ -346,15 +346,13 @@
 							"properties": {
 								"ignore": {
 									"type": "array",
-									"default": [
-
-									],
+									"default": [],
 									"items": {
 										"type": "string"
 									},
 									"examples": [
-										"--variable",
-										"--(regex)"
+										["--variable"],
+										["--(regex)"]
 									],
 									"description": "CSS variable safelist for which linting will be disabled"
 								}
