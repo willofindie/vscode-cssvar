@@ -53,6 +53,8 @@ export type CSSVarLocation = {
   isRemote: boolean;
 };
 
+export type LintingSeverity = "off" | "warn" | "error";
+
 /**
  * Since the inmem config this project maintains is completely diffent than
  * what user-facing setting types are, it was necessary to separate these two
@@ -64,6 +66,7 @@ export interface Config {
   ignore: string[];
   extensions: SupportedExtensionNames[];
   themes: string[];
+  mode: [LintingSeverity, { ignore: string[] }];
   postcssPlugins: string[];
   postcssSyntax: Record<string, string>;
   excludeThemedVariables: boolean;
@@ -73,8 +76,9 @@ export interface Config {
   enableHover: boolean;
 }
 
-export type WorkspaceConfig = Omit<Config, "files"> & {
+export type WorkspaceConfig = Omit<Config, "files" | "mode"> & {
   files: string[];
+  mode: LintingSeverity | [LintingSeverity, { ignore: string[] }];
 };
 
 /**
@@ -86,6 +90,7 @@ export const DEFAULT_CONFIG: WorkspaceConfig = {
   files: ["**/*.css"],
   ignore: ["**/node_modules/**"],
   extensions: [...SUPPORTED_LANGUAGE_IDS],
+  mode: "off",
   themes: [],
   postcssPlugins: [],
   postcssSyntax: {},

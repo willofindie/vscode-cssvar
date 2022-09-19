@@ -19,7 +19,22 @@ function createDiagnostic(
   lineIndex: number
 ): Diagnostic | null {
   const variableName = match[1].trim();
-  if (CACHE.cssVarsMap[CACHE.activeRootPath][variableName]) {
+  const mode = CACHE.config[CACHE.activeRootPath].mode;
+  let ignoreRegex = null;
+  if (mode[1].ignore.length > 0) {
+    ignoreRegex = new RegExp(
+      mode[1].ignore
+        .reduce((str, current) => {
+          str.push(`(${current})`);
+          return str;
+        }, [] as string[])
+        .join("|")
+    );
+  }
+  if (
+    CACHE.cssVarsMap[CACHE.activeRootPath][variableName] ||
+    (ignoreRegex && ignoreRegex.test(variableName))
+  ) {
     return null;
   }
   const start = match.index
@@ -31,7 +46,7 @@ function createDiagnostic(
   const diagnostic = new Diagnostic(
     range,
     `Cannot find cssvar ${variableName}.`,
-    DiagnosticSeverity.Error
+    mode[0] === "error" ? DiagnosticSeverity.Error : DiagnosticSeverity.Warning
   );
   diagnostic.source = `(${EXTENSION_NAME})`;
 
@@ -51,12 +66,16 @@ export function refreshDiagnostics(
   doc: TextDocument,
   cssvarDiagnostics: DiagnosticCollection
 ): void {
-  const diagnostics: Diagnostic[] = [];
-  if (CACHE.cssVarErrors[CACHE.activeRootPath] === 0) {
+  if (
+    CACHE.cssVarErrors[CACHE.activeRootPath] === 0 ||
+    CACHE.config[CACHE.activeRootPath].mode[0] === "off"
+  ) {
     // This can happen if the extension fails to parse everything
     // In which case we do not want to show any diagnostic errors/warns
     return;
   }
+
+  const diagnostics: Diagnostic[] = [];
 
   for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
     const lineOfText = doc.lineAt(lineIndex);

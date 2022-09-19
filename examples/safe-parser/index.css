@@ -5,5 +5,13 @@
   border-color: var(--brand-2);
   color: var( --color-astro-1 );
   border-width: var(--space-1);
+
+  /* Random Igore linting tests */
   color: var(--color-astro-3);
+  color: var(--astro-3);
+  color: var(--astro-ignored);
+  color: var(--do-not-ignored-this);
+  color: var(--ignore-me);
+  color: var(--ignore-me);
+  color: var(--color-astro-4);
 }

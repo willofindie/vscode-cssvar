@@ -216,10 +216,9 @@ This Extension supports the following properties as of now:
       E.g.<pre lang="js">["error", {
   ignore: [
     "--dynamic",
-    "--undeclared"
+    "dy[nN].*?c$"
   ]
 }]</pre>
-    <code>ignore</code> can also be a <b>regex</b> string
     </td>
     <td><pre lang="ts">string
 | [
