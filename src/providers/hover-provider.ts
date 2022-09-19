@@ -50,7 +50,7 @@ export class CssHoverProvider implements HoverProvider {
       const end = start + match[1].length;
       if (position.character >= start && position.character <= end) {
         hoverDetails = {
-          name: match[1],
+          name: match[1].trim(),
           range: new Range(
             range.start.translate({ characterDelta: start }),
             range.start.translate({ characterDelta: end })

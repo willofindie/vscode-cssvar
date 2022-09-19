@@ -15,3 +15,7 @@
   color: var(--ignore-me);
   color: var(--color-astro-4);
 }
+
+.wrapper {
+  --color-astro-4: #333;
+}

@@ -133,7 +133,7 @@ export type CacheType = {
   cssVarDefinitionsMap: {
     [activeRootpath: string]: { [varName: string]: Location[] };
   };
-  cssVarErrors: { [activeRootpath: string]: number };
+  cssVarCount: { [activeRootpath: string]: number };
   // Following propety should always point to a local file path
   filesToWatch: { [activeRootpath: string]: Set<string> };
   fileMetas: {
@@ -151,7 +151,7 @@ export const CACHE: CacheType = {
   cssVars: {},
   cssVarsMap: {},
   cssVarDefinitionsMap: {},
-  cssVarErrors: {},
+  cssVarCount: {},
   filesToWatch: {},
   fileMetas: {},
   config: {}, // Points to active config.

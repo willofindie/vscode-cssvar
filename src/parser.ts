@@ -397,7 +397,7 @@ const parseFilesForSingleFolder = async function (
   if (CACHE.cssVars[rootPath] !== cssVars) {
     try {
       const [vars, cssVarsMap] = await populateValue(cssVars);
-      CACHE.cssVarErrors[rootPath] = vars.length;
+      CACHE.cssVarCount[rootPath] = vars.length;
       CACHE.cssVarDefinitionsMap[rootPath] = vars.reduce((defs, cssVar) => {
         if (!cssVar.location) {
           return defs;
