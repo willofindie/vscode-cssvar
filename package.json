@@ -1,379 +1,428 @@
 {
-  "name": "cssvar",
-  "displayName": "CSS Var Complete",
-  "keywords": [
-    "css",
-    "css3",
-    "variable",
-    "css variables",
-    "css custom properties",
-    "css var",
-    "cssvar",
-    "autocomplete",
-    "complete",
-    "intellisense",
-    "astro",
-    "vue",
-    "react",
-    "angular",
-    "javascript",
-    "typescript"
-  ],
-  "description": "Intellisense support for CSS Variables",
-  "version": "2.2.2",
-  "publisher": "phoenisx",
-  "license": "MIT",
-  "homepage": "https://github.com/willofindie/vscode-cssvar",
-  "bugs": {
-    "url": "https://github.com/willofindie/vscode-cssvar/issues"
-  },
-  "repository": {
-    "url": "https://github.com/willofindie/vscode-cssvar",
-    "type": "git"
-  },
-  "icon": "img/icon.png",
-  "engines": {
-    "vscode": "^1.53.0",
-    "node": "^12.18.3"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onLanguage:css",
-    "onLanguage:scss",
-    "onLanguage:sass",
-    "onLanguage:less",
-    "onLanguage:postcss",
-    "onLanguage:svelte",
-    "onLanguage:vue",
-    "onLanguage:astro",
-    "onLanguage:javascript",
-    "onLanguage:javascriptreact",
-    "onLanguage:typescript",
-    "onLanguage:typescriptreact"
-  ],
-  "main": "./out/extension.js",
-  "preview": false,
-  "contributes": {
-    "configuration": {
-      "title": "CSS Variables",
-      "properties": {
-        "cssvar.files": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "Relative/Absolute paths to CSS variable file sources",
-          "scope": "resource",
-          "examples": [
-            [
-              "src/**/*.css",
-              "styles/global.css"
-            ]
-          ]
-        },
-        "cssvar.ignore": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "Relative/Absolute paths to file/folder sources to ignore",
-          "scope": "resource",
-          "examples": [
-            [
-              "**/node_modules/**",
-              "styles/ignore.css"
-            ]
-          ]
-        },
-        "cssvar.extensions": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string",
-            "enum": [
-              "css",
-              "scss",
-              "sass",
-              "less",
-              "postcss",
-              "vue",
-              "svelte",
-              "astro",
-              "ts",
-              "tsx",
-              "jsx",
-              "js"
-            ]
-          },
-          "markdownDescription": "File extensions for which IntelliSense will be enabled",
-          "scope": "resource",
-          "examples": [
-            [
-              "css",
-              "scss",
-              "tsx",
-              "jsx"
-            ]
-          ]
-        },
-        "cssvar.themes": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "CSS Theme classnames used in source files",
-          "scope": "resource",
-          "examples": [
-            [
-              "dark",
-              "dim"
-            ]
-          ]
-        },
-        "cssvar.excludeThemedVariables": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
-          "scope": "resource",
-          "examples": [
-            true,
-            false
-          ]
-        },
-        "cssvar.disableSort": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "markdownDescription": "Disables default sorting applied by VSCode",
-          "scope": "resource",
-          "examples": [
-            true,
-            false
-          ]
-        },
-        "cssvar.enableColors": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "markdownDescription": "Enable VScode's Color Representation feature when true",
-          "scope": "window",
-          "examples": [
-            true,
-            false
-          ]
-        },
-        "cssvar.enableGotoDef": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
-          "scope": "window",
-          "examples": [
-            true,
-            false
-          ]
-        },
-        "cssvar.enableHover": {
-          "type": [
-            "boolean",
-            "null"
-          ],
-          "default": null,
-          "markdownDescription": "Enable VScode's Hover IntelliSense feature for CSS Variables",
-          "scope": "window",
-          "examples": [
-            true,
-            false
-          ]
-        },
-        "cssvar.postcssPlugins": {
-          "type": [
-            "array",
-            "null"
-          ],
-          "default": null,
-          "items": {
-            "type": "string"
-          },
-          "markdownDescription": "Provide __PostCSS__ plugins to support custom CSS features. List of __PostCSS__ plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
-          "scope": "resource",
-          "examples": [
-            [
-              "postcss-nested",
-              "webp-in-css"
-            ]
-          ]
-        },
-        "cssvar.postcssSyntax": {
-          "type": "object",
-          "default": {},
-          "properties": {
-            "postcss-sass": {
-              "type": "array",
-              "description": "Sass (.sass) source file extensions to parse",
-              "default": [
-                "sass"
-              ],
-              "examples": [
-                [
-                  "sass"
-                ]
-              ]
-            },
-            "postcss-html": {
-              "type": "array",
-              "description": "HTML (.html) source file extensions to parse",
-              "default": [
-                "html"
-              ],
-              "examples": [
-                [
-                  "html",
-                  "ejs"
-                ]
-              ]
-            },
-            "sugarss": {
-              "type": "array",
-              "description": "SugarSS (.sss) source file extensions to parse",
-              "default": [
-                "sss"
-              ],
-              "examples": [
-                [
-                  "sss"
-                ]
-              ]
-            },
-            "postcss-styl": {
-              "type": "array",
-              "description": "Stylus (.styl) source file extensions to parse. Repo: https://github.com/stylus/postcss-styl",
-              "default": [
-                "styl"
-              ],
-              "examples": [
-                [
-                  "styl"
-                ]
-              ]
-            },
-            "postcss-syntax": {
-              "type": "array",
-              "description": "To parse template literals in JS/TS source files. Details: https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md",
-              "default": [],
-              "examples": [
-                [
-                  "js",
-                  "ts",
-                  "sass"
-                ]
-              ]
-            },
-            "postcss-lit": {
-              "type": "array",
-              "description": "To parse Lit templates in JS/TS source files. Repo: https://github.com/43081j/postcss-lit",
-              "default": [
-                "ts"
-              ],
-              "examples": [
-                [
-                  "js",
-                  "ts"
-                ]
-              ]
-            }
-          },
-          "additionalProperties": true,
-          "markdownDescription": "Add support for custom CSS syntaxes like `sass`, `styl` and more. Details on Customization can be [read here](https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md)",
-          "scope": "resource"
-        }
-      }
-    }
-  },
-  "scripts": {
-    "postinstall": "husky install",
-    "pub": "src/scripts/publish.js",
-    "prebuild": "rimraf out",
-    "build": "cross-env NODE_ENV=production rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
-    "watch": "rollup -c -m -w",
-    "lint": "eslint src --ext ts",
-    "lint:fix": "eslint src --ext ts --fix",
-    "test": "concurrently \"tsc --project ./tsconfig.json --noEmit\" \"jest\""
-  },
-  "devDependencies": {
-    "@babel/core": "^7.17.8",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.16.7",
-    "@rollup/plugin-commonjs": "^18.1.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.1",
-    "@rollup/plugin-replace": "^4.0.0",
-    "@types/css": "^0.0.31",
-    "@types/glob": "^7.2.0",
-    "@types/jest": "^26.0.24",
-    "@types/lodash": "^4.14.180",
-    "@types/node": "12.12.6",
-    "@types/postcss-less": "^4.0.2",
-    "@types/postcss-safe-parser": "^5.0.1",
-    "@types/vscode": "1.53.0",
-    "@typescript-eslint/eslint-plugin": "^5.17.0",
-    "@typescript-eslint/parser": "^5.17.0",
-    "babel-jest": "^26.6.3",
-    "concurrently": "^7.3.0",
-    "cross-env": "^7.0.3",
-    "dayjs": "^1.11.5",
-    "dotenv": "^16.0.2",
-    "esbuild": "^0.14.49",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-jest": "^24.7.0",
-    "eslint-plugin-prettier": "^3.4.1",
-    "husky": "^5.2.0",
-    "jest": "^26.6.3",
-    "lint-staged": "^10.5.4",
-    "lodash": "^4.17.21",
-    "prettier": "^2.6.1",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.70.1",
-    "rollup-plugin-esbuild": "^4.9.1",
-    "typescript": "^4.6.3",
-    "yargs": "^17.5.1"
-  },
-  "dependencies": {
-    "culori": "^2.0.3",
-    "fast-glob": "^3.2.11",
-    "postcss": "^8.4.12",
-    "postcss-less": "^6.0.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "npm run lint:fix"
-    ]
-  }
+	"name": "cssvar",
+	"displayName": "CSS Var Complete",
+	"keywords": [
+		"css",
+		"css3",
+		"variable",
+		"css variables",
+		"css custom properties",
+		"css var",
+		"cssvar",
+		"autocomplete",
+		"complete",
+		"intellisense",
+		"astro",
+		"vue",
+		"react",
+		"angular",
+		"javascript",
+		"typescript"
+	],
+	"description": "Intellisense support for CSS Variables",
+	"version": "2.2.2",
+	"publisher": "phoenisx",
+	"license": "MIT",
+	"homepage": "https://github.com/willofindie/vscode-cssvar",
+	"bugs": {
+		"url": "https://github.com/willofindie/vscode-cssvar/issues"
+	},
+	"repository": {
+		"url": "https://github.com/willofindie/vscode-cssvar",
+		"type": "git"
+	},
+	"icon": "img/icon.png",
+	"engines": {
+		"vscode": "^1.53.0",
+		"node": "^12.18.3"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:css",
+		"onLanguage:scss",
+		"onLanguage:sass",
+		"onLanguage:less",
+		"onLanguage:postcss",
+		"onLanguage:svelte",
+		"onLanguage:vue",
+		"onLanguage:astro",
+		"onLanguage:javascript",
+		"onLanguage:javascriptreact",
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
+	"main": "./out/extension.js",
+	"preview": false,
+	"contributes": {
+		"configuration": {
+			"title": "CSS Variables",
+			"properties": {
+				"cssvar.files": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "Relative/Absolute paths to CSS variable file sources",
+					"scope": "resource",
+					"examples": [
+						[
+							"src/**/*.css",
+							"styles/global.css"
+						]
+					]
+				},
+				"cssvar.ignore": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "Relative/Absolute paths to file/folder sources to ignore",
+					"scope": "resource",
+					"examples": [
+						[
+							"**/node_modules/**",
+							"styles/ignore.css"
+						]
+					]
+				},
+				"cssvar.extensions": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"items": {
+						"type": "string",
+						"enum": [
+							"css",
+							"scss",
+							"sass",
+							"less",
+							"postcss",
+							"vue",
+							"svelte",
+							"astro",
+							"ts",
+							"tsx",
+							"jsx",
+							"js"
+						]
+					},
+					"markdownDescription": "File extensions for which IntelliSense will be enabled",
+					"scope": "resource",
+					"examples": [
+						[
+							"css",
+							"scss",
+							"tsx",
+							"jsx"
+						]
+					]
+				},
+				"cssvar.themes": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "CSS Theme classnames used in source files",
+					"scope": "resource",
+					"examples": [
+						[
+							"dark",
+							"dim"
+						]
+					]
+				},
+				"cssvar.excludeThemedVariables": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
+					"scope": "resource",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"cssvar.disableSort": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Disables default sorting applied by VSCode",
+					"scope": "resource",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"cssvar.enableColors": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Enable VScode's Color Representation feature when true",
+					"scope": "window",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"cssvar.enableGotoDef": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
+					"scope": "window",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"cssvar.enableHover": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Enable VScode's Hover IntelliSense feature for CSS Variables",
+					"scope": "window",
+					"examples": [
+						true,
+						false
+					]
+				},
+				"cssvar.postcssPlugins": {
+					"type": [
+						"array",
+						"null"
+					],
+					"default": null,
+					"items": {
+						"type": "string"
+					},
+					"markdownDescription": "Provide __PostCSS__ plugins to support custom CSS features. List of __PostCSS__ plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
+					"scope": "resource",
+					"examples": [
+						[
+							"postcss-nested",
+							"webp-in-css"
+						]
+					]
+				},
+				"cssvar.postcssSyntax": {
+					"type": "object",
+					"default": {
+
+					},
+					"properties": {
+						"postcss-sass": {
+							"type": "array",
+							"description": "Sass (.sass) source file extensions to parse",
+							"default": [
+								"sass"
+							],
+							"examples": [
+								[
+									"sass"
+								]
+							]
+						},
+						"postcss-html": {
+							"type": "array",
+							"description": "HTML (.html) source file extensions to parse",
+							"default": [
+								"html"
+							],
+							"examples": [
+								[
+									"html",
+									"ejs"
+								]
+							]
+						},
+						"sugarss": {
+							"type": "array",
+							"description": "SugarSS (.sss) source file extensions to parse",
+							"default": [
+								"sss"
+							],
+							"examples": [
+								[
+									"sss"
+								]
+							]
+						},
+						"postcss-styl": {
+							"type": "array",
+							"description": "Stylus (.styl) source file extensions to parse. Repo: https://github.com/stylus/postcss-styl",
+							"default": [
+								"styl"
+							],
+							"examples": [
+								[
+									"styl"
+								]
+							]
+						},
+						"postcss-syntax": {
+							"type": "array",
+							"description": "To parse template literals in JS/TS source files. Details: https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md",
+							"default": [
+
+							],
+							"examples": [
+								[
+									"js",
+									"ts",
+									"sass"
+								]
+							]
+						},
+						"postcss-lit": {
+							"type": "array",
+							"description": "To parse Lit templates in JS/TS source files. Repo: https://github.com/43081j/postcss-lit",
+							"default": [
+								"ts"
+							],
+							"examples": [
+								[
+									"js",
+									"ts"
+								]
+							]
+						}
+					},
+					"additionalProperties": true,
+					"markdownDescription": "Add support for custom CSS syntaxes like `sass`, `styl` and more. Details on Customization can be [read here](https://github.com/willofindie/vscode-cssvar/tree/main/docs/customize-extension.md)",
+					"scope": "resource"
+				},
+				"cssvar.mode": {
+					"scope": "resource",
+					"type": [
+						"array",
+						"string"
+					],
+					"default": "off",
+					"markdownDescription": "Enable/Disable CSS variable linting modes.",
+					"items": [
+						{
+							"type": "string",
+							"default": "off",
+							"enum": [
+								"off",
+								"warn",
+								"error"
+							],
+							"enumDescriptions": [
+								"Disable CSS Variable linting",
+								"Enable CSS Variable linting with `warn` specifier",
+								"Enable CSS Variable linting with `error` specifier"
+							]
+						},
+						{
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"ignore": {
+									"type": "array",
+									"default": [
+
+									],
+									"items": {
+										"type": "string"
+									},
+									"examples": [
+										"--variable",
+										"--(regex)"
+									],
+									"description": "CSS variable safelist for which linting will be disabled"
+								}
+							}
+						}
+					]
+				}
+			}
+		}
+	},
+	"scripts": {
+		"postinstall": "husky install",
+		"pub": "src/scripts/publish.js",
+		"prebuild": "rimraf out",
+		"build": "cross-env NODE_ENV=production rollup -c --environment INCLUDE_DEPS,BUILD,NODE_ENV:production",
+		"watch": "rollup -c -m -w",
+		"lint": "eslint src --ext ts",
+		"lint:fix": "eslint src --ext ts --fix",
+		"test": "concurrently \"tsc --project ./tsconfig.json --noEmit\" \"jest\""
+	},
+	"devDependencies": {
+		"@babel/core": "^7.17.8",
+		"@babel/preset-env": "^7.16.11",
+		"@babel/preset-typescript": "^7.16.7",
+		"@rollup/plugin-commonjs": "^18.1.0",
+		"@rollup/plugin-json": "^4.1.0",
+		"@rollup/plugin-node-resolve": "^11.2.1",
+		"@rollup/plugin-replace": "^4.0.0",
+		"@types/css": "^0.0.31",
+		"@types/glob": "^7.2.0",
+		"@types/jest": "^26.0.24",
+		"@types/lodash": "^4.14.180",
+		"@types/node": "12.12.6",
+		"@types/postcss-less": "^4.0.2",
+		"@types/postcss-safe-parser": "^5.0.1",
+		"@types/vscode": "1.53.0",
+		"@typescript-eslint/eslint-plugin": "^5.17.0",
+		"@typescript-eslint/parser": "^5.17.0",
+		"babel-jest": "^26.6.3",
+		"concurrently": "^7.3.0",
+		"cross-env": "^7.0.3",
+		"dayjs": "^1.11.5",
+		"dotenv": "^16.0.2",
+		"esbuild": "^0.14.49",
+		"eslint": "^7.32.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-jest": "^24.7.0",
+		"eslint-plugin-prettier": "^3.4.1",
+		"husky": "^5.2.0",
+		"jest": "^26.6.3",
+		"lint-staged": "^10.5.4",
+		"lodash": "^4.17.21",
+		"prettier": "^2.6.1",
+		"rimraf": "^3.0.2",
+		"rollup": "^2.70.1",
+		"rollup-plugin-esbuild": "^4.9.1",
+		"typescript": "^4.6.3",
+		"yargs": "^17.5.1"
+	},
+	"dependencies": {
+		"culori": "^2.0.3",
+		"fast-glob": "^3.2.11",
+		"postcss": "^8.4.12",
+		"postcss-less": "^6.0.0"
+	},
+	"lint-staged": {
+		"*.{ts,tsx}": [
+			"npm run lint:fix"
+		]
+	}
 }
