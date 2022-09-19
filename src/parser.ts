@@ -351,9 +351,9 @@ const parseFilesForSingleFolder = async function (
         newVars = await parseFile(location, config, rootPath);
       } catch (e) {
         errorPaths.push(location.local);
-        // Log errors for actual URL paths, and not the cached filepaths.
         LOGGER.warn(
-          `Failed to Parse file (${path}): `,
+          `Failed to Parse file (${location.local}): `,
+          " :: what :: ",
           getCSSErrorMsg(location.remote || location.local, e as any)
         );
       }
@@ -371,6 +371,7 @@ const parseFilesForSingleFolder = async function (
         cssVars = await executeParsing(cssvarLocation);
       }
     } else {
+      // Remote files should always be parsed and cached
       cssVars = await executeParsing(cssvarLocation);
     }
 
@@ -396,6 +397,7 @@ const parseFilesForSingleFolder = async function (
   if (CACHE.cssVars[rootPath] !== cssVars) {
     try {
       const [vars, cssVarsMap] = await populateValue(cssVars);
+      CACHE.cssVarErrors[rootPath] = vars.length;
       CACHE.cssVarDefinitionsMap[rootPath] = vars.reduce((defs, cssVar) => {
         if (!cssVar.location) {
           return defs;

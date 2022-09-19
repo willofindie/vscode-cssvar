@@ -52,6 +52,11 @@ export function refreshDiagnostics(
   cssvarDiagnostics: DiagnosticCollection
 ): void {
   const diagnostics: Diagnostic[] = [];
+  if (CACHE.cssVarErrors[CACHE.activeRootPath] === 0) {
+    // This can happen if the extension fails to parse everything
+    // In which case we do not want to show any diagnostic errors/warns
+    return;
+  }
 
   for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
     const lineOfText = doc.lineAt(lineIndex);
