@@ -38,7 +38,26 @@ class Position {
     if (line === this.line && char === this.char) {
       return this;
     } else {
+      if (
+        typeof line === "object" &&
+        Object.prototype.hasOwnProperty.call(line, "line")
+      ) {
+        const { line: _line, character } = line;
+        return new Position(_line, character);
+      }
       return new Position(line, char);
+    }
+  });
+
+  translate = jest.fn().mockImplementation(change => {
+    if (typeof change !== "object") {
+      return this;
+    } else {
+      const { lineDelta, characterDelta } = change;
+      return new Position(
+        this.line + lineDelta,
+        this.character + characterDelta
+      );
     }
   });
 }
@@ -78,6 +97,8 @@ const workspace = {
   getConfiguration: jest.fn(),
   workspaceFolders: [],
   onDidSaveTextDocument: jest.fn(),
+  onDidChangeTextDocument: jest.fn(),
+  onDidCloseTextDocument: jest.fn(),
   createFileSystemWatcher: jest.fn().mockReturnValue({
     onDidChange: jest.fn(),
     onDidDelete: jest.fn(),
@@ -89,6 +110,7 @@ const languages = {
   registerColorProvider: jest.fn((_, obj) => obj),
   registerDefinitionProvider: jest.fn((_, obj) => obj),
   registerHoverProvider: jest.fn((_, obj) => obj),
+  createDiagnosticCollection: jest.fn((_, obj) => obj),
 };
 
 const window = {

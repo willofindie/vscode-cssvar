@@ -29,7 +29,7 @@ export class CssDefinitionProvider implements DefinitionProvider {
         : 0;
       const end = start + match[1].length;
       if (position.character >= start && position.character <= end) {
-        exactMatch = match[1];
+        exactMatch = match[1].trim();
         break;
       }
     }
