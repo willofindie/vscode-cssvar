@@ -37,6 +37,7 @@ function createDiagnostic(
   ) {
     return null;
   }
+
   const start = match.index
     ? match.index + (match[0].length - match[1].length - 1)
     : 0;
@@ -67,7 +68,7 @@ export function refreshDiagnostics(
   cssvarDiagnostics: DiagnosticCollection
 ): void {
   if (
-    CACHE.cssVarErrors[CACHE.activeRootPath] === 0 ||
+    CACHE.cssVarCount[CACHE.activeRootPath] === 0 ||
     CACHE.config[CACHE.activeRootPath].mode[0] === "off"
   ) {
     // This can happen if the extension fails to parse everything

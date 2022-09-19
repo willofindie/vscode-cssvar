@@ -2,6 +2,7 @@ import { Location, Position, Range, TextDocument, Uri } from "vscode";
 import { CACHE } from "../constants";
 import { getActiveRootPath } from "../utils";
 import { CssDefinitionProvider } from "../providers/definition-provider";
+import { TextDocumentStub } from "./test-utilities";
 
 jest.mock("../constants", () => {
   const DEFAULT_ROOT_FOLDER = "test";
@@ -39,15 +40,6 @@ jest.mock("../utils", () => {
 });
 
 let defProvider: CssDefinitionProvider | null;
-
-class TextDocumentStub {
-  private document: string;
-
-  constructor(doc: string) {
-    this.document = doc;
-  }
-  getText = jest.fn().mockImplementation(() => this.document);
-}
 
 beforeAll(() => {
   defProvider = new CssDefinitionProvider();

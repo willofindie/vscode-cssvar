@@ -93,6 +93,14 @@ class Color {
   }
 }
 
+class Diagnostic {
+  constructor(range, desc, severity) {
+    this.range = range;
+    this.desc = desc;
+    this.severity = severity;
+  }
+}
+
 const workspace = {
   getConfiguration: jest.fn(),
   workspaceFolders: [],
@@ -151,4 +159,9 @@ module.exports = {
   },
   Uri,
   RelativePattern,
+  DiagnosticSeverity: {
+    Error: 0,
+    Warning: 1,
+  },
+  Diagnostic,
 };

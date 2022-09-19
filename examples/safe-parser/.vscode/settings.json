@@ -1,5 +1,10 @@
 {
-  "cssvar.files": ["source.*"],
+  // You will have to import all CSS source files, that contains
+  // CSS variables for CSS Variable Linting to work.
+  // For e.g. If you remove `index.css` from below source files list
+  // CSS Variables defined inside `index.css` file will be considered as unknown
+  // and thus this extension will lint them as error on usage.
+  "cssvar.files": ["index.css", "source.*"],
 
   // Override default setting it to error
   // "cssvar.mode": "error"
