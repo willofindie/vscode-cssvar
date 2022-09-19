@@ -9,13 +9,14 @@ import {
 } from "vscode";
 import { CssColorProvider } from "./providers/color-provider";
 import { CssCompletionProvider } from "./providers/completion-provider";
-import { CACHE, DEFAULT_CONFIG } from "./constants";
+import { CACHE, DEFAULT_CONFIG, EXTENSION_NAME } from "./constants";
 import { CssDefinitionProvider } from "./providers/definition-provider";
 import { LOGGER } from "./logger";
 import { setup } from "./main";
 import { parseFiles } from "./parser";
 import { isObjectProperty } from "./utils";
 import { CssHoverProvider } from "./providers/hover-provider";
+import { subscribeToDocumentChanges } from "./providers/diagnostics";
 
 const watchers: FileSystemWatcher[] = [];
 
@@ -69,6 +70,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
       );
       context.subscriptions.push(definitionDisposable);
     }
+
+    const cssvarDiagnostics =
+      languages.createDiagnosticCollection(EXTENSION_NAME);
+    context.subscriptions.push(cssvarDiagnostics);
+    subscribeToDocumentChanges(context, cssvarDiagnostics);
 
     //#region File Watcher
     /**
