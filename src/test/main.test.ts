@@ -31,6 +31,7 @@ describe("Test Extension Main", () => {
           remote: "",
           isRemote: false,
         }],
+        mode: ["off", { ignore: [] }],
         disableSort: false,
       }
       const cssVars: CSSVarRecord = {
@@ -72,6 +73,7 @@ describe("Test Extension Main", () => {
           remote: "",
           isRemote: false,
         }],
+        mode: ["off", { ignore: [] }],
         disableSort: true,
       }
       const cssVars: CSSVarRecord = {
@@ -112,6 +114,7 @@ describe("Test Extension Main", () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation("")],
+        mode: ["off", { ignore: [] }],
         disableSort: true,
       }
       const cssVars1: CSSVarRecord = Array(11)

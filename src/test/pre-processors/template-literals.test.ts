@@ -26,6 +26,7 @@ const MOCK_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(JSX_FILE_PATH)],
+    mode: ["off", { ignore: [] }],
   },
 };
 
