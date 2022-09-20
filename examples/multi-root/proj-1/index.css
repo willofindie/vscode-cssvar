@@ -5,5 +5,8 @@
 
 .app {
   color: var(--color-1);
-  background-color: var(--color-1);
+  background-color: var(--color-2);
+
+  /* Non declared variable test */
+  color: var(--space-2, 2rem);
 }

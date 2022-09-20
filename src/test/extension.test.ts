@@ -45,7 +45,7 @@ const runActivate = async (line: string, id: SupportedLanguageIds) => {
     ) => Promise<any[]>;
   }[] = [];
   await activate({ subscriptions } as unknown as ExtensionContext);
-  return await subscriptions[0].provideCompletionItems(
+  return await subscriptions[1].provideCompletionItems(
     { getText: () => line, languageId: id },
     new Position(0, line.length)
   );
