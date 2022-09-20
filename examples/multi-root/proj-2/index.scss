@@ -4,5 +4,8 @@
     color: var(--brand-1);
     background-color: var(--brand-3);
     border-color: var(--brand-3);
+
+    // Non-declared variable tests
+    color: var(--space-2);
   }
 }

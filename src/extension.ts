@@ -36,6 +36,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
       );
     }
 
+    // Sequence of subscriptions matter.
+    context.subscriptions.push(
+      window.onDidChangeActiveTextEditor(updateStatus)
+    );
+
     const completionDisposable = languages.registerCompletionItemProvider(
       config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
       new CssCompletionProvider(),
@@ -107,10 +112,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
       }
     }
     //#endregion
-
-    context.subscriptions.push(
-      window.onDidChangeActiveTextEditor(updateStatus)
-    );
   } catch (err) {
     if (err instanceof Error) {
       window.showErrorMessage(err.message);
