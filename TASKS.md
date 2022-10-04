@@ -22,3 +22,4 @@
 - Good read to understand CSS Syntax: [Tokenizer and Parser](https://drafts.csswg.org/css-syntax/)
 - Good vscode extension to take insights from
   - https://github.com/znck/grammarly/blob/main/package.json
+- https://stackoverflow.com/a/15673308/2849127

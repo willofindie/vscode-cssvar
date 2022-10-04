@@ -1,5 +1,5 @@
-import { Position, Range } from "vscode";
-import { Config, CSSVarRecord, DEFAULT_CONFIG } from "../constants";
+import { Position, Range, workspace } from "vscode";
+import { Config, CSSVarRecord, DEFAULT_CONFIG, CACHE } from "../constants";
 import { createCompletionItems } from "../main";
 import { Region } from "../utils";
 import { getLocalCSSVarLocation } from "./test-utilities";
@@ -12,6 +12,43 @@ jest.mock("../constants", () => ({
 }));
 
 let region: Region | null = null;
+const DEFAULT_ROOT_FOLDER = "test";
+
+beforeEach(() => {
+  CACHE.activeRootPath = DEFAULT_ROOT_FOLDER;
+  CACHE.config = {
+    [CACHE.activeRootPath]: {
+      ...DEFAULT_CONFIG,
+      files: [
+        {
+          local: "",
+          remote: "",
+          isRemote: false,
+        },
+      ],
+      postcssPlugins: [],
+      mode: ["off", {}],
+      disableSort: false,
+    },
+  } as Record<string, Config>;
+});
+
+beforeAll(() => {
+  // @ts-ignore
+  workspace.workspaceFolders = [
+    {
+      uri: {
+        path: DEFAULT_ROOT_FOLDER,
+        fsPath: DEFAULT_ROOT_FOLDER,
+      },
+    },
+  ];
+});
+
+afterAll(() => {
+  // @ts-ignore Reset to default
+  workspace.workspaceFolders = [];
+})
 
 describe("Test Extension Main", () => {
   beforeEach(() => {
@@ -33,6 +70,7 @@ describe("Test Extension Main", () => {
             isRemote: false,
           },
         ],
+        postcssPlugins: [],
         mode: ["off", {}],
         disableSort: false,
       };
@@ -77,6 +115,7 @@ describe("Test Extension Main", () => {
             isRemote: false,
           },
         ],
+        postcssPlugins: [],
         mode: ["off", {}],
         disableSort: true,
       };
@@ -118,6 +157,7 @@ describe("Test Extension Main", () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation("")],
+        postcssPlugins: [],
         mode: ["off", {}],
         disableSort: true,
       };
@@ -178,4 +218,9 @@ describe("Test Extension Main", () => {
       );
     });
   });
+});
+
+// Need to work on this later.
+test.skip("setup() should map user config to in-mem Config object", () => {
+
 });

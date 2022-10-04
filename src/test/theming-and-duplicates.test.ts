@@ -26,6 +26,7 @@ const CONFIG: ConfigRecord = {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(THEMING_CSS)],
     mode: ["off", {}],
+    postcssPlugins: [],
   },
 };
 

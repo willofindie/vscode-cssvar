@@ -219,7 +219,15 @@
 					],
 					"default": null,
 					"items": {
-						"type": "string"
+						"oneOf": [
+							{ "type": "string" },
+							{ "type": "array", "items": [{
+								"type": "string"
+							}, {
+								"type": "object",
+								"default": {}
+							}]}
+						]
 					},
 					"markdownDescription": "Provide __PostCSS__ plugins to support custom CSS features. List of __PostCSS__ plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
 					"scope": "resource",

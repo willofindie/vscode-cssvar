@@ -67,7 +67,7 @@ export interface Config {
   extensions: SupportedExtensionNames[];
   themes: string[];
   mode: [LintingSeverity, { ignore?: RegExp | null }];
-  postcssPlugins: string[];
+  postcssPlugins: [string, Record<string, any>][];
   postcssSyntax: Record<string, string>;
   excludeThemedVariables: boolean;
   disableSort: boolean;
@@ -76,9 +76,13 @@ export interface Config {
   enableHover: boolean;
 }
 
-export type WorkspaceConfig = Omit<Config, "files" | "mode"> & {
+export type WorkspaceConfig = Omit<
+  Config,
+  "files" | "mode" | "postcssPlugins"
+> & {
   files: string[];
   mode: LintingSeverity | [LintingSeverity, { ignore: string[] }];
+  postcssPlugins: string[] | [string, Record<string, any>][];
 };
 
 /**
