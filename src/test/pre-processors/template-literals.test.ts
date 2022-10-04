@@ -26,7 +26,7 @@ const MOCK_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(JSX_FILE_PATH)],
-    mode: ["off", { ignore: [] }],
+    mode: ["off", {}],
   },
 };
 
@@ -132,12 +132,16 @@ beforeAll(() => {
 
 test("should have proper variables present", () => {
   for (const result of RESULTS) {
-    expect(globalVarRecord[JSX_FILE_PATH]).toContainEqual(expect.objectContaining(result));
+    expect(globalVarRecord[JSX_FILE_PATH]).toContainEqual(
+      expect.objectContaining(result)
+    );
   }
 });
 
 test("should not have improper variables", () => {
   for (const wrong of WRONG_RESULTS) {
-    expect(globalVarRecord[JSX_FILE_PATH]).not.toContainEqual(expect.objectContaining(wrong));
+    expect(globalVarRecord[JSX_FILE_PATH]).not.toContainEqual(
+      expect.objectContaining(wrong)
+    );
   }
 });

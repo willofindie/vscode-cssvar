@@ -145,15 +145,26 @@ export async function setup(): Promise<{
             const mode = _config.get<WorkspaceConfig["mode"]>(key);
             let _mode: Config["mode"];
             if (typeof mode === "string") {
-              _mode = [mode, { ignore: [] }];
+              _mode = [mode, {}];
             } else if (
               Array.isArray(mode) &&
               mode.length > 0 &&
               mode.length < 3
             ) {
-              _mode = [mode[0], mode[1] || { ignore: [] }];
+              let ignoreRegex = null;
+              if (mode[1].ignore.length > 0) {
+                ignoreRegex = new RegExp(
+                  mode[1].ignore
+                    .reduce((str, current) => {
+                      str.push(`(${current})`);
+                      return str;
+                    }, [] as string[])
+                    .join("|")
+                );
+              }
+              _mode = [mode[0], { ignore: ignoreRegex || null }];
             } else {
-              _mode = ["off", { ignore: [] }];
+              _mode = ["off", {}];
             }
             config[fsPathKey][key] = _mode;
             break;

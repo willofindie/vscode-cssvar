@@ -25,7 +25,7 @@ const CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(THEMING_CSS)],
-    mode: ["off", { ignore: [] }],
+    mode: ["off", {}],
   },
 };
 

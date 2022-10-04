@@ -13,6 +13,8 @@
   - Open `css-imports` project -> After the files are parsed, update any import for `open-props` with a new
     granular css import, like `open-props/red.min.css`.
   - Doing this still shows `open-props/open-props.min.css` in the autocomplete/definition-provider list.
+- Support variable defaults syntax as well, like the following:
+  - `color: var(--color, #333)`, this is a valid syntax.
 
 
 ## Notes:
