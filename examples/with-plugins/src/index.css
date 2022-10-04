@@ -1,0 +1,5 @@
+body {
+  color: var(--base);
+  color: var(--color-1);
+  padding: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+}

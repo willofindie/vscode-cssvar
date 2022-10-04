@@ -1,0 +1,22 @@
+{
+  "cssvar.files": [
+    "src/tailwind.css",
+    "src/other.css",
+  ],
+  "cssvar.postcssPlugins": [
+    ["postcss-import"],
+    ["postcss-nested", {
+      "unwrap": ["phone"]
+    }],
+
+    // Use tailwindcss plugin with precaution, as it
+    // processes every css passed to this extension.
+    // Always use `cssvar.files` to properly define your source files
+    // when using tailwindcss, to keep this extension parsing fast enough.
+    "tailwindcss",
+
+    // Do not use `postcss-preset-env` plugin, as it makes the extension
+    // parsing pretty slow, which happens on each source file change.
+    // "postcss-preset-env"
+  ],
+}

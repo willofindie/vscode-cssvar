@@ -59,10 +59,10 @@ const cssParseAsync = async (
   const plugins = CACHE.config[rootPath].postcssPlugins
     .map(plugin => {
       try {
-        const resolvedMod = require(require.resolve(plugin, {
+        const resolvedMod = require(require.resolve(plugin[0], {
           paths: rootPathsOrUndefined,
         }));
-        return resolvedMod;
+        return resolvedMod(plugin[1]);
       } catch (e: any) {
         window.showErrorMessage(
           `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`

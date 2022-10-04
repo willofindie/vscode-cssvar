@@ -121,6 +121,26 @@ export async function setup(): Promise<{
             });
             break;
           }
+          case "postcssPlugins": {
+            const _plugins =
+              _config.get<WorkspaceConfig["postcssPlugins"]>(key);
+            let plugins: Config["postcssPlugins"] = [];
+            if (_plugins) {
+              plugins = _plugins
+                .map(plugin => {
+                  if (Array.isArray(plugin) && plugin.length > 0) {
+                    return [plugin[0], plugin[1] || {}];
+                  } else if (typeof plugin === "string") {
+                    return [plugin, {}];
+                  } else {
+                    return null;
+                  }
+                })
+                .filter(Boolean) as Config["postcssPlugins"];
+            }
+            config[fsPathKey][key] = plugins;
+            break;
+          }
           case "postcssSyntax": {
             const syntaxes = _config.get<Record<string, string[]>>(key);
             if (syntaxes && !Array.isArray(syntaxes)) {
