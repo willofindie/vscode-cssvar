@@ -66,7 +66,7 @@ export interface Config {
   ignore: string[];
   extensions: SupportedExtensionNames[];
   themes: string[];
-  mode: [LintingSeverity, { ignore: string[] }];
+  mode: [LintingSeverity, { ignore?: RegExp | null }];
   postcssPlugins: string[];
   postcssSyntax: Record<string, string>;
   excludeThemedVariables: boolean;

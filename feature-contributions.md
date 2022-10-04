@@ -213,7 +213,7 @@ This Extension supports the following properties as of now:
       <br>Enable/Disable CSS variable linting modes.
     </td>
     <td>
-      E.g.<pre lang="js">["error", {
+      <br>E.g.<pre lang="js">["error", {
   ignore: [
     "--dynamic",
     "dy[nN].*?c$"

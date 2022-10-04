@@ -20,17 +20,7 @@ function createDiagnostic(
 ): Diagnostic | null {
   const variableName = match[1].trim();
   const mode = CACHE.config[CACHE.activeRootPath].mode;
-  let ignoreRegex = null;
-  if (mode[1].ignore.length > 0) {
-    ignoreRegex = new RegExp(
-      mode[1].ignore
-        .reduce((str, current) => {
-          str.push(`(${current})`);
-          return str;
-        }, [] as string[])
-        .join("|")
-    );
-  }
+  const ignoreRegex = mode[1].ignore;
   if (
     CACHE.cssVarsMap[CACHE.activeRootPath][variableName] ||
     (ignoreRegex && ignoreRegex.test(variableName))

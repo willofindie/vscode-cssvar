@@ -29,7 +29,7 @@ jest.mock("../constants", () => {
   };
 });
 
-jest.mock('../remote-paths');
+jest.mock("../remote-paths");
 
 type ConfigRecord = { [rootFolder: string]: Config };
 
@@ -37,7 +37,7 @@ const EXTENSION_CONFIG: ConfigRecord = {
   [CACHE.activeRootPath]: {
     ...DEFAULT_CONFIG,
     files: [getLocalCSSVarLocation(DUMMY_FILE)],
-    mode: ["off", { ignore: [] }],
+    mode: ["off", {}],
   },
 };
 
@@ -135,11 +135,13 @@ describe("Test Parser", () => {
       const updatedConfig: ConfigRecord = {
         [CACHE.activeRootPath]: {
           ...EXTENSION_CONFIG[CACHE.activeRootPath],
-          files: [{
-            local: path.resolve(__dirname, "fixtures/theming.css"), // Does nothing, just to make jest happy
-            remote: "http://example.com/v0.12.3/foo.css",
-            isRemote: true,
-          }],
+          files: [
+            {
+              local: path.resolve(__dirname, "fixtures/theming.css"), // Does nothing, just to make jest happy
+              remote: "http://example.com/v0.12.3/foo.css",
+              isRemote: true,
+            },
+          ],
         },
       };
 
@@ -148,7 +150,7 @@ describe("Test Parser", () => {
       jest.resetAllMocks();
       await parseFiles(updatedConfig);
       expect(fetchAndCacheAsset).toHaveBeenCalledTimes(0);
-    })
+    });
   });
 
   describe("parseFiles handle improper CSS Files", () => {
@@ -157,7 +159,10 @@ describe("Test Parser", () => {
       const updatedConfig: ConfigRecord = {
         [CACHE.activeRootPath]: {
           ...EXTENSION_CONFIG[CACHE.activeRootPath],
-          files: [getLocalCSSVarLocation(RENAMED_FILE), getLocalCSSVarLocation(BROKEN_FILE)],
+          files: [
+            getLocalCSSVarLocation(RENAMED_FILE),
+            getLocalCSSVarLocation(BROKEN_FILE),
+          ],
         },
       };
       CACHE.config = updatedConfig;
@@ -248,7 +253,7 @@ describe("Multi Root", () => {
   afterAll(() => {
     // @ts-ignore
     workspace.workspaceFolders = [];
-  })
+  });
 
   it(`should have proper values for each root folder`, async () => {
     const config: ConfigRecord = {
@@ -256,13 +261,13 @@ describe("Multi Root", () => {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation(IMPORT_SCSS_FILE)],
-        mode: ["off", { ignore: [] }],
+        mode: ["off", {}],
       },
       [rootPath2]: {
         // This config will test SCSS files
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation(RENAMED_FILE)],
-        mode: ["off", { ignore: [] }],
+        mode: ["off", {}],
       },
     };
     CACHE.config = config;

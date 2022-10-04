@@ -26,14 +26,16 @@ describe("Test Extension Main", () => {
     it("Should return CompletionItems with Sorting On", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
-        files: [{
-          local: "",
-          remote: "",
-          isRemote: false,
-        }],
-        mode: ["off", { ignore: [] }],
+        files: [
+          {
+            local: "",
+            remote: "",
+            isRemote: false,
+          },
+        ],
+        mode: ["off", {}],
         disableSort: false,
-      }
+      };
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
@@ -68,14 +70,16 @@ describe("Test Extension Main", () => {
     it("Should return CompletionItems with Sorting Disabled", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
-        files: [{
-          local: "",
-          remote: "",
-          isRemote: false,
-        }],
-        mode: ["off", { ignore: [] }],
+        files: [
+          {
+            local: "",
+            remote: "",
+            isRemote: false,
+          },
+        ],
+        mode: ["off", {}],
         disableSort: true,
-      }
+      };
       const cssVars: CSSVarRecord = {
         "./src/01.css": [
           {
@@ -114,9 +118,9 @@ describe("Test Extension Main", () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation("")],
-        mode: ["off", { ignore: [] }],
+        mode: ["off", {}],
         disableSort: true,
-      }
+      };
       const cssVars1: CSSVarRecord = Array(11)
         .fill([
           {

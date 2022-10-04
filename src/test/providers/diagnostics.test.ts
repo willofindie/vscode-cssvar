@@ -52,7 +52,7 @@ const resetMockedCache = () => {
           isRemote: false,
         },
       ],
-      mode: ["off", { ignore: [] }],
+      mode: ["off", {}],
     },
   };
 };
@@ -99,8 +99,8 @@ test("Should return diagnostics when turned on", () => {
   expect(diagnosticCollectionStub.get("foo")).not.toBeNull();
   expect(diagnosticCollectionStub.get("foo").length).toBe(1);
   expect(diagnosticCollectionStub.get("foo")[0]).toMatchObject({
-    desc: `Cannot find cssvar --brand-primary.`
-  })
+    desc: `Cannot find cssvar --brand-primary.`,
+  });
 });
 
 test("Should ignore variables which are added to `ignore` list", () => {
@@ -118,7 +118,7 @@ test("Should ignore variables which are added to `ignore` list", () => {
   CACHE.cssVarCount[CACHE.activeRootPath] = 1;
   CACHE.config[CACHE.activeRootPath].mode[0] = "error";
   CACHE.config[CACHE.activeRootPath].mode[1] = {
-    ignore: ["--brand-primary"]
+    ignore: new RegExp("--brand-primary"),
   };
 
   refreshDiagnostics(
