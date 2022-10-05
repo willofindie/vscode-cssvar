@@ -105,7 +105,7 @@ Read more about [Theming here][theme-link]
 
 Limited support to keep bundle size small.
 <br/>
-Except for `color(`)` api, every other CSS color is supported.
+Except for `color()` api, every other CSS color is supported.
 Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value)
 
 <br>
