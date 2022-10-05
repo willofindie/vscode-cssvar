@@ -195,12 +195,23 @@ This Extension supports the following properties as of now:
   <tr align="left">
     <td>
       <code>cssvar.postcssPlugins</code>
+      <br>Provide PostCSS Plugins to support custom CSS features
     </td>
     <td>
-      <br>Provide PostCSS Plugins to support custom CSS features
-      <br>E.g.<pre lang="js">["postcss-nested"]</pre>
+      <br>E.g.
+      <pre lang="js">["postcss-nested"]</pre>
+      Or
+      <pre lang="js">[[
+  "postcss-nested",
+  {"unwrap": ["phone"]}
+]]</pre>
     </td>
-    <td><code>string[]</code></td>
+        </td>
+    <td><pre lang="ts">string[]
+| [
+    string,
+    object
+  ][]</pre></td>
     <td>
       <br>
       <pre lang="js">[]</pre>
