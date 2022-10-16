@@ -8,7 +8,7 @@ import {
 import { tmpdir } from "os";
 import { mkdirSync } from "fs";
 import { resolve } from "path";
-import fastGlob from "fast-glob";
+import { globby } from "globby";
 import {
   CACHE,
   Config,
@@ -31,6 +31,7 @@ import {
   getRemoteCSSVarLocation,
 } from "./utils";
 import { disableDefaultSort } from "./unstable";
+import { LOGGER } from "./logger";
 
 /**
  * Use this function only when getting values from VSCode's
@@ -91,10 +92,12 @@ export async function setup(): Promise<{
               },
               [[], []]
             );
-            const localEntries = await fastGlob(localGlobs, {
+            const localEntries = await globby(localGlobs, {
               cwd: resourcePath,
+              gitignore: true,
               ignore: ignoreList,
             });
+            LOGGER.log("Source files: ", localEntries);
             const entries = [...localEntries, ...remoteRoutes];
             config[fsPathKey][key] = entries.map<CSSVarLocation>(
               (path: string | CSSVarLocation) => {
