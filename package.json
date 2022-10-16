@@ -220,13 +220,21 @@
 					"default": null,
 					"items": {
 						"oneOf": [
-							{ "type": "string" },
-							{ "type": "array", "items": [{
+							{
 								"type": "string"
-							}, {
-								"type": "object",
-								"default": {}
-							}]}
+							},
+							{
+								"type": "array",
+								"items": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "object",
+										"default": {}
+									}
+								]
+							}
 						]
 					},
 					"markdownDescription": "Provide __PostCSS__ plugins to support custom CSS features. List of __PostCSS__ plugin names can be found in [PostCSS Doc](https://github.com/postcss/postcss#plugins)",
@@ -422,7 +430,7 @@
 	},
 	"dependencies": {
 		"culori": "^2.0.3",
-		"fast-glob": "^3.2.11",
+		"globby": "^13.1.2",
 		"postcss": "^8.4.12",
 		"postcss-less": "^6.0.0"
 	},
