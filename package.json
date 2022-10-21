@@ -429,7 +429,7 @@
 	},
 	"dependencies": {
 		"culori": "^2.0.3",
-		"globby": "^13.1.2",
+		"fast-glob": "^3.2.12",
 		"postcss": "^8.4.12",
 		"postcss-less": "^6.0.0"
 	},

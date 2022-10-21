@@ -8,7 +8,7 @@ import {
 import { tmpdir } from "os";
 import { mkdirSync } from "fs";
 import { resolve } from "path";
-import { globby } from "globby";
+import fastGlob from "fast-glob";
 import {
   CACHE,
   Config,
@@ -92,9 +92,8 @@ export async function setup(): Promise<{
               },
               [[], []]
             );
-            const localEntries = await globby(localGlobs, {
+            const localEntries = await fastGlob(localGlobs, {
               cwd: resourcePath,
-              gitignore: true,
               ignore: ignoreList,
             });
             LOGGER.log("Source files: ", localEntries);
