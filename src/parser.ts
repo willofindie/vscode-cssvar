@@ -31,6 +31,7 @@ import {
   getRemoteCSSVarLocation,
   getVariableType,
   populateValue,
+  postcssPluginResolver,
 } from "./utils";
 import { LOGGER } from "./logger";
 import { fetchAndCacheAsset } from "./remote-paths";
@@ -56,22 +57,22 @@ const cssParseAsync = async (
     workspace.workspaceFolders?.map(folder => folder.uri.fsPath) || [];
   const rootPathsOrUndefined = rootPaths.length === 0 ? undefined : rootPaths;
 
-  const plugins = CACHE.config[rootPath].postcssPlugins
-    .map(plugin => {
-      try {
-        const resolvedMod = require(require.resolve(plugin[0], {
-          paths: rootPathsOrUndefined,
-        }));
-        return resolvedMod(plugin[1]);
-      } catch (e: any) {
-        window.showErrorMessage(
-          `Cannot resolve postcss plugin ${plugin}. Please add postcss@8 as project's dependency.`
-        );
-        LOGGER.error(`Failed to load postcss plugin: ${rootPaths}`, e);
-      }
-      return null;
-    })
-    .filter(Boolean);
+  const pluginPromises: Promise<any>[] = [];
+
+  /**
+   * FIXME(phoenisx): Improve the logic to support multiple node_modules
+   * present in multi-root projects, each having different root folder path
+   * and config file paths.
+   */
+  CACHE.config[rootPath].postcssPlugins.forEach(plugin => {
+    pluginPromises.push(
+      postcssPluginResolver(plugin[0], {
+        lookupPaths: rootPathsOrUndefined,
+        cwd: CACHE.activeRootPath,
+        ...plugin[1],
+      })
+    );
+  });
 
   /* Postcss Syntax needs to be applied only for files of that type */
   const syntaxModuleName = CACHE.config[rootPath].postcssSyntax[ext];
@@ -96,7 +97,16 @@ const cssParseAsync = async (
   }
 
   /* Parse a single file, with a syntax if provided */
-  const preProcessedContent = await preProcessor(content, ext);
+  const [processedContentResult, ...pluginImportResults] =
+    await Promise.allSettled([preProcessor(content, ext), ...pluginPromises]);
+  const plugins = pluginImportResults
+    .filter(result => result.status === "fulfilled" && !!result.value)
+    .map(result => (result as PromiseFulfilledResult<any>).value);
+
+  const preProcessedContent =
+    processedContentResult.status === "fulfilled"
+      ? processedContentResult.value
+      : content;
   return postcss(plugins).process(preProcessedContent, options);
 };
 

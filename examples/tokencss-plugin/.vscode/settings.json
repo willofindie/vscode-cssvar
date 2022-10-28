@@ -1,0 +1,5 @@
+{
+  "cssvar.postcssPlugins": [
+    ["@tokencss/postcss", { "cwd": "examples/tokencss-plugin/config" }]
+  ]
+}

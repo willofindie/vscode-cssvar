@@ -1,5 +1,7 @@
 body {
   color: var(--base);
-  color: var(--color-1);
+  background-color: rgba(var(--color-teal-6-rgb) , 0.3);
+  color: var(--color-grape-5);
   padding: var(--tw-border-spacing-x) var(--tw-border-spacing-y);
+  scale: var(--tw-scale-x);
 }

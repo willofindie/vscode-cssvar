@@ -16,7 +16,8 @@ export default [
     input: "src/extension.ts",
     external: ["vscode"],
     output: {
-      file: pkg.main,
+      // file: pkg.main,
+      dir: "out",
       format: "cjs",
     },
     plugins: [
