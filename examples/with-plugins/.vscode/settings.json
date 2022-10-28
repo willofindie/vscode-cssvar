@@ -2,6 +2,7 @@
   "cssvar.files": [
     "src/tailwind.css",
     "src/other.css",
+    "src/tokencss.css",
   ],
   "cssvar.postcssPlugins": [
     ["postcss-import"],
@@ -15,6 +16,7 @@
     // when using tailwindcss, to keep this extension parsing fast enough.
     "tailwindcss",
 
+    "@tokencss/postcss"
     // Do not use `postcss-preset-env` plugin, as it makes the extension
     // parsing pretty slow, which happens on each source file change.
     // "postcss-preset-env"
