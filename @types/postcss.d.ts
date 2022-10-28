@@ -80,3 +80,7 @@ declare module "postcss/lib/parser" {
   }
   export default Parser;
 }
+
+declare module "@tokencss/postcss" {
+  export default function plugin(options?: any): void;
+}

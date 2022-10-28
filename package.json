@@ -396,6 +396,7 @@
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^11.2.1",
 		"@rollup/plugin-replace": "^4.0.0",
+		"@tokencss/postcss": "^0.0.5",
 		"@types/css": "^0.0.31",
 		"@types/glob": "^7.2.0",
 		"@types/jest": "^29.1.2",

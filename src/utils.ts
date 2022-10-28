@@ -21,6 +21,7 @@ import { Range, window, workspace } from "vscode";
 import { URL } from "url";
 import { resolve } from "path";
 import { existsSync } from "fs";
+import { LOGGER } from "./logger";
 
 /**
  * [TODO] Change this method to a more generic recursion call to
@@ -349,3 +350,61 @@ export const getRemoteCSSVarLocation = (url: string) => {
     isRemote: !alreadyCached,
   };
 };
+
+//#region Import Resolver for external postcss plugins/syntax parser modules
+
+type ResolverOptions = {
+  lookupPaths: string[] | undefined;
+  cwd: string;
+  [key: string]: any;
+};
+
+const resolveModuleInPaths = (name: string, paths: string[] | undefined) =>
+  require(require.resolve(name, {
+    paths,
+  }));
+
+/**
+ * To fix #78:
+ * I need to create a way to resolve and pass arguments to plugins dynamically.
+ * Dynamically here means it should use a generic API, that can add some logic or use a config
+ * to figure out how to instantiate a plugin. This would be really helpful for plugins which are
+ * complicated to resolve and needs extra care with arguments, as they dop not support
+ * pure JSON arguments.
+ */
+export async function postcssPluginResolver(
+  name: string,
+  options: ResolverOptions
+) {
+  const { lookupPaths, cwd, ...rest } = options;
+  switch (name) {
+    case "@tokencss/postcss": {
+      if (!cwd || !existsSync(resolve(cwd, "token.config.json"))) {
+        LOGGER.error("TokenCSS Config not found in: ", resolve(cwd));
+        return null;
+      }
+      const _cwd = resolve(cwd);
+      // VSCode/Electron does not support ESM modules, thus it becomes important to bundle them
+      // with the code to make it work.
+      try {
+        const tokencss = await import("@tokencss/postcss").then(m => m.default);
+        return tokencss({ cwd: _cwd, ...rest });
+      } catch (e) {
+        LOGGER.error(">>>>> Error Import: ", e);
+        return null;
+      }
+    }
+    default: {
+      try {
+        const resolvedMod = resolveModuleInPaths(name, lookupPaths);
+        return resolvedMod(rest);
+      } catch (e: any) {
+        window.showErrorMessage(
+          `Cannot resolve postcss plugin ${name}. Please add postcss@8 as project's dependency.`
+        );
+        LOGGER.error(`Failed to load postcss plugin: ${lookupPaths}`, e);
+      }
+      return null;
+    }
+  }
+}
