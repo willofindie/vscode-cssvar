@@ -27,6 +27,9 @@ const watchers: FileSystemWatcher[] = [];
 export async function activate(context: ExtensionContext): Promise<void> {
   try {
     const { config } = await setup();
+    if (!config[CACHE.activeRootPath].enable) {
+      return;
+    }
     const [, errorPaths] = await parseFiles(config, { parseAll: true }); // Cache Parsed CSS Vars for all Root folders
     if (errorPaths.length > 0) {
       const relativePaths = errorPaths;

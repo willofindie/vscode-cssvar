@@ -109,6 +109,19 @@
 						]
 					]
 				},
+				"cssvar.enable": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Enable/Disable extension for a workspace/folder",
+					"scope": "resource",
+					"examples": [
+						true,
+						false
+					]
+				},
 				"cssvar.extensions": {
 					"type": [
 						"array",

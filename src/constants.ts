@@ -64,6 +64,7 @@ export interface Config {
   files: CSSVarLocation[];
   // Ignore could be a glob as well.
   ignore: string[];
+  enable: boolean;
   extensions: SupportedExtensionNames[];
   themes: string[];
   mode: [LintingSeverity, { ignore?: RegExp | null }];
@@ -93,6 +94,7 @@ export type WorkspaceConfig = Omit<
 export const DEFAULT_CONFIG: WorkspaceConfig = {
   files: ["**/*.css"],
   ignore: ["**/node_modules/**"],
+  enable: true,
   extensions: [...SUPPORTED_LANGUAGE_IDS],
   mode: "off",
   themes: [],
