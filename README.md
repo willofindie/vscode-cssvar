@@ -19,8 +19,8 @@
   <a href="https://github.com/willofindie/vscode-cssvar">
     <img src="https://img.shields.io/github/stars/willofindie/vscode-cssvar?style=social" />
   </a>
-  &nbsp;&nbsp;
-  <img src="https://img.shields.io/badge/size-%3C%20200KB-blue?style=flat" />
+  <!-- &nbsp;&nbsp;
+  <img src="https://img.shields.io/badge/size-%3C%20200KB-blue?style=flat" /> -->
   &nbsp;&nbsp;
   <a href="https://marketplace.visualstudio.com/items?itemName=phoenisx.cssvar">
     <img src="https://img.shields.io/visual-studio-marketplace/i/phoenisx.cssvar?label=vsc%20installs" />
