@@ -9,7 +9,7 @@ import {
 } from "vscode";
 import { CssColorProvider } from "./providers/color-provider";
 import { CssCompletionProvider } from "./providers/completion-provider";
-import { CACHE, DEFAULT_CONFIG, EXTENSION_NAME } from "./constants";
+import { CACHE, EXTENSION_NAME } from "./constants";
 import { CssDefinitionProvider } from "./providers/definition-provider";
 import { LOGGER } from "./logger";
 import { setup } from "./main";
@@ -30,6 +30,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     if (!config[CACHE.activeRootPath].enable) {
       return;
     }
+
     const [, errorPaths] = await parseFiles(config, { parseAll: true }); // Cache Parsed CSS Vars for all Root folders
     if (errorPaths.length > 0) {
       const relativePaths = errorPaths;
@@ -45,7 +46,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     );
 
     const completionDisposable = languages.registerCompletionItemProvider(
-      config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
+      config[CACHE.activeRootPath].extensions,
       new CssCompletionProvider(),
       "-",
       "v",
@@ -57,7 +58,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
     if (config[CACHE.activeRootPath].enableColors) {
       const colorDisposable = languages.registerColorProvider(
-        config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
+        config[CACHE.activeRootPath].extensions,
         new CssColorProvider()
       );
       context.subscriptions.push(colorDisposable);
@@ -65,7 +66,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
     if (config[CACHE.activeRootPath].enableGotoDef) {
       const definitionDisposable = languages.registerDefinitionProvider(
-        config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
+        config[CACHE.activeRootPath].extensions,
         new CssDefinitionProvider()
       );
       context.subscriptions.push(definitionDisposable);
@@ -73,7 +74,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
     if (config[CACHE.activeRootPath].enableHover) {
       const definitionDisposable = languages.registerHoverProvider(
-        config[CACHE.activeRootPath].extensions || DEFAULT_CONFIG.extensions,
+        config[CACHE.activeRootPath].extensions,
         new CssHoverProvider()
       );
       context.subscriptions.push(definitionDisposable);

@@ -1,3 +1,4 @@
 {
-  "cssvar.ignore": ["broken.css"]
+  "cssvar.ignore": ["broken.css"],
+  "cssvar.mode": "error"
 }

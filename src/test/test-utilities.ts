@@ -12,12 +12,14 @@ export class TextDocumentStub {
   private _uri: string;
   lineCount: number;
   lines: string[] = [];
+  languageId: string;
 
   constructor(doc: string, uri = "foo") {
     this.document = doc;
     this.lines = doc.split("\n");
     this.lineCount = this.lines.length;
     this._uri = uri;
+    this.languageId = "css";
   }
 
   // I have used a getter here, so that I can spy it if I want
