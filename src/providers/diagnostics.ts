@@ -58,6 +58,9 @@ export function refreshDiagnostics(
   cssvarDiagnostics: DiagnosticCollection
 ): void {
   if (
+    !CACHE.config[CACHE.activeRootPath].extensions.includes(
+      doc.languageId as any
+    ) ||
     CACHE.cssVarCount[CACHE.activeRootPath] === 0 ||
     CACHE.config[CACHE.activeRootPath].mode[0] === "off"
   ) {

@@ -44,13 +44,28 @@
 		"onLanguage:sass",
 		"onLanguage:less",
 		"onLanguage:postcss",
-		"onLanguage:svelte",
-		"onLanguage:vue",
-		"onLanguage:astro",
+		"onLanguage:stylus",
+		"onLanguage:sugarss",
+		"onLanguage:tailwindcss",
+
+		"onLanguage:django-html",
+		"onLanguage:ejs",
+		"onLanguage:gohtml",
+		"onLanguage:GoHTML",
+		"onLanguage:gohtmltmpl",
+		"onLanguage:handlebars",
+		"onLanguage:html",
+		"onLanguage:jade",
+
 		"onLanguage:javascript",
 		"onLanguage:javascriptreact",
 		"onLanguage:typescript",
-		"onLanguage:typescriptreact"
+		"onLanguage:typescriptreact",
+		"onLanguage:coffeescript",
+
+		"onLanguage:svelte",
+		"onLanguage:vue",
+		"onLanguage:astro"
 	],
 	"main": "./out/extension.js",
 	"preview": false,
@@ -92,6 +107,19 @@
 							"**/node_modules/**",
 							"styles/ignore.css"
 						]
+					]
+				},
+				"cssvar.enable": {
+					"type": [
+						"boolean",
+						"null"
+					],
+					"default": null,
+					"markdownDescription": "Enable/Disable extension for a workspace/folder",
+					"scope": "resource",
+					"examples": [
+						true,
+						false
 					]
 				},
 				"cssvar.extensions": {

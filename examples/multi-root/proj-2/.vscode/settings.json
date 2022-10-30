@@ -1,4 +1,5 @@
 {
   "cssvar.files": ["**/*.scss"],
+  "cssvar.extensions": ["scss"],
   "cssvar.mode": "warn"
 }
