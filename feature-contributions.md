@@ -58,6 +58,17 @@ This Extension supports the following properties as of now:
 </thead>
 <tbody>
   <tr align="left">
+    <td><code>cssvar.enable</code></td>
+    <td>
+      Enable/Disable extension for a workspace/folder
+    </td>
+    <td><code>boolean</code></td>
+    <td><br>
+      <pre lang="js">true</pre>
+      <br>
+    </td>
+  </tr>
+  <tr align="left">
     <td><code>cssvar.files</code></td>
     <td>
       Relative/Absolute paths to CSS variable source files
@@ -82,6 +93,7 @@ This Extension supports the following properties as of now:
   <tr align="left">
     <td>
       <code>cssvar.extensions</code>
+      <br>Use language identifiers mentioned in <a href="https://code.visualstudio.com/docs/languages/identifiers#_known-language-identifiers">this doc</a>
     </td>
     <td>File extensions in which IntelliSense will be enabled</td>
     <td><code>string[]</code></td>
