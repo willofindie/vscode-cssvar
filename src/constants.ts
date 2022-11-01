@@ -79,11 +79,12 @@ export interface Config {
 
 export type WorkspaceConfig = Omit<
   Config,
-  "files" | "mode" | "postcssPlugins"
+  "files" | "mode" | "postcssPlugins" | "postcssSyntax"
 > & {
   files: string[];
   mode: LintingSeverity | [LintingSeverity, { ignore: string[] }];
   postcssPlugins: string[] | [string, Record<string, any>][];
+  postcssSyntax: Record<string, string[]>;
 };
 
 /**
