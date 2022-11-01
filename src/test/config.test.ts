@@ -1,14 +1,10 @@
-import { Position, Range, workspace } from "vscode";
+import { workspace } from "vscode";
 import {
-  Config,
-  CSSVarRecord,
   DEFAULT_CONFIG,
   CACHE,
   WorkspaceConfig,
 } from "../constants";
 import { setup } from "../main";
-import { Region } from "../utils";
-import { getLocalCSSVarLocation } from "./test-utilities";
 
 jest.mock("../constants", () => ({
   ...jest.requireActual("../constants"),
@@ -108,5 +104,35 @@ test("should work for string array set to other values in config", async () => {
   const { config } = await setup();
   expect(config[CACHE.activeRootPath].ignore.length).toBe(2);
   expect(config[CACHE.activeRootPath].ignore).toContain("foo");
-  expect(config[CACHE.activeRootPath].ignore).not.toContain("**/node_modules/**");
+  expect(config[CACHE.activeRootPath].ignore).not.toContain(
+    "**/node_modules/**"
+  );
+});
+
+test("should convert configs mode, postcssPLugins, postcssSyntax", async () => {
+  wcGet.mockImplementation((key: keyof WorkspaceConfig) => {
+    switch (key) {
+      case "mode":
+        return "warn";
+      case "postcssPlugins":
+        return ["foo"]; // Old pattern
+      case "postcssSyntax":
+        return { "postcss-styled": ["styl", "css"] };
+      case "themes":
+        return null;
+      default:
+        return DEFAULT_CONFIG[key];
+    }
+  });
+
+  const { config } = await setup();
+  expect(config[CACHE.activeRootPath].mode).toMatchObject(["warn", {}]);
+  expect(config[CACHE.activeRootPath].postcssPlugins).toMatchObject([
+    ["foo", {}],
+  ]);
+  expect(config[CACHE.activeRootPath].postcssSyntax).toMatchObject({
+    styl: "postcss-styled",
+    css: "postcss-styled",
+  });
+  expect(config[CACHE.activeRootPath].themes).toMatchObject([]);
 });
