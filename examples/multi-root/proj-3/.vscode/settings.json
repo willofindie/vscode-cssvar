@@ -6,5 +6,6 @@
     "dark",
     "dim"
   ],
-  "cssvar.excludeThemedVariables": false
+  "cssvar.excludeThemedVariables": false,
+  "cssvar.mode": "warn"
 }
