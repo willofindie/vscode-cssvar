@@ -28,6 +28,7 @@ const MOCK_CONFIG: ConfigRecord = {
     files: [getLocalCSSVarLocation(JSX_FILE_PATH)],
     mode: ["off", {}],
     postcssPlugins: [],
+    postcssSyntax: {},
   },
 };
 

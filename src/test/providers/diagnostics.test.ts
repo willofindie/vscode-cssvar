@@ -54,6 +54,7 @@ const resetMockedCache = () => {
       ],
       mode: ["off", {}],
       postcssPlugins: [],
+      postcssSyntax: {},
     },
   };
 };
