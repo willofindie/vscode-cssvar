@@ -1,0 +1,17 @@
+:root {
+  --foo: #f00;
+  --joo: 4px;
+  /* Following does not get normalised in post-processing, because of regex */
+  --too: 2px var(--joo);
+  --bar: var(--too);
+}
+
+.test {
+  /* This needs to be fixed, and will be fixed once stop using object mapping in */
+  /* done to single value in v3.0 */
+  background: var(--foo);
+}
+
+.test--two {
+  --foo: var(--bar);
+}

@@ -1,0 +1,15 @@
+:root {
+  --foo: #f00;
+  --joo: 4px;
+  /* Following does not get normalised in post-processing, because of regex */
+  --too: 2px var(--joo);
+  --bar: var(--too);
+}
+
+.test {
+  background: var(--foo);
+}
+
+.test--two {
+  --foo: var(--bar);
+}

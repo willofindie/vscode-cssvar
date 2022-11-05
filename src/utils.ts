@@ -14,6 +14,7 @@ import {
   SupportedLanguageIds,
   VAR_KEYWORD_REVERSE,
   CACHE,
+  PATTERN_ALL_VARIABLE_USAGES,
 } from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { serializeColor } from "./color-parser";
@@ -100,6 +101,7 @@ export const populateValue = async (
   // Get Color for each, and modify the cssVar Record.
   const vars = getCSSDeclarationArray(cssVars);
 
+  // TODO(phoenisx) Remove this state.
   const cssVarsMapToSelf = vars.reduce((defs, cssVar) => {
     defs[cssVar.property] = cssVar;
     return defs;
@@ -110,7 +112,7 @@ export const populateValue = async (
   for await (const cssVar of vars) {
     const isVariable = getVariableType(cssVar.value);
     if (typeof isVariable === "string") {
-      const value = getValue(getVariableName(cssVar.value), cssVarsMapToSelf);
+      const value = getValue(getVariableName(cssVar.value), vars);
       cssVar.value = value || cssVar.value;
     }
 
@@ -124,16 +126,28 @@ export const populateValue = async (
 };
 
 function getValue(
-  name: string,
-  cssVarsMapToSelf: Record<string, CSSVarDeclarations | null>
+  prop: string, // Points to CSS variable name (a.k.a Propname in a CSS declarations)
+  cssVars: CSSVarDeclarations[]
 ): string | null {
-  const currentCssVar = cssVarsMapToSelf[name];
+  const currentCssVar = cssVars.reduce<CSSVarDeclarations | null>(
+    (currentCssVar, cssVar) => {
+      if (
+        !currentCssVar &&
+        cssVar.property === prop &&
+        !cssVar.value.match(PATTERN_ALL_VARIABLE_USAGES)
+      ) {
+        currentCssVar = cssVar;
+      }
+      return currentCssVar;
+    },
+    null
+  );
   if (currentCssVar) {
     const variableType = getVariableType(currentCssVar.value);
     if (variableType === null) {
       return currentCssVar.value;
     } else {
-      return getValue(getVariableName(currentCssVar.value), cssVarsMapToSelf);
+      return getValue(getVariableName(currentCssVar.value), cssVars);
     }
   }
 
