@@ -74,11 +74,8 @@
 			"title": "CSS Variables",
 			"properties": {
 				"cssvar.files": {
-					"type": [
-						"array",
-						"null"
-					],
-					"default": null,
+					"type": "array",
+					"default": ["**/*.css"],
 					"items": {
 						"type": "string"
 					},
@@ -92,11 +89,8 @@
 					]
 				},
 				"cssvar.ignore": {
-					"type": [
-						"array",
-						"null"
-					],
-					"default": null,
+					"type": "array",
+					"default": ["**/node_modules/**"],
 					"items": {
 						"type": "string"
 					},
@@ -110,11 +104,8 @@
 					]
 				},
 				"cssvar.enable": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": true,
 					"markdownDescription": "Enable/Disable extension for a workspace/folder",
 					"scope": "resource",
 					"examples": [
@@ -123,11 +114,21 @@
 					]
 				},
 				"cssvar.extensions": {
-					"type": [
-						"array",
-						"null"
+					"type": "array",
+					"default": [
+						"css",
+						"scss",
+						"sass",
+						"less",
+						"postcss",
+						"vue",
+						"svelte",
+						"astro",
+						"ts",
+						"tsx",
+						"js",
+						"jsx"
 					],
-					"default": null,
 					"items": {
 						"type": "string",
 						"enum": [
@@ -136,13 +137,25 @@
 							"sass",
 							"less",
 							"postcss",
+							"stylus",
+							"sugarss",
+							"tailwindcss",
 							"vue",
 							"svelte",
 							"astro",
+							"django-html",
+							"ejs",
+							"gohtml",
+							"GoHTML",
+							"gohtmltmpl",
+							"handlebars",
+							"html",
+							"jade",
 							"ts",
 							"tsx",
 							"jsx",
-							"js"
+							"js",
+							"coffeescript"
 						]
 					},
 					"markdownDescription": "File extensions for which IntelliSense will be enabled",
@@ -157,11 +170,8 @@
 					]
 				},
 				"cssvar.themes": {
-					"type": [
-						"array",
-						"null"
-					],
-					"default": null,
+					"type": "array",
+					"default": [],
 					"items": {
 						"type": "string"
 					},
@@ -175,11 +185,8 @@
 					]
 				},
 				"cssvar.excludeThemedVariables": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": false,
 					"markdownDescription": "Exclude themed variables to remove unnecessary duplicates",
 					"scope": "resource",
 					"examples": [
@@ -188,11 +195,8 @@
 					]
 				},
 				"cssvar.disableSort": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": false,
 					"markdownDescription": "Disables default sorting applied by VSCode",
 					"scope": "resource",
 					"examples": [
@@ -201,11 +205,8 @@
 					]
 				},
 				"cssvar.enableColors": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": true,
 					"markdownDescription": "Enable VScode's Color Representation feature when true",
 					"scope": "window",
 					"examples": [
@@ -214,11 +215,8 @@
 					]
 				},
 				"cssvar.enableGotoDef": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": true,
 					"markdownDescription": "Enable VScode's Goto Definition feature for CSS Variables",
 					"scope": "window",
 					"examples": [
@@ -227,11 +225,8 @@
 					]
 				},
 				"cssvar.enableHover": {
-					"type": [
-						"boolean",
-						"null"
-					],
-					"default": null,
+					"type": "boolean",
+					"default": true,
 					"markdownDescription": "Enable VScode's Hover IntelliSense feature for CSS Variables",
 					"scope": "window",
 					"examples": [
@@ -240,11 +235,8 @@
 					]
 				},
 				"cssvar.postcssPlugins": {
-					"type": [
-						"array",
-						"null"
-					],
-					"default": null,
+					"type": "array",
+					"default": [],
 					"items": {
 						"oneOf": [
 							{
@@ -414,7 +406,8 @@
 		"watch": "rollup -c -m -w",
 		"lint": "eslint src --ext ts",
 		"lint:fix": "eslint src --ext ts --fix",
-		"test": "concurrently \"tsc --project ./tsconfig.json --noEmit\" \"jest\""
+		"test": "concurrently \"tsc --project ./tsconfig.json --noEmit\" \"jest\"",
+		"jest": "jest"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.17.8",

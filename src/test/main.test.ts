@@ -27,6 +27,7 @@ beforeEach(() => {
         },
       ],
       postcssPlugins: [],
+      postcssSyntax: {},
       mode: ["off", {}],
       disableSort: false,
     },
@@ -71,6 +72,7 @@ describe("Test Extension Main", () => {
           },
         ],
         postcssPlugins: [],
+        postcssSyntax: {},
         mode: ["off", {}],
         disableSort: false,
       };
@@ -116,6 +118,7 @@ describe("Test Extension Main", () => {
           },
         ],
         postcssPlugins: [],
+        postcssSyntax: {},
         mode: ["off", {}],
         disableSort: true,
       };
@@ -158,6 +161,7 @@ describe("Test Extension Main", () => {
         ...DEFAULT_CONFIG,
         files: [getLocalCSSVarLocation("")],
         postcssPlugins: [],
+        postcssSyntax: {},
         mode: ["off", {}],
         disableSort: true,
       };

@@ -41,10 +41,9 @@ const getConfigValue = <T extends keyof WorkspaceConfig>(
   config: WorkspaceConfiguration,
   key: T
 ): WorkspaceConfig[typeof key] => {
-  let value = config.get<WorkspaceConfig[typeof key]>(key);
-  if (value == null) {
-    // Only overrride, if extension setting is untouched
-    value = DEFAULT_CONFIG[key];
+  const value = config.get<WorkspaceConfig[typeof key]>(key);
+  if (value == null || !config.has(key)) {
+    return DEFAULT_CONFIG[key];
   }
   return value;
 };
@@ -124,8 +123,7 @@ export async function setup(): Promise<{
             break;
           }
           case "postcssPlugins": {
-            const _plugins =
-              _config.get<WorkspaceConfig["postcssPlugins"]>(key);
+            const _plugins = getConfigValue(_config, key);
             let plugins: Config["postcssPlugins"] = [];
             if (_plugins) {
               plugins = _plugins
@@ -144,7 +142,7 @@ export async function setup(): Promise<{
             break;
           }
           case "postcssSyntax": {
-            const syntaxes = _config.get<Record<string, string[]>>(key);
+            const syntaxes = getConfigValue(_config, key);
             if (syntaxes && !Array.isArray(syntaxes)) {
               config[fsPathKey][key] = Object.keys(syntaxes).reduce(
                 (syntaxMap, key) => {
@@ -164,7 +162,7 @@ export async function setup(): Promise<{
             break;
           }
           case "mode": {
-            const mode = _config.get<WorkspaceConfig["mode"]>(key);
+            const mode = getConfigValue(_config, key);
             let _mode: Config["mode"];
             if (typeof mode === "string") {
               _mode = [mode, {}];

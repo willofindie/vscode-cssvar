@@ -27,6 +27,7 @@ const CONFIG: ConfigRecord = {
     files: [getLocalCSSVarLocation(THEMING_CSS)],
     mode: ["off", {}],
     postcssPlugins: [],
+    postcssSyntax: {},
   },
 };
 

@@ -64,13 +64,15 @@ export class CssHoverProvider implements HoverProvider {
       CACHE.activeRootPath = getActiveRootPath();
       const varDetails =
         CACHE.cssVarsMap[CACHE.activeRootPath][hoverDetails.name];
-      const content = getMDString(
-        varDetails.property,
-        varDetails.real,
-        varDetails.color || varDetails.value,
-        varDetails.theme
-      );
-      return new Hover(content, hoverDetails.range);
+      if (varDetails) {
+        const content = getMDString(
+          varDetails.property,
+          varDetails.real,
+          varDetails.color || varDetails.value,
+          varDetails.theme
+        );
+        return new Hover(content, hoverDetails.range);
+      }
     }
 
     return null;
