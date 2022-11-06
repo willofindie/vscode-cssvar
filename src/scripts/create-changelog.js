@@ -106,7 +106,7 @@ const processCommitMsg = (/** @type {string[]} */ msgTokens) => {
       changelogs.feature.forEach(line => console.log(`- ${line}`));
     }
     if (changelogs.fix.length > 0) {
-      console.log("### Fixed");
+      console.log("### Fixes");
       changelogs.fix.forEach(line => console.log(`- ${line}`));
     }
     if (changelogs.doc.length > 0) {
