@@ -1,0 +1,10 @@
+.card {
+  background: var(--fuzz);
+  padding: var(--not-defined);
+}
+
+/* Just updating variables instead of having to re-define each property */
+.card--large {
+  --fuzz: var(--fuzz-large);
+  --not-defined: var(--boo);
+}

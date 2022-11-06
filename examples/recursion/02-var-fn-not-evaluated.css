@@ -7,8 +7,8 @@
 }
 
 .test {
-  /* This needs to be fixed, and will be fixed once stop using object mapping in */
-  /* done to single value in v3.0 */
+  /* --foo should point to #f00, but it isn't righ now */
+  /* Need to find a way to set recursive value to previously declared variable */
   background: var(--foo);
 }
 

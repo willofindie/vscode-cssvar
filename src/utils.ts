@@ -107,8 +107,16 @@ export const populateValue = async (
     return defs;
   }, {} as Record<string, CSSVarDeclarations>);
 
-  // [TODO(shub)] Improve the following code, if possible
   // Mutating self inside the loop is not performant
+  /**
+   * [TODO(shub)] Improve the following code:
+   * - There can be duplicate variables; thus once value is found:
+   *    - We can either skip any subsequent loops for the same variable.
+   *    - Or make subsequent variable values scope aware. I mean decipher
+   *      nearset value set for that variable. This is too difficult, because it depends
+   *      on HTML layout and what parent a rule will reside under. (Skip)
+   * - `getValue` function should be memoized once the recursion starts.
+   */
   for await (const cssVar of vars) {
     const isVariable = getVariableType(cssVar.value);
     if (typeof isVariable === "string") {
