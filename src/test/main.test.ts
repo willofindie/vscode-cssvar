@@ -223,8 +223,3 @@ describe("Test Extension Main", () => {
     });
   });
 });
-
-// Need to work on this later.
-test.skip("setup() should map user config to in-mem Config object", () => {
-
-});

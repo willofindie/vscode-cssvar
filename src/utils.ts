@@ -14,6 +14,7 @@ import {
   SupportedLanguageIds,
   VAR_KEYWORD_REVERSE,
   CACHE,
+  PATTERN_ALL_VARIABLE_USAGES,
 } from "./constants";
 import { CSSVarDeclarations } from "./main";
 import { serializeColor } from "./color-parser";
@@ -100,17 +101,26 @@ export const populateValue = async (
   // Get Color for each, and modify the cssVar Record.
   const vars = getCSSDeclarationArray(cssVars);
 
+  // TODO(phoenisx) Remove this state.
   const cssVarsMapToSelf = vars.reduce((defs, cssVar) => {
     defs[cssVar.property] = cssVar;
     return defs;
   }, {} as Record<string, CSSVarDeclarations>);
 
-  // [TODO(shub)] Improve the following code, if possible
   // Mutating self inside the loop is not performant
+  /**
+   * [TODO(shub)] Improve the following code:
+   * - There can be duplicate variables; thus once value is found:
+   *    - We can either skip any subsequent loops for the same variable.
+   *    - Or make subsequent variable values scope aware. I mean decipher
+   *      nearset value set for that variable. This is too difficult, because it depends
+   *      on HTML layout and what parent a rule will reside under. (Skip)
+   * - `getValue` function should be memoized once the recursion starts.
+   */
   for await (const cssVar of vars) {
     const isVariable = getVariableType(cssVar.value);
     if (typeof isVariable === "string") {
-      const value = getValue(getVariableName(cssVar.value), cssVarsMapToSelf);
+      const value = getValue(getVariableName(cssVar.value), vars);
       cssVar.value = value || cssVar.value;
     }
 
@@ -124,16 +134,28 @@ export const populateValue = async (
 };
 
 function getValue(
-  name: string,
-  cssVarsMapToSelf: Record<string, CSSVarDeclarations | null>
+  prop: string, // Points to CSS variable name (a.k.a Propname in a CSS declarations)
+  cssVars: CSSVarDeclarations[]
 ): string | null {
-  const currentCssVar = cssVarsMapToSelf[name];
+  const currentCssVar = cssVars.reduce<CSSVarDeclarations | null>(
+    (currentCssVar, cssVar) => {
+      if (
+        !currentCssVar &&
+        cssVar.property === prop &&
+        !cssVar.value.match(PATTERN_ALL_VARIABLE_USAGES)
+      ) {
+        currentCssVar = cssVar;
+      }
+      return currentCssVar;
+    },
+    null
+  );
   if (currentCssVar) {
     const variableType = getVariableType(currentCssVar.value);
     if (variableType === null) {
       return currentCssVar.value;
     } else {
-      return getValue(getVariableName(currentCssVar.value), cssVarsMapToSelf);
+      return getValue(getVariableName(currentCssVar.value), cssVars);
     }
   }
 

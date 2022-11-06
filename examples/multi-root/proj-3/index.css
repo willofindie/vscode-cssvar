@@ -2,6 +2,8 @@
 @import "./theme.dark.css";
 
 body {
+  /* FIXME(phoenisx) Not working. It was working before */
+  /* It started working after reload */
   color: var(--primary-text);
   background-color: var(--primary-bg);
   padding: var(--container-spacing);

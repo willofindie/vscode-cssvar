@@ -1,0 +1,16 @@
+/* Folllowing is valid css */
+:root {
+  --bar: var(--foo);
+}
+
+.test {
+  background: var(--foo);
+}
+
+.test--two {
+  --foo: var(--bar);
+}
+
+.test--two.define {
+  --foo: lightgreen;
+}

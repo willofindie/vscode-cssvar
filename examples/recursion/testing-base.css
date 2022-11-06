@@ -1,0 +1,12 @@
+:root {
+  --fuzz: #fff;
+
+  --fuzz-large: var(--fuzz);
+  --boo: var(--not-defined);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --boo: 48px;
+  }
+}

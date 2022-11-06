@@ -1,0 +1,12 @@
+:root {
+  --foo: #f00;
+  --bar: var(--foo);
+}
+
+.test {
+  background: var(--foo);
+}
+
+.test--two {
+  --foo: var(--bar);
+}

@@ -7,6 +7,9 @@
   color: var(--color-1);
   background-color: var(--color-2);
 
+  /* LOL!! I didn't know adding a var() in the comment makes it visible for diagnostics */
+  /* FIXME(phoenisx) When var() function is used with default values, the regex doesn't */
+  /* work as expected */
   /* Non declared variable test */
   color: var(--space-2, 2rem);
 }
