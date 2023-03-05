@@ -20,7 +20,7 @@
 		"typescript"
 	],
 	"description": "Intellisense support for CSS Variables",
-	"version": "2.5.0",
+	"version": "2.6.0",
 	"publisher": "phoenisx",
 	"license": "MIT",
 	"homepage": "https://github.com/willofindie/vscode-cssvar",
@@ -47,7 +47,6 @@
 		"onLanguage:stylus",
 		"onLanguage:sugarss",
 		"onLanguage:tailwindcss",
-
 		"onLanguage:django-html",
 		"onLanguage:ejs",
 		"onLanguage:gohtml",
@@ -56,13 +55,11 @@
 		"onLanguage:handlebars",
 		"onLanguage:html",
 		"onLanguage:jade",
-
 		"onLanguage:javascript",
 		"onLanguage:javascriptreact",
 		"onLanguage:typescript",
 		"onLanguage:typescriptreact",
 		"onLanguage:coffeescript",
-
 		"onLanguage:svelte",
 		"onLanguage:vue",
 		"onLanguage:astro"
@@ -75,7 +72,9 @@
 			"properties": {
 				"cssvar.files": {
 					"type": "array",
-					"default": ["**/*.css"],
+					"default": [
+						"**/*.css"
+					],
 					"items": {
 						"type": "string"
 					},
@@ -90,7 +89,9 @@
 				},
 				"cssvar.ignore": {
 					"type": "array",
-					"default": ["**/node_modules/**"],
+					"default": [
+						"**/node_modules/**"
+					],
 					"items": {
 						"type": "string"
 					},
