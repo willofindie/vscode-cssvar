@@ -19,17 +19,23 @@ export const CSS_IDS = [
 ] as const;
 export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
 export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
+export type ExtendedLanguageIds = "stylus" | "sugarss" | "handlebars";
 export type CssExtensions = Exclude<
   typeof CSS_IDS[number],
   "vue" | "svelte" | "astro"
 >;
 
+/**
+ * This should always be a combination of extension and language ids
+ * to simplify user experience.
+ */
 export type SupportedExtensionNames =
   | "css"
   | "scss"
   | "sass"
   | "less"
   | "postcss"
+  | "pcss"
   | "vue"
   | "svelte"
   | "astro"
@@ -41,6 +47,12 @@ export type SupportedExtensionNames =
   | "typescriptreact"
   | "javascript"
   | "javascriptreact";
+
+export type ExtendedExtensionNames =
+  | ExtendedLanguageIds
+  | "styl"
+  | "sss"
+  | "hbs";
 
 export type JsExtensions = Extract<
   SupportedExtensionNames,
@@ -65,7 +77,7 @@ export interface Config {
   // Ignore could be a glob as well.
   ignore: string[];
   enable: boolean;
-  extensions: SupportedExtensionNames[];
+  extensions: (SupportedExtensionNames | ExtendedExtensionNames)[];
   themes: string[];
   mode: [LintingSeverity, { ignore?: RegExp | null }];
   postcssPlugins: [string, Record<string, any>][];
@@ -109,8 +121,8 @@ export const DEFAULT_CONFIG: WorkspaceConfig = {
 };
 
 export const mapShortToFullExtension = (
-  ext: SupportedExtensionNames
-): SupportedLanguageIds => {
+  ext: SupportedExtensionNames | ExtendedExtensionNames
+): SupportedLanguageIds | ExtendedLanguageIds => {
   switch (ext) {
     case "ts":
       return "typescript";
@@ -120,6 +132,14 @@ export const mapShortToFullExtension = (
       return "javascript";
     case "jsx":
       return "javascriptreact";
+    case "pcss":
+      return "postcss";
+    case "styl":
+      return "stylus";
+    case "sss":
+      return "sugarss";
+    case "hbs":
+      return "handlebars";
     default:
       return ext;
   }

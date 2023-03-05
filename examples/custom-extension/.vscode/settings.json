@@ -1,0 +1,8 @@
+{
+   "cssvar.files": ["*.styl"],
+   "cssvar.extensions": ["styl"],
+   "cssvar.postcssSyntax": {
+      // [npm package name]: ["file extension list to use this syntax parser for"]
+      "postcss-styl": ["styl"]
+    }
+}

@@ -15,6 +15,7 @@ import {
   CSSVarLocation,
   CSSVarRecord,
   DEFAULT_CONFIG,
+  ExtendedExtensionNames,
   EXTENSION_NAME,
   mapShortToFullExtension,
   SUFFIX,
@@ -116,7 +117,9 @@ export async function setup(): Promise<{
             const value = getConfigValue(_config, key);
             config[fsPathKey][key] = value.map(ext => {
               const _ext = ext.startsWith(".")
-                ? (ext.substring(1) as SupportedExtensionNames)
+                ? (ext.substring(1) as
+                    | SupportedExtensionNames
+                    | ExtendedExtensionNames)
                 : ext;
               return mapShortToFullExtension(_ext);
             });

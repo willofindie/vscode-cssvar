@@ -20,6 +20,11 @@ The following list of source file extensions does not need any customization.
 > __*JS/TS source file parsing try*__
 > __*using [postcss-css-in-js][css-in-js] parser,*__
 > __*as described in the [following section](#example-ii)*__.
+>
+
+> **NOTE:** Customization might not always work, because the way these syntax parsers work are different
+> for different css extensions. Thus if you find an extension is not working properly, do raise an issue
+> and appreciate a PR for the same.
 
 <br><br>
 
