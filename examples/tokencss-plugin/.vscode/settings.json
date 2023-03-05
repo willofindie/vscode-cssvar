@@ -1,6 +1,6 @@
 {
   "cssvar.postcssPlugins": [
     // `cwd` option is required only if tokencss config is not declared directly under project root
-    ["@tokencss/postcss", { "cwd": "examples/tokencss-plugin/config" }]
+    ["@tokencss/postcss", { "cwd": "config" }]
   ]
 }

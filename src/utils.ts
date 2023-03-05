@@ -401,11 +401,11 @@ export async function postcssPluginResolver(
   const { lookupPaths, cwd, ...rest } = options;
   switch (name) {
     case "@tokencss/postcss": {
-      if (!cwd || !existsSync(resolve(cwd, "token.config.json"))) {
+      const _cwd = resolve(CACHE.activeRootPath, cwd);
+      if (!cwd || !existsSync(resolve(_cwd, "token.config.json"))) {
         LOGGER.error("TokenCSS Config not found in: ", resolve(cwd));
         return null;
       }
-      const _cwd = resolve(cwd);
       // VSCode/Electron does not support ESM modules, thus it becomes important to bundle them
       // with the code to make it work.
       try {

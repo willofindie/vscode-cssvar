@@ -15,6 +15,7 @@
   - Doing this still shows `open-props/open-props.min.css` in the autocomplete/definition-provider list.
 - Support variable defaults syntax as well, like the following:
   - `color: var(--color, #333)`, this is a valid syntax.
+- `cssvar.enable` disables the extension entirely. It is not scoped for each root folder.
 
 
 ## Notes:
