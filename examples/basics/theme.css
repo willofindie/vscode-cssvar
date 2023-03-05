@@ -13,3 +13,15 @@
     --container-padding: 1rem;
   }
 }
+
+/* CSS with new at-rules */
+
+@custom-selector :--root :root, :after, :before;
+
+@layer variables {
+  @layer colors {
+    :--root {
+      --test-custom-selector: rgba(17, 17, 17, 1);
+    }
+  }
+}
