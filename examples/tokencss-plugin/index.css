@@ -1,4 +1,5 @@
 body {
   color: var(--color-red-2);
+  background-color: var(--color-blue-4);
   padding: var(--space-2xl);
 }
