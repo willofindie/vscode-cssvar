@@ -1,0 +1,9 @@
+:root {
+   --pop: violet;
+   --chop1: var(--pop);
+   --chop2: var(--chop1);
+}
+
+body {
+   color: var(--chop2);
+}

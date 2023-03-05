@@ -290,7 +290,9 @@ const parseFile = async function (
             }, {} as CSSVarLocation);
           }
           if (acceptedFile && !allLocalFiles.includes(acceptedFile.local)) {
-            resolvedPaths.push(acceptedFile);
+            if (Object.keys(acceptedFile).length !== 0) {
+              resolvedPaths.push(acceptedFile);
+            }
           }
         }
       }

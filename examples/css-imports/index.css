@@ -10,7 +10,9 @@
 /* Following is very specific to webpack/react projects */
 /* I won't be supporting this in this extension, as a user can import */
 /* such css files from extension settings */
-/* @import '~open-props/open-props.min.css' */
+/* But's it's wise to ignore such imports */
+@import '~open-props/open-props.min.css';
+@import 'modern-normalize/modern-normalize.css';
 
 @import url('node_modules/open-props/red.min.css') layer(utilities) print, screen;
 
@@ -29,4 +31,5 @@ body {
   background-color: var(--c-blue);
   border-top-color: var(--orange-2);
   box-shadow: 0 0 3px 0 var(--violet-2);
+  margin: var(--size-10);
 }
