@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.2](https://github.com/willofindie/vscode-cssvar/compare/v2.6.1...v2.6.2) - 2023-03-06
+### Features
+- [#105](https://github.com/willofindie/vscode-cssvar/issues/105) immediately return value of already parsed color css variable.
+### Fixes
+-  changelog typo
+
+
 ## [2.6.1](https://github.com/willofindie/vscode-cssvar/compare/v2.6.0...v2.6.1) - 2023-03-05
 ### Fixes
 -  [#99](https://github.com/willofindie/vscode-cssvar/issues/99) File extensions and languageIds are represented by `cssvar.extensions` setting.
