@@ -45,6 +45,12 @@ export async function normalizeVars(
     const propertyName = value.match(CSS_VAR_FUNCTION_NOTATION)?.groups?.args;
     if (propertyName) {
       const cssVar = cssVars.find(cssVar => cssVar.property === propertyName);
+      if (cssVar?.color) {
+        return {
+          isColor: true,
+          value: cssVar?.color,
+        };
+      }
       return await normalizeVars(cssVar?.value || "");
     }
   } else if (cssVars && SCSS_COLOR_INTERPOLATION.test(value)) {
