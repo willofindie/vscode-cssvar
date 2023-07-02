@@ -21,6 +21,7 @@
 /* @import 'pollen-css/pollen.css'; */
 
 @import url(https://unpkg.com/pollen-css@4.4.0/pollen.css);
+@import "https://unpkg.com/pollen-css";
 
 body {
   color: var(--red-2);

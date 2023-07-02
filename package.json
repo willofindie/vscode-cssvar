@@ -462,6 +462,7 @@
 	"dependencies": {
 		"culori": "^2.0.3",
 		"fast-glob": "^3.2.12",
+		"follow-redirects": "^1.15.2",
 		"postcss": "^8.4.12",
 		"postcss-less": "^6.0.0"
 	},

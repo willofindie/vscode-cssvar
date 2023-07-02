@@ -1,7 +1,7 @@
 import { createWriteStream, existsSync, mkdirSync, unlink } from "fs";
 import { Readable } from "stream";
-import { get, IncomingMessage } from "http";
-import { get as sGet } from "https";
+import { http, https } from "follow-redirects";
+import { IncomingMessage } from "http";
 import { URL } from "url";
 import {
   createUnzip,
@@ -22,8 +22,10 @@ const CSSGetError = class extends Error {
     super(overrideMsg || response.statusMessage || "CSSGetError: ");
 
     this.name = "CSSGetError";
-    this.message = overrideMsg || response.statusMessage || "";
-    this.code = response.statusCode || 200;
+    this.code = response.statusCode ?? 200;
+    this.message =
+      `Response Status Code: ${this.code}, Message: ` +
+      (overrideMsg ?? response.statusMessage ?? "");
   }
 };
 
@@ -38,10 +40,10 @@ const CSSGetError = class extends Error {
 export const fetchAndCacheAsset = (url: string) =>
   new Promise<void>((res, rej) => {
     const _url = new URL(url);
-    let httpGet = sGet;
+    let httpGet = https.get;
 
     if (_url.protocol === "http:") {
-      httpGet = get;
+      httpGet = http.get;
     }
 
     httpGet(
