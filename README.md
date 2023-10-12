@@ -119,13 +119,13 @@ Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.
 
 <br><br><br><br>
 
-<h3 align="center">Phoenisx Sponsors</h3>
+<!-- <h3 align="center">Phoenisx Sponsors</h3>
 
 <p align="center">
   <a href="./img/sponsors.png">
     <img src='./img/sponsors.png'/>
   </a>
-</p>
+</p> -->
 
 
 

@@ -11,6 +11,7 @@ import { fetchAndCacheAsset } from "../remote-paths";
 const MODIFIED_DATE = new Date("2021-04-12T08:58:58.676Z");
 const DUMMY_FILE = path.resolve("src", "test", "touch.css");
 const RENAMED_FILE = path.resolve("src", "test", "renamed.css");
+const AT_RULES_CSS = path.resolve("src", "test", "at-rules.css");
 const BROKEN_FILE = path.resolve("src", "test", "broken.css");
 const IMPORT_BASE = path.resolve("src", "test", "css-imports");
 const IMPORT_CSS_FILE = path.resolve(IMPORT_BASE, "import.css");
@@ -152,6 +153,19 @@ describe("Test Parser", () => {
       jest.resetAllMocks();
       await parseFiles(updatedConfig);
       expect(fetchAndCacheAsset).toHaveBeenCalledTimes(0);
+    });
+
+    it("Should parse at-rules", async () => {
+      // Updated config should contain the latest renamed file name.
+      const updatedConfig: ConfigRecord = {
+        [CACHE.activeRootPath]: {
+          ...EXTENSION_CONFIG[CACHE.activeRootPath],
+          files: [getLocalCSSVarLocation(AT_RULES_CSS)],
+        },
+      };
+      CACHE.config = updatedConfig;
+      const [_, errorPaths] = await parseFiles(updatedConfig);
+      expect(errorPaths.length).toBe(0);
     });
   });
 

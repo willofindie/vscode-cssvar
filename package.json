@@ -20,7 +20,7 @@
 		"typescript"
 	],
 	"description": "Intellisense support for CSS Variables",
-	"version": "2.6.3",
+	"version": "2.6.4",
 	"publisher": "phoenisx",
 	"license": "MIT",
 	"homepage": "https://github.com/willofindie/vscode-cssvar",

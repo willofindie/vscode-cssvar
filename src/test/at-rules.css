@@ -1,0 +1,16 @@
+@layer x01, x02;
+@layer x02 {
+  .test {
+    color: firebrick;
+  }
+}
+@layer x01 {
+  .test {
+    color: limegreen;
+  }
+}
+
+:root {
+  --red100: #f00;
+  --red500: #f24455;
+}
