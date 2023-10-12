@@ -1,6 +1,18 @@
 @import url("https://unpkg.com/open-props@1.4.14/orange.min.css");
 @import url(./nested.css);
 
+@layer x01, x02;
+@layer x01 {
+  .test {
+    --test-x01: green;
+  }
+}
+@layer x02 {
+  .test {
+    --test-x01: red;
+  }
+}
+
 :root {
   --gap-sm: 0.25rem;
   --gap-md: 0.5rem;

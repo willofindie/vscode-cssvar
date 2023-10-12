@@ -192,7 +192,7 @@ export function getVariableDeclarations(
   if (isNodeType<Rule>(node, SUPPORTED_CSS_RULE_TYPES[0])) {
     // For proper theming, following filter condition should be improved
     const [theme] = config.themes.filter(theme => node.selector.match(theme));
-    if (!config.excludeThemedVariables || !theme) {
+    if (node.nodes && (!config.excludeThemedVariables || !theme)) {
       for (const _node of node.nodes) {
         const decls = getVariableDeclarations(config, _node, {
           ...options,
@@ -208,9 +208,11 @@ export function getVariableDeclarations(
     isNodeType<AtRule>(node, SUPPORTED_CSS_RULE_TYPES[2]) &&
     SUPPORTED_EVALUATING_ATRULES.has(node.name)
   ) {
-    for (const _node of node.nodes) {
-      const decls = getVariableDeclarations(config, _node, options);
-      declarations = declarations.concat(decls);
+    if (node.nodes) {
+      for (const _node of node.nodes) {
+        const decls = getVariableDeclarations(config, _node, options);
+        declarations = declarations.concat(decls);
+      }
     }
   }
 
