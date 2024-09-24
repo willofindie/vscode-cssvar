@@ -34,7 +34,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const [, errorPaths] = await parseFiles(config, { parseAll: true }); // Cache Parsed CSS Vars for all Root folders
     if (errorPaths.length > 0) {
       const relativePaths = errorPaths;
-      window.showWarningMessage(
+      LOGGER.error(
         "Failed to parse CSS variables in files:",
         `\n\n${relativePaths.join("\n\n")}`
       );
