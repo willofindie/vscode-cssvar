@@ -1,7 +1,7 @@
 import { css } from "@linaria/core";
 
 const rootClass = css`
-  color: var(--brand);
+  color: var(--color-green);
   background-color: var(--color-blue);
 
   .head {

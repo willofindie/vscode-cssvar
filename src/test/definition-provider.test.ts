@@ -1,6 +1,5 @@
 import { Location, Position, Range, TextDocument, Uri } from "vscode";
 import { CACHE } from "../constants";
-import { getActiveRootPath } from "../utils";
 import { CssDefinitionProvider } from "../providers/definition-provider";
 import { TextDocumentStub } from "./test-utilities";
 
@@ -52,21 +51,23 @@ afterAll(() => {
 test("Definition Provider to work with variables present", async () => {
   CACHE.cssVarDefinitionsMap = {
     [CACHE.activeRootPath]: {
-      "--color-red-300": [new Location(
-        {
-          path: "/foo/bar",
-        } as Uri,
-        new Range(new Position(0, 3), new Position(0, 18))
-      )]
-    }
-  }
+      "--color-red-300": [
+        new Location(
+          {
+            path: "/foo/bar",
+          } as Uri,
+          new Range(new Position(0, 3), new Position(0, 18))
+        ),
+      ],
+    },
+  };
   const document = new TextDocumentStub(
     "color: var(--color-red-300)"
   ) as unknown as TextDocument;
-  const def = await defProvider?.provideDefinition(
+  const def = (await defProvider?.provideDefinition(
     document,
     new Position(0, 14)
-  ) as Location[];
+  )) as Location[];
 
   expect(def.length).toBeGreaterThan(0);
   expect(def[0].uri).toMatchObject({ path: "/foo/bar" });
@@ -76,10 +77,10 @@ test("Definition Provider to work w/ var() function with spaces", async () => {
   const document = new TextDocumentStub(
     "color: var( --color-red-300 )"
   ) as unknown as TextDocument;
-  const def = await defProvider?.provideDefinition(
+  const def = (await defProvider?.provideDefinition(
     document,
     new Position(0, 14)
-  ) as Location[];
+  )) as Location[];
 
   expect(def.length).toBeGreaterThan(0);
   expect(def[0].uri).toMatchObject({ path: "/foo/bar" });

@@ -5,7 +5,7 @@ export const getLocalCSSVarLocation = (path: string) =>
     local: path,
     remote: "",
     isRemote: false,
-  } as CSSVarLocation);
+  }) as CSSVarLocation;
 
 export class TextDocumentStub {
   private document: string;
@@ -28,7 +28,9 @@ export class TextDocumentStub {
   }
 
   getText = jest.fn().mockImplementation(() => this.document);
-  lineAt = jest.fn().mockImplementation((index: number) => ({ text: this.lines[index] }));
+  lineAt = jest
+    .fn()
+    .mockImplementation((index: number) => ({ text: this.lines[index] }));
 }
 
 export class DiagnosticCollectionStub {
@@ -41,8 +43,8 @@ export class DiagnosticCollectionStub {
 
   set = jest.fn().mockImplementation((uri: string, obj: any) => {
     this.map.set(uri, obj);
-  })
+  });
   get = jest.fn().mockImplementation((uri: string) => {
     return this.map.get(uri);
-  })
+  });
 }

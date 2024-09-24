@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
 // @ts-check
 const { spawn } = require("node:child_process");
 require("dotenv").config();
@@ -26,7 +28,7 @@ Promise.all([spawnAsync("yarn", "test"), spawnAsync("yarn", "build")])
       spawnAsync("ovsx", "publish", "-p", process.env.OVSX_KEY),
     ]);
   })
-  .catch((reason)=> {
+  .catch(reason => {
     console.error(reason);
     process.exit(1);
   });

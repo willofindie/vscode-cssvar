@@ -85,9 +85,12 @@ const cssParseAsync = async (
 
   if (syntaxModuleName) {
     try {
-      options.syntax = require(require.resolve(syntaxModuleName, {
-        paths: rootPathsOrUndefined,
-      }));
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      options.syntax = require(
+        require.resolve(syntaxModuleName, {
+          paths: rootPathsOrUndefined,
+        })
+      );
     } catch (e: any) {
       window.showErrorMessage(
         `Cannot resolve postcss syntax module ${syntaxModuleName}. Please add postcss@8 as project's dependency.`
@@ -412,19 +415,22 @@ const parseFilesForSingleFolder = async function (
     try {
       const [vars, cssVarsMap] = await populateValue(cssVars);
       CACHE.cssVarCount[rootPath] = vars.length;
-      CACHE.cssVarDefinitionsMap[rootPath] = vars.reduce((defs, cssVar) => {
-        if (!cssVar.location) {
-          return defs;
-        }
+      CACHE.cssVarDefinitionsMap[rootPath] = vars.reduce(
+        (defs, cssVar) => {
+          if (!cssVar.location) {
+            return defs;
+          }
 
-        const key = cssVar.property;
-        if (key in defs) {
-          defs[key].push(cssVar.location);
-        } else {
-          defs[key] = [cssVar.location];
-        }
-        return defs;
-      }, {} as CacheType["cssVarDefinitionsMap"][string]);
+          const key = cssVar.property;
+          if (key in defs) {
+            defs[key].push(cssVar.location);
+          } else {
+            defs[key] = [cssVar.location];
+          }
+          return defs;
+        },
+        {} as CacheType["cssVarDefinitionsMap"][string]
+      );
       CACHE.cssVarsMap[rootPath] = cssVarsMap;
     } catch (e) {
       window.showErrorMessage(`Populating Variable Values: ${e}`);

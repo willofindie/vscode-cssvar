@@ -1,9 +1,5 @@
 import { workspace } from "vscode";
-import {
-  DEFAULT_CONFIG,
-  CACHE,
-  WorkspaceConfig,
-} from "../constants";
+import { DEFAULT_CONFIG, CACHE, WorkspaceConfig } from "../constants";
 import { setup } from "../main";
 
 jest.mock("../constants", () => ({
@@ -27,7 +23,7 @@ beforeEach(() => {
 });
 
 beforeAll(() => {
-  // @ts-ignore
+  // @ts-expect-error workspaceFolders is readonly
   workspace.workspaceFolders = [
     {
       uri: {
@@ -44,7 +40,8 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  // @ts-ignore Reset to default
+  // Reset to default
+  // @ts-expect-error workspaceFolders is readonly
   workspace.workspaceFolders = [];
   jest.clearAllMocks();
 });

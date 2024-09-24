@@ -3,8 +3,8 @@ import commonjs from "@rollup/plugin-commonjs";
 import replace from "@rollup/plugin-replace";
 import json from "@rollup/plugin-json";
 import esbuild from "rollup-plugin-esbuild";
-import pkg from "./package.json";
-import tsConfig from "./tsconfig.json";
+import pkg from "./package.json" with { type: "json" };
+import tsConfig from "./tsconfig.json" with { type: "json" };
 
 const isProd = process.env.NODE_ENV === "production";
 

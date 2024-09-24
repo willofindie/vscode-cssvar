@@ -117,7 +117,8 @@ describe("Utility Function Tests", () => {
       {
         type: "css",
         property: "--color-gradient",
-        value: "linear-gradient(var(--g-rot), var(--g-red), var(--color-translucent))",
+        value:
+          "linear-gradient(var(--g-rot), var(--g-red), var(--color-translucent))",
         real: "linear-gradient(var(--g-rot), var(--g-red), var(--color-translucent))",
         theme: "",
       },
@@ -201,26 +202,35 @@ describe("Utility Function Tests", () => {
         theme: "",
       },
     ];
-    const colorWithNegativeRad = [{
-      type: "css",
-      property: "--color",
-      value: "hwb(-100 0% 10%)",
-      theme: "",
-    }] as CSSVarDeclarations[];
+    const colorWithNegativeRad = [
+      {
+        type: "css",
+        property: "--color",
+        value: "hwb(-100 0% 10%)",
+        theme: "",
+      },
+    ] as CSSVarDeclarations[];
 
-    const results = await Promise.all(cssVars.map(cssVar => normalizeVars(cssVar.value, cssVars)));
-    const maxIndexWithoutAlpha = Math.ceil((results.length / 2) - 1);
+    const results = await Promise.all(
+      cssVars.map(cssVar => normalizeVars(cssVar.value, cssVars))
+    );
+    const maxIndexWithoutAlpha = Math.ceil(results.length / 2 - 1);
+    const resultsWithoutAlpha = results.splice(0, maxIndexWithoutAlpha + 1);
+    for (let i = 0; i < resultsWithoutAlpha.length; i++) {
+      const result = resultsWithoutAlpha[i];
+      expect(result.isColor).toBeTruthy();
+      expect(result.value).toEqual("rgb(106, 27, 154)");
+    }
     for (let i = 0; i < results.length; i++) {
       const result = results[i];
       expect(result.isColor).toBeTruthy();
-      if (i <= maxIndexWithoutAlpha) {
-        expect(result.value).toEqual("rgb(106, 27, 154)");
-      } else {
-        expect(result.value).toEqual("rgba(106, 27, 154, 0.67)");
-      }
+      expect(result.value).toEqual("rgba(106, 27, 154, 0.67)");
     }
 
-    const result = await normalizeVars(colorWithNegativeRad[0].value, colorWithNegativeRad);
+    const result = await normalizeVars(
+      colorWithNegativeRad[0].value,
+      colorWithNegativeRad
+    );
     expect(result.isColor).toBeTruthy();
     expect(result.value).toEqual("rgb(76, 0, 230)");
   });
@@ -231,7 +241,7 @@ describe("Utility Function Tests", () => {
       const input2 = "let x = --i";
       const input3 = "--i";
       // Need to fix intellisense getting triggered for input4 for JS like files.
-      const input4 = '{x: "(--i) reduces i by 1"';
+      // const input4 = '{x: "(--i) reduces i by 1"';
       const result1 = restrictIntellisense(
         input1,
         "javascript",
@@ -268,12 +278,14 @@ describe("Utility Function Tests", () => {
         [initCount + 9, initCount + 11],
         [initCount + 24, initCount + 26],
         [initCount + 15, initCount + 17],
-      ]
-      const results = lines.map(line => restrictIntellisense(
-        line,
-        "css",
-        new Range(new Position(0, 0), new Position(0, line.length))
-      ));
+      ];
+      const results = lines.map(line =>
+        restrictIntellisense(
+          line,
+          "css",
+          new Range(new Position(0, 0), new Position(0, line.length))
+        )
+      );
       for (const index in positions.slice(0, positions.length - 1)) {
         const position = positions[index];
         expect(results[index][0]).toMatchObject({
@@ -282,9 +294,9 @@ describe("Utility Function Tests", () => {
               character: position[0],
             }),
             end: expect.objectContaining({
-              character: position[1]
+              character: position[1],
             }),
-          }
+          },
         });
       }
       expect(results[last].length).toBe(2);
@@ -294,11 +306,11 @@ describe("Utility Function Tests", () => {
             character: positions[last][0],
           }),
           end: expect.objectContaining({
-            character: positions[last][1]
+            character: positions[last][1],
           }),
-        }
+        },
       });
-    })
+    });
 
     it("should not restrict for proper css variable used in JS", () => {
       const last = 4;
@@ -315,12 +327,14 @@ describe("Utility Function Tests", () => {
         [initCount + 2, initCount + 4],
         [initCount + 24, initCount + 26],
         [initCount + 15, initCount + 17],
-      ]
-      const results = lines.map(line => restrictIntellisense(
-        line,
-        "javascriptreact",
-        new Range(new Position(0, 0), new Position(0, line.length))
-      ));
+      ];
+      const results = lines.map(line =>
+        restrictIntellisense(
+          line,
+          "javascriptreact",
+          new Range(new Position(0, 0), new Position(0, line.length))
+        )
+      );
       expect(results[0].length).toBe(0); // Since we activate only after second `-`
       const test_results = results.slice(1, results.length - 1);
       const test_positions = positions.slice(1, positions.length - 1);
@@ -332,9 +346,9 @@ describe("Utility Function Tests", () => {
               character: position[0],
             }),
             end: expect.objectContaining({
-              character: position[1]
+              character: position[1],
             }),
-          }
+          },
         });
       }
       expect(results[last].length).toBe(2);
@@ -344,11 +358,11 @@ describe("Utility Function Tests", () => {
             character: positions[last][0],
           }),
           end: expect.objectContaining({
-            character: positions[last][1]
+            character: positions[last][1],
           }),
-        }
+        },
       });
-    })
+    });
 
     it("should return proper range", () => {
       const lines: [string, SupportedLanguageIds][] = [
@@ -358,11 +372,13 @@ describe("Utility Function Tests", () => {
         ["  border-radius: --c;", "css"],
       ];
 
-      const [r1, r2, r3, r4] = lines.map(([line, lang]) => restrictIntellisense(
-        line,
-        lang,
-        new Range(new Position(0, 0), new Position(0, line.length))
-      ));
+      const [r1, r2, r3, r4] = lines.map(([line, lang]) =>
+        restrictIntellisense(
+          line,
+          lang,
+          new Range(new Position(0, 0), new Position(0, line.length))
+        )
+      );
 
       expect(r1[0]).toMatchObject({
         range: {
@@ -370,7 +386,7 @@ describe("Utility Function Tests", () => {
             character: 13,
           }),
           end: expect.objectContaining({
-            character: 13
+            character: 13,
           }),
         },
         insideVar: true,
@@ -383,7 +399,7 @@ describe("Utility Function Tests", () => {
             character: 16,
           }),
           end: expect.objectContaining({
-            character: 18
+            character: 18,
           }),
         },
         insideVar: true,
@@ -395,7 +411,7 @@ describe("Utility Function Tests", () => {
             character: 17,
           }),
           end: expect.objectContaining({
-            character: 19
+            character: 19,
           }),
         },
         insideVar: false,

@@ -108,10 +108,13 @@ export const populateValue = async (
   const vars = getCSSDeclarationArray(cssVars);
 
   // TODO(phoenisx) Remove this state.
-  const cssVarsMapToSelf = vars.reduce((defs, cssVar) => {
-    defs[cssVar.property] = cssVar;
-    return defs;
-  }, {} as Record<string, CSSVarDeclarations>);
+  const cssVarsMapToSelf = vars.reduce(
+    (defs, cssVar) => {
+      defs[cssVar.property] = cssVar;
+      return defs;
+    },
+    {} as Record<string, CSSVarDeclarations>
+  );
 
   // Mutating self inside the loop is not performant
   /**
@@ -362,7 +365,7 @@ export const getActiveRootPath = (firstFolderPath = CACHE.activeRootPath) => {
 
 export const getCachedRemoteFilePath = (url: URL) => {
   const pathTokens = url.pathname.split("/");
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const filename = pathTokens.pop()!;
   const parentpath = resolve(CACHE.tmpDir, ...pathTokens);
   return [parentpath, resolve(parentpath, filename)];
@@ -388,9 +391,12 @@ type ResolverOptions = {
 };
 
 const resolveModuleInPaths = (name: string, paths: string[] | undefined) =>
-  require(require.resolve(name, {
-    paths,
-  }));
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  require(
+    require.resolve(name, {
+      paths,
+    })
+  );
 
 /**
  * To fix #78:

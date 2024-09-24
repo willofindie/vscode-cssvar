@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 /**
  * Usage:
@@ -41,17 +42,19 @@ const gitLog = () =>
 
 const processCommitMsg = (/** @type {string[]} */ msgTokens) => {
   return msgTokens.map(token => {
-    return token.trim().replace(
-      /(\[?#(\d+)\]?)/,
-      "$1(https://github.com/willofindie/vscode-cssvar/issues/$2)"
-    );
+    return token
+      .trim()
+      .replace(
+        /(\[?#(\d+)\]?)/,
+        "$1(https://github.com/willofindie/vscode-cssvar/issues/$2)"
+      );
   });
 };
 
 (async () => {
   try {
     const log = await gitLog();
-    const [_, releaseTag] = compareString.split("...");
+    const [, releaseTag] = compareString.split("...");
     const filtered = log
       .split("\n")
       .filter(line => /\d{4}-\d{2}-\d{2}/.test(line))

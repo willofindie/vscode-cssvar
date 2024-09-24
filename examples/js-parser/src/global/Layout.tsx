@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { styled } from "@linaria/react";
 
 export default styled.div`
@@ -8,7 +7,7 @@ export default styled.div`
     --h3: 24px;
 
     --color-red: red;
-    --color-green: green;
+    --color-green: lab(50.22% -49 38.39);
     --color-blue: blue;
   }
 `;

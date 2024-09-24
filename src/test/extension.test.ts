@@ -1,15 +1,10 @@
 import path from "path";
-import { ExtensionContext, Position, Range, workspace } from "vscode";
-import {
-  Config,
-  DEFAULT_CONFIG,
-  SupportedLanguageIds,
-  CACHE,
-} from "../constants";
+import { ExtensionContext, Position, workspace } from "vscode";
+import { DEFAULT_CONFIG, SupportedLanguageIds, CACHE } from "../constants";
 import { activate } from "../extension";
 import { setup } from "../main";
 
-var DUMMY_FILE = path.resolve("src", "test", "touch.css");
+const DUMMY_FILE = path.resolve("src", "test", "touch.css");
 
 const DEFAULT_ROOT_FOLDER = "test";
 
@@ -67,7 +62,7 @@ describe("Test Extension Activations and Results", () => {
   });
 
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error workspaceFolders is readonly
     workspace.workspaceFolders = [
       {
         uri: {
@@ -79,9 +74,10 @@ describe("Test Extension Activations and Results", () => {
   });
 
   afterAll(() => {
-    // @ts-ignore Reset to default
+    // Reset to Default
+    // @ts-expect-error workspaceFolders is readonly
     workspace.workspaceFolders = [];
-  })
+  });
 
   it("should activate", async () => {
     const lines = [

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
+
 /**
  * Ref: https://github.com/postcss/postcss-scss
  * I have modified it to work with my extension and use ES6 syntax and

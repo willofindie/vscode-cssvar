@@ -18,10 +18,10 @@ export const CSS_IDS = [
   "astro",
 ] as const;
 export const SUPPORTED_LANGUAGE_IDS = [...CSS_IDS, ...JS_IDS] as const;
-export type SupportedLanguageIds = typeof SUPPORTED_LANGUAGE_IDS[number];
+export type SupportedLanguageIds = (typeof SUPPORTED_LANGUAGE_IDS)[number];
 export type ExtendedLanguageIds = "stylus" | "sugarss" | "handlebars";
 export type CssExtensions = Exclude<
-  typeof CSS_IDS[number],
+  (typeof CSS_IDS)[number],
   "vue" | "svelte" | "astro"
 >;
 

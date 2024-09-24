@@ -15,5 +15,5 @@ body {
   width: var(--container-size);
   padding: var(--container-padding);
   background-color: var(--test-custom-selector);
-  color: --gray
+  color: var(--gray-1);
 }

@@ -88,4 +88,4 @@ describe("Failures color-parser", () => {
     expect(result.isColor).toBeFalsy();
     expect(result.color).toBe("color(display-p3 1 0.5 0)");
   });
-})
+});

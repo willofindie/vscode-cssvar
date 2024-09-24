@@ -164,7 +164,7 @@ describe("Test Parser", () => {
         },
       };
       CACHE.config = updatedConfig;
-      const [_, errorPaths] = await parseFiles(updatedConfig);
+      const [, errorPaths] = await parseFiles(updatedConfig);
       expect(errorPaths.length).toBe(0);
     });
   });
@@ -182,7 +182,7 @@ describe("Test Parser", () => {
         },
       };
       CACHE.config = updatedConfig;
-      const [_, errorPaths] = await parseFiles(updatedConfig);
+      const [, errorPaths] = await parseFiles(updatedConfig);
       expect(
         Object.keys(CACHE.cssVars[CACHE.activeRootPath]).length
       ).toBeGreaterThan(0);
@@ -206,7 +206,7 @@ describe("Test Parser", () => {
       },
     };
     CACHE.config = cssConfig;
-    const [_, errorPaths] = await parseFiles(cssConfig);
+    const [, errorPaths] = await parseFiles(cssConfig);
     expect(CACHE.filesToWatch[CACHE.activeRootPath].size).toBe(6);
     expect(Array.from(CACHE.filesToWatch[CACHE.activeRootPath])).toEqual(
       expect.arrayContaining([
@@ -225,7 +225,7 @@ describe("Test Parser", () => {
       },
     };
     CACHE.config = scssConfig;
-    const [_, errorPaths] = await parseFiles(scssConfig);
+    const [, errorPaths] = await parseFiles(scssConfig);
     expect(CACHE.filesToWatch[CACHE.activeRootPath].size).toBe(7);
     expect(Array.from(CACHE.filesToWatch[CACHE.activeRootPath])).toEqual(
       expect.arrayContaining([
@@ -249,7 +249,7 @@ describe("Multi Root", () => {
   });
 
   beforeAll(() => {
-    // @ts-ignore
+    // @ts-expect-error readonly property
     workspace.workspaceFolders = [
       {
         uri: {
@@ -267,7 +267,7 @@ describe("Multi Root", () => {
   });
 
   afterAll(() => {
-    // @ts-ignore
+    // @ts-expect-error readonly property
     workspace.workspaceFolders = [];
   });
 
@@ -291,7 +291,7 @@ describe("Multi Root", () => {
       },
     };
     CACHE.config = config;
-    const [_, errorPaths] = await parseFiles(config, { parseAll: true });
+    const [, errorPaths] = await parseFiles(config, { parseAll: true });
     expect(CACHE.filesToWatch[rootPath1].size).toBe(7);
     expect(CACHE.filesToWatch[rootPath2].size).toBe(1);
 

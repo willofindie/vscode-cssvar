@@ -35,7 +35,7 @@ beforeEach(() => {
 });
 
 beforeAll(() => {
-  // @ts-ignore
+  // @ts-expect-error Readonly property
   workspace.workspaceFolders = [
     {
       uri: {
@@ -47,9 +47,9 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  // @ts-ignore Reset to default
+  // @ts-expect-error Readonly property
   workspace.workspaceFolders = [];
-})
+});
 
 describe("Test Extension Main", () => {
   beforeEach(() => {
