@@ -470,5 +470,6 @@
 		"*.{ts,tsx}": [
 			"npm run lint:fix"
 		]
-	}
+	},
+	"packageManager": "yarn@4.5.0"
 }
