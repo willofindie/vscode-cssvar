@@ -5,6 +5,8 @@
 /**
  * Usage:
  *  `./src/scripts/create-changelog.js v2.1.0...v2.2.0 | pbcopy`
+ *  OR
+ *  `./src/scripts/create-changelog.js v2.1.0..HEAD | pbcopy`
  */
 
 const { spawn } = require("node:child_process");
