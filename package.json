@@ -20,7 +20,7 @@
 		"typescript"
 	],
 	"description": "Intellisense support for CSS Variables",
-	"version": "2.6.4",
+	"version": "2.6.5",
 	"publisher": "phoenisx",
 	"license": "MIT",
 	"homepage": "https://github.com/willofindie/vscode-cssvar",
@@ -33,7 +33,7 @@
 	},
 	"icon": "img/icon.png",
 	"engines": {
-		"vscode": "^1.53.0"
+		"vscode": "^1.93.0"
 	},
 	"categories": [
 		"Other"
@@ -417,7 +417,8 @@
 		"lint": "eslint src",
 		"lint:fix": "eslint src --fix",
 		"test": "concurrently \"tsc --project ./tsconfig.json --noEmit\" \"jest\"",
-		"jest": "jest"
+		"jest": "jest",
+		"list": "src/scripts/yarn-berry-list.js"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",

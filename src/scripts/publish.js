@@ -24,8 +24,14 @@ Promise.all([spawnAsync("yarn", "test"), spawnAsync("yarn", "build")])
   .then(([c1, c2]) => {
     console.log("Results: ", c1, c2);
     return Promise.allSettled([
-      spawnAsync("vsce", "publish"),
-      spawnAsync("ovsx", "publish", "-p", process.env.OVSX_KEY),
+      // spawnAsync("vsce", "publish", "--no-dependencies"),
+      spawnAsync(
+        "ovsx",
+        "publish",
+        "-p",
+        process.env.OVSX_KEY,
+        "--no-dependencies"
+      ),
     ]);
   })
   .catch(reason => {

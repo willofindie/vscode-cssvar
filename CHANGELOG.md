@@ -4,9 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.6.4](https://github.com/willofindie/vscode-cssvar/compare/v2.6.3...2.6.4) - 2023-10-12
+## [2.6.5](https://github.com/willofindie/vscode-cssvar/compare/v2.6.4..v2.6.5) - 2025-01-14
+### Features
+-  upgrade dependencies
+-  use yarn v4
 ### Fixes
--  #110(https://github.com/willofindie/vscode-cssvar/issues/110) Failed to parse CSS variable with @layer declaration
+-  [#119](https://github.com/willofindie/vscode-cssvar/issues/119) replace ext notification with logger
+
+
+## [2.6.4](https://github.com/willofindie/vscode-cssvar/compare/v2.6.3...v2.6.4) - 2023-10-12
+### Fixes
+-  [#110](https://github.com/willofindie/vscode-cssvar/issues/110) Failed to parse CSS variable with @layer declaration
 
 
 ## [2.6.3](https://github.com/willofindie/vscode-cssvar/compare/v2.6.2...v2.6.3) - 2023-07-02

@@ -47,8 +47,8 @@ const processCommitMsg = (/** @type {string[]} */ msgTokens) => {
     return token
       .trim()
       .replace(
-        /(\[?#(\d+)\]?)/,
-        "$1(https://github.com/willofindie/vscode-cssvar/issues/$2)"
+        /\[?(#(\d+))\]?/,
+        "[$1](https://github.com/willofindie/vscode-cssvar/issues/$2)"
       );
   });
 };
@@ -56,7 +56,7 @@ const processCommitMsg = (/** @type {string[]} */ msgTokens) => {
 (async () => {
   try {
     const log = await gitLog();
-    const [, releaseTag] = compareString.split("...");
+    const [, releaseTag] = compareString.split(/\.\.\.?/);
     const filtered = log
       .split("\n")
       .filter(line => /\d{4}-\d{2}-\d{2}/.test(line))
@@ -102,9 +102,7 @@ const processCommitMsg = (/** @type {string[]} */ msgTokens) => {
       }
     }
     console.log(
-      `## [${releaseTag.substring(
-        1
-      )}](https://github.com/willofindie/vscode-cssvar/compare/${compareString}) - ${lastReleaseDate}`
+      `## [${releaseTag}](https://github.com/willofindie/vscode-cssvar/compare/${compareString}) - ${lastReleaseDate}`
     );
     if (changelogs.feature.length > 0) {
       console.log("### Features");
