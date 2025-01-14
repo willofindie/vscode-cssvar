@@ -129,8 +129,7 @@ Please find details for CSS colors [here in MDN Docs](https://developer.mozilla.
 
 
 
-
-[settings-link]: ./feature-contributions.md
-[customize-extension-link]: ./docs/customize-extension.md
-[theme-link]: ./docs/theming.md
-[debug-link]: ./docs/debug-extension.md
+[settings-link]: https://github.com/willofindie/vscode-cssvar/blob/main/feature-contributions.md
+[customize-extension-link]: https://github.com/willofindie/vscode-cssvar/blob/main/docs/customize-extension.md
+[theme-link]: https://github.com/willofindie/vscode-cssvar/blob/main/docs/theming.md
+[debug-link]: https://github.com/willofindie/vscode-cssvar/blob/main/docs/debug-extension.md
