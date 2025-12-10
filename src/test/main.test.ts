@@ -107,6 +107,54 @@ describe("Test Extension Main", () => {
         })
       );
     });
+
+    it("Should add semicolon for SCSS but not for SASS", async () => {
+      const config: Config = {
+        ...DEFAULT_CONFIG,
+        files: [
+          {
+            local: "",
+            remote: "",
+            isRemote: false,
+          },
+        ],
+        postcssPlugins: [],
+        postcssSyntax: {},
+        mode: ["off", {}],
+        disableSort: false,
+      };
+      const cssVars: CSSVarRecord = {
+        "./src/01.css": [
+          {
+            type: "css",
+            property: "--red-A100",
+            value: "red",
+            real: "red",
+            theme: "",
+          },
+        ],
+      };
+
+      const itemsScss = createCompletionItems(config, cssVars, {
+        region,
+        languageId: "scss",
+      });
+      expect(itemsScss[0]).toEqual(
+        expect.objectContaining({
+          insertText: "var(--red-A100);",
+        })
+      );
+
+      const itemsSass = createCompletionItems(config, cssVars, {
+        region,
+        languageId: "sass",
+      });
+      expect(itemsSass[0]).toEqual(
+        expect.objectContaining({
+          insertText: "var(--red-A100)",
+        })
+      );
+    });
     it("Should return CompletionItems with Sorting Disabled", async () => {
       const config: Config = {
         ...DEFAULT_CONFIG,
