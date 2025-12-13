@@ -247,7 +247,8 @@ export const createCompletionItems = (
       }
       if (
         !SUFFIX.test(options.region.suffixChar) &&
-        !isCSSInJS(options.languageId)
+        !isCSSInJS(options.languageId) &&
+        options.languageId !== "sass"
       ) {
         insertText += ";";
       }

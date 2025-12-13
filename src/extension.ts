@@ -27,7 +27,8 @@ const watchers: FileSystemWatcher[] = [];
 export async function activate(context: ExtensionContext): Promise<void> {
   try {
     const { config } = await setup();
-    if (!config[CACHE.activeRootPath].enable) {
+    const currentConfig = config[CACHE.activeRootPath];
+    if (!currentConfig || !currentConfig.enable) {
       return;
     }
 
@@ -90,7 +91,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
      * Following code will help in watching file changes, without any 3rd-party libs
      * This helps to re-calculate CSS Variables, if there is any change.
      */
-    const watchers: FileSystemWatcher[] = [];
+    // use top-level `watchers` declared above so `deactivate` can dispose them
     const folders = workspace.workspaceFolders || [];
     for (const folder of folders) {
       for (const path of CACHE.filesToWatch[folder.uri.fsPath]) {
