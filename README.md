@@ -7,7 +7,7 @@
 
 
 <h1 align="center">
-  CSS Variables
+  CSS Variables (Archived)
 </h1>
 
 <div align="center">
@@ -38,6 +38,17 @@
     <img src="https://img.shields.io/open-vsx/rating/phoenisx/cssvar?color=yellowgreen&label=ovsx%20rating" />
   </a>
 </div>
+
+**Archive Notice**
+> Hi everyone! Thanks so much for all the support over the years — I really appreciate it. 🙏
+> I want to share that I no longer have the time or interest to continue maintaining this project.
+> I started this project to help out my friend and never expected for it to get this much
+> attention.  All thanks to @jjenzz for sharing this extension.
+>
+> I learned a lot working on this, and I’m grateful for the experience. If you’re looking for an
+> actively maintained VS Code extension for CSS custom variables, check out:
+> https://github.com/vunguyentuan/vscode-css-variables
+
 
 ## 💡 Features:
 
